@@ -95,6 +95,6 @@ class BookCategories(Base):
        }
 
 
-engine = create_engine('sqlite:///{}'.format(DB_NAME))
- 
-Base.metadata.create_all(engine)
+def setup_db():
+    engine = create_engine('sqlite:///{}'.format(DB_NAME))
+    Base.metadata.create_all(engine)
