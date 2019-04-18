@@ -5,6 +5,7 @@ import os
 from db_setup import DB_NAME, setup_db
 from pathlib import Path
 
+# remove the old db file, if it exists
 db_file = Path(DB_NAME)
 if db_file.is_file:
     os.remove(db_file)
