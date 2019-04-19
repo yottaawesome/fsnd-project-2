@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db_setup import (
+from .schema import (
     User, Book, Bookshelf, BookCategory, 
     BookCategories, Base, DB_NAME)
  

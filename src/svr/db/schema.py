@@ -94,7 +94,13 @@ class BookCategories(Base):
             'category_id'     : self.description,
        }
 
+import os
+from pathlib import Path
 
 def setup_db():
+    # remove the old db file, if it exists
+    db_file = Path(DB_NAME)
+    if db_file.is_file:
+        os.remove(db_file)
     engine = create_engine('sqlite:///{}'.format(DB_NAME))
     Base.metadata.create_all(engine)
