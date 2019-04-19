@@ -40,6 +40,7 @@ class Bookshelf(Base):
             'user_id'     : self.user_id,
        }
 
+
 class BookCategory(Base):
     __tablename__ = 'book_category'
 

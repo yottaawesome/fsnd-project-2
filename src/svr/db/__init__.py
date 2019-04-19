@@ -1,1 +1,2 @@
-from .schema import User, Book, BookCategories, BookCategory, Bookshelf
+from .schema import User, Book, BookCategories, BookCategory, Bookshelf, DB_NAME
+from .dal import Dal
