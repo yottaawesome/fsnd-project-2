@@ -1,11 +1,14 @@
 from flask import (Flask, render_template, url_for, 
                     request, redirect, flash, jsonify)
+from db import Dal
 
 # Flask
 app = Flask(__name__)
 
 @app.route('/')
 def home():
+    with Dal() as x:
+        x.get_user(1)
     return render_template('index.html')
 
 @app.route('/bookshelf/<int:id>')
