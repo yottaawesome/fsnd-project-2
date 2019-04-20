@@ -2,9 +2,10 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
- 
-Base = declarative_base()
+import os
+from pathlib import Path
 
+Base = declarative_base()
 DB_NAME = 'bookshelf.db'
 
 class User(Base):
@@ -95,13 +96,13 @@ class BookCategories(Base):
             'category_id'     : self.description,
        }
 
-import os
-from pathlib import Path
-
 def setup_db():
     # remove the old db file, if it exists
     db_file = Path(DB_NAME)
-    if db_file.is_file:
+    if db_file.is_file():
         os.remove(db_file)
     engine = create_engine('sqlite:///{}'.format(DB_NAME))
     Base.metadata.create_all(engine)
+
+if __name__ == '__main__':
+    setup_db()

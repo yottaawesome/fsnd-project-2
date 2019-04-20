@@ -3,7 +3,8 @@ from .schema import (User, Book, BookCategories,
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///{}'.format(DB_NAME))
+PKG_DB_NAME = DB_NAME
+engine = create_engine('sqlite:///{}'.format(PKG_DB_NAME))
 Base.metadata.bind=engine
 DBSession = sessionmaker(bind = engine)
 
@@ -17,6 +18,10 @@ class Dal():
 
     def __exit__(self, type, value, traceback):
         self.close(type is not None)
+
+    @staticmethod
+    def print_db_name():
+        print(PKG_DB_NAME)
 
     def open(self):
         if self.session is None:
