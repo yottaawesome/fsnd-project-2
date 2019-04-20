@@ -12,8 +12,8 @@ def dal_factory(db_name=DB_NAME):
 class Dal():
 
     def __init__(self, sess_fct):
-        self.sess_fct = sess_fct
-        self.session = None
+        self._sess_fct = sess_fct
+        self._session = None
 
     def __enter__(self):
         self.open()
@@ -23,70 +23,72 @@ class Dal():
         self.close(type is not None)
 
     def open(self):
-        if self.session is None:
-            self.session = self.sess_fct()
+        if self._session is None:
+            self._session = self._sess_fct()
 
     def close(self, rollback=False):
-        if self.session:
+        if self._session:
             try:
                 if rollback:
-                    self.session.rollback()
+                    self._session.rollback()
                 else:
-                    self.session.commit()
+                    self._session.commit()
+
             finally:
-                self.session.close()
+                self._session.close()
+                self._session = None
 
     def flush(self):
-        self.session.flush()
+        self._session.flush()
 
     def create_book(self, name, bookshelf_id, description=None, weblink=None):
         book = Book(name=name,
                     bookshelf_id=bookshelf_id,
                     description=None,web_link=weblink)
-        self.session.add(book)
+        self._session.add(book)
         return book
 
     def get_book(self, id: int):
         return (self
-            .session
+            ._session
             .query(Book)
             .filter_by(id=id)
             .first())
 
     def delete_book(self, id: int):
         (self
-            .session
+            ._session
             .query(Book)
             .filter_by(id=id)
             .delete())
 
     def get_books_by_bookshelf(self, bookshelf_id: int):
         return (self
-            .session
+            ._session
             .query(Book)
             .filter_by(bookshelf_id=bookshelf_id)
             .all())
 
     def create_bookshelf(self, user_id):
         bookshelf = Bookshelf(user_id=user_id)
-        self.session.add(bookshelf)
+        self._session.add(bookshelf)
         return bookshelf
 
     def create_user(self, name, email, picture):
         user = User(name=name, email=email, picture=picture)
-        self.session.add(user)
+        self._session.add(user)
         return user
 
     def get_user(self, user_id: int):
         return (self
-            .session
+            ._session
             .query(User)
             .filter_by(id=user_id)
             .first())
 
     def get_bookshelf_by_user(self, user_id: int):
         return (self
-            .session
+            ._session
             .query(Bookshelf)
             .filter_by(user_id=user_id)
             .first())
