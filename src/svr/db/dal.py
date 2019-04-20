@@ -3,13 +3,16 @@ from .schema import (User, Book, BookCategories,
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-PKG_DB_NAME = DB_NAME
-engine = create_engine('sqlite:///{}'.format(PKG_DB_NAME))
-Base.metadata.bind=engine
-DBSession = sessionmaker(bind = engine)
+def dal_factory(db_name=DB_NAME):
+    engine = create_engine('sqlite:///{}'.format(db_name))
+    Base.metadata.bind=engine
+    DBSession = sessionmaker(bind = engine)
+    return lambda: Dal(DBSession)
 
 class Dal():
-    def __init__(self):
+
+    def __init__(self, sess_fct):
+        self.sess_fct = sess_fct
         self.session = None
 
     def __enter__(self):
@@ -19,13 +22,9 @@ class Dal():
     def __exit__(self, type, value, traceback):
         self.close(type is not None)
 
-    @staticmethod
-    def print_db_name():
-        print(PKG_DB_NAME)
-
     def open(self):
         if self.session is None:
-            self.session = DBSession()
+            self.session = self.sess_fct()
 
     def close(self, rollback=False):
         if self.session:
@@ -55,7 +54,11 @@ class Dal():
             .first())
 
     def delete_book(self, id: int):
-        self.session.query(Book).filter_by(id=id).delete()
+        (self
+            .session
+            .query(Book)
+            .filter_by(id=id)
+            .delete())
 
     def get_books_by_bookshelf(self, bookshelf_id: int):
         return (self

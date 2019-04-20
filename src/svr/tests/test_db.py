@@ -6,14 +6,14 @@ from pathlib import Path
 
 DB_NAME = "test.db"
 svr.db.schema.DB_NAME = DB_NAME
-svr.db.dal.PKG_DB_NAME = DB_NAME
 svr.db.data.PKG_DB_NAME = DB_NAME
-from svr.db import Dal, populate
+from svr.db import Dal, populate, dal_factory
 
 class TestDal(unittest.TestCase):
     def setUp(self):
         svr.db.schema.setup_db()
         populate()
+        self.dal_fct = dal_factory(DB_NAME)
 
     def tearDown(self):
         db_file = Path(svr.db.schema.DB_NAME)
@@ -21,9 +21,13 @@ class TestDal(unittest.TestCase):
             os.remove(db_file)
 
     def test_create_user(self):
-        Dal.print_db_name()
-        with Dal() as dal:
-            self.assertTrue(True)
+        with self.dal_fct() as dal:
+            user = dal.create_user(name='Vasilios Magriplis', 
+                                    email='test@example.com', 
+                                    picture='path/to/picture')
+            dal.flush()
+            self.assertTrue(user.id is not None)
+
 
 if __name__ == '__main__':
     unittest.main()
