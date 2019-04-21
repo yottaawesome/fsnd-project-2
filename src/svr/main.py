@@ -16,6 +16,29 @@ with open('cfg/clientsecret') as f:
 
 app = Flask(__name__)
 
+def revoke_token(access_token):
+    response = requests.post('https://accounts.google.com/o/oauth2/revoke',
+        params={'token': access_token},
+    headers = {'content-type': 'application/x-www-form-urlencoded'})
+    if response.status_code == 200:
+        print('Token successfully revoked')
+    else:
+        print('Token revocation failed with status {}'.format(response.status_code))
+
+def clear_session():
+    del login_session['access_token']
+    del login_session['gplus_id']
+    del login_session['username']
+    del login_session['email']
+    del login_session['picture']
+
+def check_token_status(access_token):
+    response = requests.get(
+        'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}', 
+        params={'token': access_token})
+
+    return response.status_code == 200
+
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -39,9 +62,8 @@ def gconnect():
 
     # Check that the access token is valid.
     access_token = credentials.access_token
-    print('Got access token: {}'.format(access_token))
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
-            % access_token)
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'
+            .format(access_token))
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
@@ -105,16 +127,6 @@ def gconnect():
     print("done!")
     return output
 
-def revoke_token(access_token):
-  response = requests.post('https://accounts.google.com/o/oauth2/revoke',
-    params={'token': access_token},
-    headers = {'content-type': 'application/x-www-form-urlencoded'})
-  if response.status_code == 200:
-    print('Token successfully revoked')
-  else:
-    print('Token revocation failed with status {}'.format(response.status_code))
-
-
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('access_token')
@@ -124,26 +136,9 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    print('In gdisconnect access token is {}'.format(access_token))
-    print('User name is {}'.format(login_session['username']))
-    url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(login_session['access_token'])
-    print(url)
-    h = httplib2.Http()
-    result = h.request(url, 'POST', headers={'content-type': 'application/x-www-form-urlencoded'})[0]
-    print('result is ')
-    print(result)
-
-    if result['status'] == '200':
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        del login_session['picture']
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    response = make_response(json.dumps('Failed to revoke token for given user.'), 400)
+    revoke_token(login_session['access_token'])
+    clear_session()
+    response = make_response(json.dumps('Successfully disconnected.'), 200)
     response.headers['Content-Type'] = 'application/json'
     return response
 
@@ -154,11 +149,11 @@ def home():
     return render_template('index.html')
 
 @app.route('/bookshelf/<int:id>')
-def view_bookshelf(id):
+def get_bookshelf(id):
     pass
 
 @app.route('/book/<int:id>')
-def view_book(id):
+def get_book(id):
     pass
 
 @app.route('/book/<int:id>/new', methods=['POST'])
