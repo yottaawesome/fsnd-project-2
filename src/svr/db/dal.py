@@ -44,7 +44,8 @@ class Dal():
     def create_book(self, name, bookshelf_id, description=None, weblink=None):
         book = Book(name=name,
                     bookshelf_id=bookshelf_id,
-                    description=None,web_link=weblink)
+                    description=description,
+                    web_link=weblink)
         self._session.add(book)
         return book
 
@@ -74,7 +75,7 @@ class Dal():
         self._session.add(bookshelf)
         return bookshelf
 
-    def create_user(self, name, email, picture):
+    def create_user(self, name, email, picture=None):
         user = User(name=name, email=email, picture=picture)
         self._session.add(user)
         return user
@@ -92,3 +93,28 @@ class Dal():
             .query(Bookshelf)
             .filter_by(user_id=user_id)
             .first())
+
+    def create_book_category(self, name, description):
+        book_category = BookCategory(name=name, description=description)
+        self._session.add(book_category)
+        return book_category
+
+    def add_category_to_book(self, book_id, category_id):
+        book_category = BookCategories(book_id=book_id, 
+                                        category_id=category_id)
+        self._session.add(book_category)
+        return book_category
+
+    def delete_category_from_book(self, book_id, category_id):
+        (self
+            ._session
+            .query(BookCategories)
+            .filter_by(book_id=book_id,category_id=category_id)
+            .delete())
+
+    def delete_book_category(self, id):
+        (self
+            ._session
+            .query(BookCategories)
+            .filter_by(id=id)
+            .delete())
