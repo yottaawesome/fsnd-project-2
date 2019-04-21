@@ -64,7 +64,22 @@ class TestDal(unittest.TestCase):
 
     def test_delete_book(self):
         with self.dal_fct() as dal:
-            self.assertTrue(True)
+            user = dal.create_user(name='Vasilios Magriplis', 
+                                    email='test@example.com', 
+                                    picture='path/to/picture')
+            dal.flush()
+            
+            bookshelf = dal.create_bookshelf(user.id)
+            dal.flush()
+            
+            book = dal.create_book('Test',
+                                    bookshelf.id,
+                                    description='desc',
+                                    weblink='testlink')
+            dal.flush()
+            dal.delete_book(book.id)
+            dal.flush()
+            self.assertIsNone(dal.get_book(book.id))
 
     def test_create_bookshelf(self):
         with self.dal_fct() as dal:
@@ -84,7 +99,7 @@ class TestDal(unittest.TestCase):
             desc='desc'
             book_category = dal.create_book_category(name, desc)
             dal.flush()
-            
+
             self.assertIsNotNone(book_category)
             self.assertTrue(book_category.name==name)
             self.assertTrue(book_category.description==desc)

@@ -41,6 +41,13 @@ class Dal():
     def flush(self):
         self._session.flush()
 
+    def get_book(self, id: int):
+        return (self
+            ._session
+            .query(Book)
+            .filter_by(id=id)
+            .first())
+
     def create_book(self, name, bookshelf_id, description=None, weblink=None):
         book = Book(name=name,
                     bookshelf_id=bookshelf_id,
@@ -49,19 +56,22 @@ class Dal():
         self._session.add(book)
         return book
 
-    def get_book(self, id: int):
-        return (self
-            ._session
-            .query(Book)
-            .filter_by(id=id)
-            .first())
-
     def delete_book(self, id: int):
+        (self
+            ._session
+            .query(BookCategories)
+            .filter_by(book_id=id)
+            .delete())
         (self
             ._session
             .query(Book)
             .filter_by(id=id)
             .delete())
+
+    def create_bookshelf(self, user_id):
+        bookshelf = Bookshelf(user_id=user_id)
+        self._session.add(bookshelf)
+        return bookshelf
 
     def get_books_by_bookshelf(self, bookshelf_id: int):
         return (self
@@ -70,10 +80,12 @@ class Dal():
             .filter_by(bookshelf_id=bookshelf_id)
             .all())
 
-    def create_bookshelf(self, user_id):
-        bookshelf = Bookshelf(user_id=user_id)
-        self._session.add(bookshelf)
-        return bookshelf
+    def get_bookshelf_by_user(self, user_id: int):
+        return (self
+            ._session
+            .query(Bookshelf)
+            .filter_by(user_id=user_id)
+            .first())
 
     def create_user(self, name, email, picture=None):
         user = User(name=name, email=email, picture=picture)
@@ -85,13 +97,6 @@ class Dal():
             ._session
             .query(User)
             .filter_by(id=user_id)
-            .first())
-
-    def get_bookshelf_by_user(self, user_id: int):
-        return (self
-            ._session
-            .query(Bookshelf)
-            .filter_by(user_id=user_id)
             .first())
 
     def create_book_category(self, name, description):
