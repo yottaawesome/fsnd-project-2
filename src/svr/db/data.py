@@ -23,6 +23,12 @@ def populate():
                             'other books.'))
     session.add(BookCategory(name='Cookbook', description='Books that are '
                             'collections of recipes.'))
+    user = User(name='Vasilios Magriplis',
+                        email='example@example.com',
+                        picture='path/to/picture')
+    session.add(user)
+
+    session.add(Bookshelf(user=user))
 
     session.commit()
     session.close()

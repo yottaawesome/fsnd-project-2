@@ -32,6 +32,7 @@ class Bookshelf(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable = False)
+    user = relationship(User)
     
     @property
     def serialize(self):
@@ -67,6 +68,7 @@ class Book(Base):
     name = Column(String(250), nullable=False)
     description = Column(String(250))
     web_link = Column(String(250))
+    bookshelf = relationship(Bookshelf)
 
     @property
     def serialize(self):
@@ -86,6 +88,8 @@ class BookCategories(Base):
     id = Column(Integer, primary_key=True)
     book_id = Column(Integer, ForeignKey('book.id'), nullable=False)
     category_id = Column(Integer, ForeignKey('book_category.id'), nullable=False)
+    book = relationship(Book)
+    book = relationship(BookCategory)
 
     @property
     def serialize(self):
