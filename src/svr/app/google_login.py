@@ -9,12 +9,7 @@ import random, string, httplib2, json, requests
 from db import Dal, dal_factory
 dal_fct = dal_factory()
 
-with open('clientid') as f:
-    CLIENT_ID = f.read()
-with open('clientsecret') as f:
-    CLIENT_SECRET = f.read()
-
-app = Flask(__name__)
+from .flask_app import main_app, CLIENT_ID, CLIENT_SECRET
 
 def revoke_token(access_token):
     response = requests.post('https://accounts.google.com/o/oauth2/revoke',
@@ -36,10 +31,9 @@ def check_token_status(access_token):
     response = requests.get(
         'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}', 
         params={'token': access_token})
-
     return response.status_code == 200
 
-@app.route('/gconnect', methods=['POST'])
+@main_app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
     if request.args.get('state') != login_session['state']:
@@ -127,7 +121,7 @@ def gconnect():
     print("done!")
     return output
 
-@app.route('/gdisconnect')
+@main_app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
@@ -141,29 +135,3 @@ def gdisconnect():
     response = make_response(json.dumps('Successfully disconnected.'), 200)
     response.headers['Content-Type'] = 'application/json'
     return response
-
-@app.route('/')
-def home():
-    with dal_fct() as dal:
-        dal.get_user(1)
-    return render_template('index.html')
-
-@app.route('/bookshelf/<int:id>')
-def get_bookshelf(id):
-    pass
-
-@app.route('/book/<int:id>')
-def get_book(id):
-    pass
-
-@app.route('/book/<int:id>/new', methods=['POST'])
-def new_book(id):
-    pass
-
-@app.route('/book/<int:id>/edit', methods=['POST'])
-def edit_book():
-    pass
-
-@app.route('/book/<int:id>/delete', methods=['POST'])
-def delete_book():
-    pass

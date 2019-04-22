@@ -1,5 +1,5 @@
-from app.web_app import app
+from app import main_app
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run(host = '127.0.0.1', port = 5000)
+    main_app.debug = True
+    main_app.run(host = '127.0.0.1', port = 5000)
