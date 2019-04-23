@@ -20,4 +20,9 @@ The project is structured as a Python package with several subpackages beneath i
 
 ## Setting up
 
-TBD.
+The client is built as an Inferno SPA. To build it:
+
+* First install all dependencies in the `clt` folder: `npm install`.
+* Run Webpack: `npx webpack`.
+
+Further details will be added soon.

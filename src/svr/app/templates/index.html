@@ -3,10 +3,16 @@
         <title>Hello!</title>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-        <script type="text/javascript" src="{{ url_for('static', filename='client.js') }}"></script>
+
+        <meta name="google-client-id" content="{{ google_client_id }}">
+        <meta name="google-client-secret" content="{{ google_client_secret }}">
+        <meta name="github-client-id" content="{{ github_client_id }}">
+        <meta name="github-client-secret" content="{{ github_client_secret }}">
     </head>
     
     <body>
         <h1>Hello!</h1>
+        <div id="app"></div>
+        <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
     </body>
 </html>

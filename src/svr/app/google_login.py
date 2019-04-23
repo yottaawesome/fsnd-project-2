@@ -9,7 +9,7 @@ import random, string, httplib2, json, requests
 from db import Dal, dal_factory
 dal_fct = dal_factory()
 
-from .flask_app import main_app, CLIENT_ID, CLIENT_SECRET
+from .flask_app import main_app, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
 
 def revoke_token(access_token):
     response = requests.post('https://accounts.google.com/o/oauth2/revoke',
@@ -45,7 +45,9 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('cfg/client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets(
+            'secret.google_client_secrets.json',
+            scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -75,7 +77,7 @@ def gconnect():
         return response
 
     # Verify that the access token is valid for this app.
-    if result['issued_to'] != CLIENT_ID:
+    if result['issued_to'] != GOOGLE_CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
         print("Token's client ID does not match app's.")

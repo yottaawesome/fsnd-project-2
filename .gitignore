@@ -105,6 +105,4 @@ venv.bak/
 
 *.db
 node_modules/
-clientid
-clientsecret
-client_secrets.json
+secret.*
