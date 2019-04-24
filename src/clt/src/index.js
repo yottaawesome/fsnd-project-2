@@ -1,4 +1,7 @@
 import { render, Component } from 'inferno';
+import styles from './index.module.scss';
+
+console.log(styles)
 
 class MyComponent extends Component {
   constructor(props) {
@@ -9,7 +12,7 @@ class MyComponent extends Component {
   }
   render() {
     return (
-      <div>
+      <div className={styles.red}>
         <h1>Header!</h1>
         <span>Counter is at: { this.state.counter }</span>
       </div>
