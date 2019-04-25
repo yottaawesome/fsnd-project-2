@@ -12,17 +12,42 @@ _In development._
 
 ## Project structure
 
-The project is structured as a Python package with several subpackages beneath it.
+The application is split in two parts: a Python Flask backend that initially serves the index page and handles the server-side REST endpoints, and a single page application built in Inferno that acts as the default client. The Flask backend is located in `src/svr` and the SPA is located in `src/spa`.
+
+The Flask application is structured as a Python package with several subpackages beneath it.
 
 * **app:** Contains the core logic of the Flask web application.
 * **db:** Contains the database abstraction components.
 * **tests:** Contains the unit tests.
 
+The Inferno SPA is built using Webpack and NPM. It is a componentized client-side application in the typical style of React apps.
+
 ## Setting up
 
-The client is built as an Inferno SPA. To build it:
+You'll require the following prerequisites.
 
-* First install all dependencies in the `clt` folder: `npm install`.
-* Run Webpack: `npx webpack`.
+* Python
+* Pip
+* `virtualenv`
+* Node
+* NPM (ideally a version that comes with NPX, or you can install NPX separately)
+* Git to clone this repository.
+
+### Python
+
+* From Bash:
+	** Move into the server dir: `cd src/svr`.
+	** Create virtual environment: `env virtualenv`.
+	** Activate virtual environment: `source env/bin/activate`.
+	** Install Python dependencies: `pip install -r requirements.txt`.
+	** Run development server: `python main.py` or `source run`.
+	** Visit http://localhost:5000.
+### SPA
+
+* From Bash:
+	** Move into the SPA dir: `cd src/spa`.
+	** First NPM dependencies: `npm install`.
+	** Build the client using `npm run dev`, `npm run prod`, `npm run dev-watch` or `npm run prod-watch`.
+		*** The latter two commands perform almost identically to the first two respectively, but set Webpack into watch mode, allowing for changes to result in auto-rebuilding the client.
 
 Further details will be added soon.
