@@ -47,8 +47,11 @@ You'll require the following prerequisites.
 
 * From Bash:
   * Move into the SPA dir: `cd src/spa`.
-  * First NPM dependencies: `npm install`.
-  * Build the client using `npm run dev`, `npm run prod`, `npm run dev-watch` or `npm run prod-watch`.
-    * The latter two commands perform almost identically to the first two respectively, but set Webpack into watch mode, allowing for changes to result in auto-rebuilding the client.
+  * Install NPM dependencies: `npm install`.
+  * Build the client using one of the following commands:
+    * `npm run dev`: run a one-off development build.
+    * `npm run prod`: run a one-off production build.
+    * `npm run dev-watch`: run the development build and rebuild on file changes.
+    * `npm run prod-watch`: run the production build and rebuild on file changes.
 
 Further details will be added soon.
