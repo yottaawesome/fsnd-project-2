@@ -1,11 +1,13 @@
 {
   "name": "bookshelf-client",
   "version": "1.0.0",
-  "description": "The client code",
+  "description": "The default client code for the Bookshelf web app.",
   "main": "index.js",
   "scripts": {
     "dev": "rm -rf ../svr/app/static/*; webpack --mode=development",
-    "prod": "rm -rf ../svr/app/static/*; webpack --mode=production"
+    "prod": "rm -rf ../svr/app/static/*; webpack --mode=production",
+    "dev-watch": "rm -rf ../svr/app/static/*; webpack --mode=development --watch",
+    "prod-watch": "rm -rf ../svr/app/static/*; webpack --mode=production --watch"
   },
   "author": "Vasilios Magriplis",
   "license": "MIT",
