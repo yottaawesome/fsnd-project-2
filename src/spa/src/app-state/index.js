@@ -22,7 +22,7 @@ eventSubscription[Events.LOGOUT] = []
  * Represents all State variables that can have data associated with them.
  */
 const State = {
-    CURRENT_USER = "stateCurrentUser"
+    CURRENT_USER: "stateCurrentUser"
 }
 const eventStateData = {}
 eventStateData.CURRENT_USER = null
