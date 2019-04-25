@@ -1,12 +1,14 @@
 import { render, Component } from 'inferno';
 import { HashRouter, Route, Switch, Link } from 'inferno-router';
-import Home from './home';
-import Login from './login';
+import Home from './ui-components/home';
+import Login from './ui-components/login';
+import LoginStatus from './ui-components/login-status';
 import './index.scss';
 
 const MainClient = () => (
   <div>
     <h1>Welcome to your Bookshelf!</h1>
+    <LoginStatus />
     <HashRouter>
       <div>
         <ul>

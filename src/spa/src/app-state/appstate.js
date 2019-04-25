@@ -49,7 +49,7 @@ class AppState {
      * @param {*} data The data to set.
      */
     static setStateData(stateVariable, data) {
-        eventStateData[state] = data;
+        eventStateData[stateVariable] = data;
     }
 
     /**
