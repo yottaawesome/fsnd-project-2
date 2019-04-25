@@ -36,18 +36,19 @@ You'll require the following prerequisites.
 ### Python
 
 * From Bash:
-	** Move into the server dir: `cd src/svr`.
-	** Create virtual environment: `env virtualenv`.
-	** Activate virtual environment: `source env/bin/activate`.
-	** Install Python dependencies: `pip install -r requirements.txt`.
-	** Run development server: `python main.py` or `source run`.
-	** Visit http://localhost:5000.
+  * Move into the server dir: `cd src/svr`.
+  * Create virtual environment: `env virtualenv`.
+  * Activate virtual environment: `source env/bin/activate`.
+  * Install Python dependencies: `pip install -r requirements.txt`.
+  * Run development server: `python main.py` or `source run`.
+  * Visit [localhost:5000](http://localhost:5000).
+
 ### SPA
 
 * From Bash:
-	** Move into the SPA dir: `cd src/spa`.
-	** First NPM dependencies: `npm install`.
-	** Build the client using `npm run dev`, `npm run prod`, `npm run dev-watch` or `npm run prod-watch`.
-		*** The latter two commands perform almost identically to the first two respectively, but set Webpack into watch mode, allowing for changes to result in auto-rebuilding the client.
+  * Move into the SPA dir: `cd src/spa`.
+  * First NPM dependencies: `npm install`.
+  * Build the client using `npm run dev`, `npm run prod`, `npm run dev-watch` or `npm run prod-watch`.
+    * The latter two commands perform almost identically to the first two respectively, but set Webpack into watch mode, allowing for changes to result in auto-rebuilding the client.
 
 Further details will be added soon.
