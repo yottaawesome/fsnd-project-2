@@ -1,26 +1,26 @@
 import { render, Component } from 'inferno';
-import styles from './index.module.scss';
+import { BrowserRouter, Route, Switch, Link } from 'inferno-router';
+import Home from './home';
+import Login from './login';
+import './index.scss';
 
-console.log(styles)
-
-class MyComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      counter: 0
-    };
-  }
-  render() {
-    return (
-      <div className={styles.red}>
-        <h1>Header!</h1>
-        <span>Counter is at: { this.state.counter }</span>
-      </div>
-    );
-  }
-}
+const MyWebsite = () => (
+  <BrowserRouter>
+    <div>
+      <ul>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/login">Login</Link></li>
+      </ul>
+      <hr />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/login" component={Login} />
+      </Switch>
+    </div>
+  </BrowserRouter>
+);
 
 render(
-  <MyComponent />,
+  <MyWebsite />,
   document.getElementById("app")
 );

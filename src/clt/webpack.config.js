@@ -1,15 +1,13 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-console.log(process.env.NODE_ENV)
-
 module.exports = (env, argv) => { 
   // We need to set this manually due to https://github.com/webpack/webpack/issues/7074
   // Note that official documentation at https://webpack.js.org/configuration/mode/ states the following:
   //      Sets process.env.NODE_ENV on DefinePlugin to value production . 
   // This is misleading, as printing the process.env.NODE_ENV variable out shows it is undefined,
   // causing the style-loader/minicssextractplugin rule to fail to behave as expected.
-  let isDevelopment = process.env.NODE_ENV !== 'production'
+  let isDevelopment = (process.env.NODE_ENV = argv['mode']) !== 'production'
 
   return {
     entry: './src/index.js',
@@ -38,7 +36,7 @@ module.exports = (env, argv) => {
               loader: 'css-loader',
               options: {
                 modules: true,
-                localIdentName: '[name]__[local]___[hash:base64:5]',
+                localIdentName: '[folder]__[local]__[hash:base64:5]',
                 camelCase: true,
               }
             },
@@ -62,7 +60,7 @@ module.exports = (env, argv) => {
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: "style.css"
+        filename: "main.css"
       })
     ]
   };

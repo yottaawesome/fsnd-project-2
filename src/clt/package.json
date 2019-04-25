@@ -4,8 +4,8 @@
   "description": "The client code",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode=development",
-    "prod": "webpack --mode=production"
+    "dev": "rm -rf ../svr/app/static/*; webpack --mode=development",
+    "prod": "rm -rf ../svr/app/static/*; webpack --mode=production"
   },
   "author": "Vasilios Magriplis",
   "license": "MIT",
