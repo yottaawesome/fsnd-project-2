@@ -33,3 +33,7 @@ def edit_book():
 @main_app.route('/book/<int:id>/delete', methods=['POST'])
 def delete_book():
     pass
+
+@main_app.route('/test')
+def test_fetch():
+    return jsonify({ 'cool':'super'}), 200

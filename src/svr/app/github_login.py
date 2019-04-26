@@ -11,20 +11,40 @@ dal_fct = dal_factory()
 
 from .flask_app import main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
 
-#https://developer.github.com/v3/guides/basics-of-authentication/
-
+# Code adapted from https://developer.github.com/v3/guides/basics-of-authentication/
+# GitHub endpoints: https://developer.github.com/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/
 @main_app.route('/githubcallback/')
 def github_callback():
-    pass
-    # get temporary GitHub code...
-    #session_code = request.env['rack.request.query_hash']['code']
+    # this is the temporary GitHub code passed in via the querystring
+    session_code = request.args.get('code')
+    
+    # swap the the temportary code for an access token
+    url = 'https://github.com/login/oauth/access_token'
+    data = {
+        'client_id': GITHUB_CLIENT_ID,
+        'client_secret': GITHUB_CLIENT_SECRET,
+        'code': session_code
+    }
+    headers = { 'accept': 'application/json' }
+    access_token_response = requests.post(url, data=data, headers=headers)
 
-    # ... and POST it back to GitHub
-    #result = RestClient.post('https://github.com/login/oauth/access_token',
-    #                      {:client_id => CLIENT_ID,
-    #                       :client_secret => CLIENT_SECRET,
-    #                       :code => session_code},
-    #                       :accept => :json)
+    if access_token_response.status_code != 200:
+        raise Exception('Token flow failed with status code {}'
+                        .format(access_token_response.status_code))
+        
+    access_token = access_token_response.json()['access_token']
+    
+    url = 'https://api.github.com/user?access_token={}'.format(access_token)
+    user_details_response = requests.get(url)
+    user_details_data = user_details_response.json()
 
-    # extract the token and granted scopes
-    #access_token = JSON.parse(result)['access_token']
+    #with dal_fct() as dal:
+    #    dal.get_user()
+    
+    """
+    relevant fields:
+        id?
+        name
+        email
+        avatar_url
+    """

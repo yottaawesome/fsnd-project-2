@@ -68,6 +68,19 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    """ https://www.googleapis.com/oauth2/v1/tokeninfo
+    {
+        "issued_to": <app client id>,
+        "audience": <app client id>,
+        "user_id": <user id>,
+        "scope": "openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+        "expires_in": <seconds to expiry>,
+        "email": "<user email>",
+        "verified_email": true,
+        "access_type": "offline"
+    }
+    """
+
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
@@ -107,6 +120,20 @@ def gconnect():
     answer = requests.get(userinfo_url, params=params)
 
     data = answer.json()
+
+    """
+    https://www.googleapis.com/oauth2/v1/userinfo
+    {
+        "id": <numeric id as string>,
+        "email": <email>,
+        "verified_email": true,
+        "name": "Vasilios Magriplis",
+        "given_name": "Vasilios",
+        "family_name": "Magriplis",
+        "picture": <user content picture path>,
+        "locale": "en-GB"
+    }
+    """
 
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']

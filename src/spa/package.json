@@ -12,6 +12,7 @@
   "author": "Vasilios Magriplis",
   "license": "MIT",
   "dependencies": {
+    "@babel/polyfill": "^7.4.3",
     "brainlet": "^1.0.2",
     "inferno": "^7.1.11",
     "inferno-router": "^7.1.11"
