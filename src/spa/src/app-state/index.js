@@ -1,1 +1,1 @@
-export { AppState, Events, State } from './appstate'
+export { GlobalState, Events, State } from './appstate'

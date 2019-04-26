@@ -1,5 +1,5 @@
 import { Component, linkEvent } from 'inferno';
-import { AppState, Events, State } from '../../app-state'
+import { GlobalState, Events, State } from '../../app-state'
 import styles from './styles.module.scss'
 
 export default class Home extends Component {
@@ -15,12 +15,12 @@ export default class Home extends Component {
     onAppEventLogin(event, data) { }
 
     onLoginClick() {
-        AppState.raiseEvent(Events.LOGIN, { name: 'Vasilios Magriplis' });
+        GlobalState.raiseEvent(Events.LOGIN, { name: 'Vasilios Magriplis' });
     }
 
     onLogoutClick() {
-        AppState.setStateData(State.CURRENT_USER, null);
-        AppState.raiseEvent(Events.LOGOUT, null);
+        GlobalState.setStateData(State.CURRENT_USER, null);
+        GlobalState.raiseEvent(Events.LOGOUT, null);
     }
 
     render() {

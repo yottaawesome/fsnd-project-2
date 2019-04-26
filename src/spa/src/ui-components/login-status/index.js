@@ -1,14 +1,18 @@
 import { Component } from 'inferno';
 import styles from './styles.module.scss';
-import { AppState, Events } from '../../app-state'
+import { GlobalState, Events } from '../../app-state';
 
 export default class LoginStatus extends Component {
     constructor(props) {
         super(props);
-        AppState.subscribe(this, Events.LOGIN, Events.LOGOUT);
+        GlobalState.subscribe(this, Events.LOGIN, Events.LOGOUT);
         this.state = {
             user: null
         }
+    }
+
+    componentWillUnmount() { 
+        GlobalState.unsubscribe(this);
     }
 
     onAppEventLogin(event, data) {
