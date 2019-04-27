@@ -4,6 +4,8 @@ import { HashRouter, Route, Switch, Link } from 'inferno-router';
 import Home from './ui-components/home';
 import Login from './ui-components/login';
 import LoginStatus from './ui-components/login-status';
+import Header from './ui-components/header';
+import Menu from './ui-components/menu';
 import './index.scss';
 
 fetch('/test', {
@@ -12,20 +14,17 @@ fetch('/test', {
   .then(json => console.log(json.cool));
 
 const MainClient = () => (
-  <div>
-    <h1>Welcome to your Bookshelf!</h1>
-    <LoginStatus />
+  <div class="main">
+    <Header />
     <HashRouter>
       <div>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/login">Login</Link></li>
-        </ul>
-        <hr />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login} />
-        </Switch>
+        <Menu />
+        <div>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/login" component={Login} />
+          </Switch>
+        </div>
       </div>
     </HashRouter>
   </div>
