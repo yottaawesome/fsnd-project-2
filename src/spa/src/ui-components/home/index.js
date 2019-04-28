@@ -30,7 +30,7 @@ export default class Home extends Component {
     }
 
     onAppEventLogin(event, data) { 
-        this.state.setState({
+        this.setState({
             user: data
         });
     }
