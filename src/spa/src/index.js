@@ -3,15 +3,24 @@ import { render, Component } from 'inferno';
 import { HashRouter, Route, Switch, Link } from 'inferno-router';
 import Home from './ui-components/home';
 import Login from './ui-components/login';
-import LoginStatus from './ui-components/login-status';
 import Header from './ui-components/header';
 import Menu from './ui-components/menu';
+import { GlobalState, Events, State } from './app-state';
 import './index.scss';
 
-fetch('/test', {
+fetch('/user', {
   credentials: 'same-origin'  
-}).then(response => response.json())
-  .then(json => console.log(json.cool));
+})
+  .then(response => { 
+    if(response.status == 215)
+      return Promise.reject('User is not authenticated')
+    return response.json();
+  })
+  .then(json => {
+    GlobalState.setStateData(State.CURRENT_USER, json);
+    GlobalState.raiseEvent(Events.LOGIN, json);
+    return json;
+  });
 
 const MainClient = () => (
   <div class="main">

@@ -99,6 +99,13 @@ class Dal():
             .filter_by(id=user_id)
             .first())
 
+    def get_user_by_email(self, email: str):
+        return (self
+            ._session
+            .query(User)
+            .filter_by(email=email)
+            .first())
+
     def create_book_category(self, name, description):
         book_category = BookCategory(name=name, description=description)
         self._session.add(book_category)

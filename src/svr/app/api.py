@@ -10,9 +10,15 @@ dal_fct = dal_factory()
 @main_app.route('/')
 def home():
     return render_template('index.html', google_client_id=GOOGLE_CLIENT_ID,
-                            google_client_secret=GOOGLE_CLIENT_SECRET,
-                            github_client_id=GITHUB_CLIENT_ID,
-                            github_client_secret=GITHUB_CLIENT_SECRET)
+                            github_client_id=GITHUB_CLIENT_ID)
+
+@main_app.route('/user/')
+def user():
+    user = login_session.get('user')
+    if user is None:
+        return jsonify({ 'message': 'No currently logged in user' }), 215
+    
+    return jsonify(user)
 
 @main_app.route('/bookshelf/<int:id>')
 def get_bookshelf(id):

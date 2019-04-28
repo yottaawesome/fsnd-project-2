@@ -4,7 +4,6 @@
 .login__red__1DXmZ {
   color: blue; }
 
-
 .header__root__Is4gf {
   display: flex;
   flex-direction: row;
@@ -28,6 +27,7 @@ h1 {
   flex: 1;
   align-items: flex-end;
   height: 35px; }
+
 
 .menu__root__2l_tV ul {
   display: flex;

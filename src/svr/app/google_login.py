@@ -139,6 +139,13 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    login_session['user'] = {
+        'uid': data['id'],
+        'name': data['name'],
+        'email': data['email'],
+        'picture': data['picture']
+    }
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']

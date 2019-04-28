@@ -100,6 +100,7 @@ class BookCategories(Base):
             'category_id'     : self.description,
        }
 
+
 def setup_db():
     # remove the old db file, if it exists
     db_file = Path(DB_NAME)

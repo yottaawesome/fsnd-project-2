@@ -1,15 +1,13 @@
 from flask import (Flask, render_template, url_for, 
                     request, redirect, flash, jsonify,
                     session as login_session, make_response)
-                    
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import random, string, httplib2, json, requests
 
-from db import Dal, dal_factory
+from .flask_app import main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_ID
+from db import Dal, dal_factory, User
 dal_fct = dal_factory()
-
-from .flask_app import main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
 
 # Code adapted from https://developer.github.com/v3/guides/basics-of-authentication/
 # GitHub endpoints: https://developer.github.com/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/
@@ -38,13 +36,14 @@ def github_callback():
     user_details_response = requests.get(url)
     user_details_data = user_details_response.json()
 
-    #with dal_fct() as dal:
-    #    dal.get_user()
+    with dal_fct() as dal:
+        user_record = dal.get_user_by_email(user_details_data['email'])
+        if(user_record is None):
+            user_record = dal.create_user(
+                                    user_details_data['name'],
+                                    user_details_data['email'],
+                                    user_details_data['avatar_url'])
+            dal.flush()
+        login_session['user'] = user_record.serialize
     
-    """
-    relevant fields:
-        id?
-        name
-        email
-        avatar_url
-    """
+    return redirect(url_for("home"), code=303)
