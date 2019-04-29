@@ -3,8 +3,8 @@ import { Link } from 'inferno-router';
 import styles from './index.module.scss';
 
 export default class Menu extends Component {
-    constructor() { 
-        super(); 
+    constructor(props) { 
+        super(props); 
     }
 
     render() {

@@ -3,8 +3,8 @@ import styles from './index.module.scss';
 import LoginStatus from '../login-status';
 
 export default class Header extends Component {
-    constructor() { 
-        super(); 
+    constructor(props) { 
+        super(props);
     }
 
     render() {
