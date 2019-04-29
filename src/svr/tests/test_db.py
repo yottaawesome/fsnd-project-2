@@ -93,7 +93,7 @@ class TestDal(unittest.TestCase):
             self.assertIsNotNone(bookshelf)
             self.assertTrue(bookshelf.user_id == user.id)
 
-    def create_book_category(self):
+    def test_create_book_category(self):
         with self.dal_fct() as dal:
             name='testcategory'
             desc='desc'
@@ -103,6 +103,29 @@ class TestDal(unittest.TestCase):
             self.assertIsNotNone(book_category)
             self.assertTrue(book_category.name==name)
             self.assertTrue(book_category.description==desc)
+
+    def test_get_books_by_user(self):
+        with self.dal_fct() as dal:
+            user = dal.create_user(name='Vasilios Magriplis', 
+                                    email='test@example.com', 
+                                    picture='path/to/picture')
+            dal.flush()
+            
+            bookshelf = dal.create_bookshelf(user.id)
+            dal.flush()
+            
+            dal.create_book_category('testcategory', 'desc')
+            dal.flush()
+
+            book = dal.create_book('Test',
+                                    bookshelf.id,
+                                    description='desc',
+                                    weblink='testlink')
+            dal.flush()
+            books = dal.get_books_by_user(user.id)
+            self.assertIsNotNone(books)
+            self.assertTrue(len(books)>0)
+            self.assertTrue(books[0].id==book.id)
 
     def test_add_category_to_book(self):
         with self.dal_fct() as dal:
