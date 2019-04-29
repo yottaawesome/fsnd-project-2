@@ -87,6 +87,15 @@ class Dal():
             .filter_by(user_id=user_id)
             .first())
 
+    def get_books_by_user(self, user_id: int):
+        return (self
+            ._session
+            .query(Book)
+            .join(Bookshelf)
+            .join(User)
+            .filter(User.id==user_id)
+            .all())
+
     def create_user(self, name, email, picture=None):
         user = User(name=name, email=email, picture=picture)
         self._session.add(user)
