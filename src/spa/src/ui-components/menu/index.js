@@ -1,10 +1,12 @@
 import { Component } from 'inferno';
 import { Link } from 'inferno-router';
 import styles from './index.module.scss';
+import autobind from 'auto-bind';
 
 export default class Menu extends Component {
     constructor(props) { 
-        super(props); 
+        super(props);
+        autobind(this);
     }
 
     render() {

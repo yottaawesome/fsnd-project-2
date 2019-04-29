@@ -1,11 +1,13 @@
 import { render, Component } from 'inferno';
 import styles from './styles.module.scss'
+import autobind from 'auto-bind';
 
 const githubClientId = document.querySelector("meta[name='github-client-id']").getAttribute("content");
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
+        autobind(this);
     }
 
     render() {
