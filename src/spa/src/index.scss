@@ -3,4 +3,15 @@
     width:50%;
     margin:0 auto;
 }
-    
+
+//https://stackoverflow.com/questions/1367409/how-to-make-button-look-like-a-link
+.link-button {
+    background:none!important;
+    color:inherit;
+    border:none; 
+    padding:0!important;
+    font: inherit;
+    /*border is optional*/
+    border-bottom:1px solid #444; 
+    cursor: pointer;
+}

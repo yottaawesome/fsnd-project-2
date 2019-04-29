@@ -3,42 +3,37 @@ from flask import (Flask, render_template, url_for,
                     session as login_session, make_response)
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-import random, string, httplib2, json, requests
-import base64
+from requests.auth import HTTPBasicAuth
+import random, string, json, requests
 
 from .flask_app import main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_ID
 from db import Dal, dal_factory, User
 dal_fct = dal_factory()
 
-def revoke_token():
-    # returns 404
-    #url = 'https://api.github.com/applications/{}/tokens/{}'.format(GITHUB_CLIENT_ID, access_token)
-    #secret = base64.urlsafe_b64encode('{}:{}'.format(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET).encode())
-    #headers = { 'Authorization': 'Basic {}'.format(secret)}
-    #revoke_response = requests.delete(url, headers=headers)
+def revoke_token(access_token):
+    url = 'https://api.github.com/applications/{}/tokens/{}'.format(GITHUB_CLIENT_ID, access_token)
+    # Don't put the Authorization header in manually with manual base64 
+    # encoding via base64 lib, it doesn't seem to work.
+    response = requests.delete(url, auth=HTTPBasicAuth(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET))
     
-    # returns 401
-    # apparently, requires the user to enter their password, which is silly
-    # https://stackoverflow.com/questions/17217750/revoking-oauth-access-token-results-in-404-not-found
-    #url = 'https://api.github.com/authorizations/{}'.format(access_token)
-    #secret = base64.urlsafe_b64encode('{}:{}'.format(GITHUB_CLIENT_SECRET).encode())
-    #headers = { 'Authorization': 'Basic {}'.format(secret)}
-    #revoke_response = requests.delete(url, headers=headers)
-    #if revoke_response.status_code == 204:
-    #    print("Token revoked")
-    #else:
-    #    print(revoke_response.status_code)
-    #    print(revoke_response.text)
-    pass
+    if response.status_code == 204:
+        print("GitHub token revoked")
+    else:
+        print('Revocation failed: {} {}'.format(
+            response.status_code, response.text))
+
 
 # Code adapted from https://developer.github.com/v3/guides/basics-of-authentication/
 # GitHub endpoints: https://developer.github.com/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/
 @main_app.route('/githubcallback/')
 def github_callback():
-    # this is the temporary GitHub code passed in via the querystring
+    # We don't need to verify the state token, because the endpoint is invoked
+    # directly by GitHub, bypassing the client.
+    
+    # Temporary GitHub code passed in via the querystring
     session_code = request.args.get('code')
     
-    # swap the the temporary code for an access token
+    # Swap the the temporary code for an access token
     url = 'https://github.com/login/oauth/access_token'
     data = {
         'client_id': GITHUB_CLIENT_ID,
@@ -54,8 +49,12 @@ def github_callback():
         
     access_token = access_token_response.json()['access_token']
     
-    url = 'https://api.github.com/user?access_token={}'.format(access_token)
-    user_details_response = requests.get(url)
+    url = 'https://api.github.com/user'
+    # As per https://developer.github.com/v3/, GitHub recommends putting the
+    # token into the headers as opposed to in the query string, as
+    # "URLs can be logged by any system along the request path".
+    headers = { 'Authorization': 'token {}'.format(access_token) }
+    user_details_response = requests.get(url, headers=headers)
     user_details_data = user_details_response.json()
 
     with dal_fct() as dal:
@@ -67,5 +66,9 @@ def github_callback():
                                     user_details_data['avatar_url'])
             dal.flush()
         login_session['user'] = user_record.serialize
+
+    # Once we have the user's details, we don't actually need the token 
+    # anymore, so let's just immediately revoke it.
+    revoke_token(access_token)
 
     return redirect(url_for("home"), code=303)

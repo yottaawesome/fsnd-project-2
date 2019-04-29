@@ -6,11 +6,11 @@ import Login from './ui-components/login';
 import Header from './ui-components/header';
 import Menu from './ui-components/menu';
 import { GlobalState, Events, State } from './app-state';
+import ServerApi from './api';
 import './index.scss';
 
-fetch('/user', {
-  credentials: 'same-origin'  
-})
+ServerApi
+  .fetchUserDetails()
   .then(response => { 
     if(response.status == 215)
       return Promise.reject('User is not authenticated')

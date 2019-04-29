@@ -1,7 +1,8 @@
-import { Component } from 'inferno';
-import styles from './styles.module.scss';
-import { GlobalState, Events } from '../../app-state';
 import autobind from 'auto-bind';
+import { Component, linkEvent } from 'inferno';
+import { GlobalState, Events, State } from '../../app-state';
+import ServerApi from '../../api';
+import styles from './styles.module.scss';
 
 export default class LoginStatus extends Component {
     constructor(props) {
@@ -25,11 +26,24 @@ export default class LoginStatus extends Component {
         this.setState({ user: null });
     }
 
+    onLogoutClick() {
+        ServerApi
+            .logout()
+            .then((response) => {
+                if(response.status == 204) {
+                    GlobalState.setStateData(State.CURRENT_USER, null);
+                    GlobalState.raiseEvent(Events.LOGOUT, null);
+                    return response;
+                }
+                return Promise.reject(`Logout encountered response code ${response.status}`)
+            });
+
+    }
+
     render() {
-        return (
-            <div>
-                { this.state.user == null ? <a href="#login">Please log in</a> : `Hello, ${this.state.user.name}!` }
-            </div>
-        )
+        if(this.state.user == null)
+            return (<div><a href="#login">Please log in</a></div>);
+
+        return (<div>{ `Hello, ${this.state.user.name}!` } Not you? <button class="link-button" onClick={linkEvent(this, this.onLogoutClick)}>Logout</button></div>);
     }
 }

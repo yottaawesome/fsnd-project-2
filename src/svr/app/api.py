@@ -1,9 +1,10 @@
 from db import Dal, dal_factory
 from flask import (Flask, render_template, url_for, 
-                    request, redirect, flash, jsonify,
+                    request, redirect, flash, jsonify, Response,
                     session as login_session, make_response)
 from .flask_app import (main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, 
                         GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+import base64, requests
 
 dal_fct = dal_factory()
 
@@ -17,8 +18,13 @@ def user():
     user = login_session.get('user')
     if user is None:
         return jsonify({ 'message': 'No currently logged in user' }), 215
-    
+
     return jsonify(user)
+
+@main_app.route('/logout/', methods=['DELETE'])
+def logout():
+    login_session.clear()
+    return '', 204
 
 @main_app.route('/bookshelf/<int:id>')
 def get_bookshelf(id):

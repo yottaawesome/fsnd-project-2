@@ -9,48 +9,27 @@ export default class Home extends Component {
         //this.componentDidMount = this.componentDidMount.bind(this);
         autobind(this);
         this.state = {}
-        GlobalState.subscribe(this, Events.LOGIN);
+        GlobalState.subscribe(this, Events.LOGIN, Events.LOGOUT);
     }
 
     componentDidMount() { 
         let currentUser = GlobalState.getStateData(State.CURRENT_USER);
-        if(currentUser == null)
-            this.setState({
-                user: null
-            });
-        else {
-            this.setState({
-                user: currentUser
-            });
-        }
+        let state = currentUser == null
+            ? { user: null }
+            : { user: currentUser }
+        this.setState(state);
     }
 
-    componentWillUnmount() { 
-        GlobalState.unsubscribe(this);
-    }
+    componentWillUnmount() { GlobalState.unsubscribe(this); }
 
-    onAppEventLogin(event, data) { 
-        this.setState({
-            user: data
-        });
-    }
+    onAppEventLogin(event, data) { this.setState({ user: data }); }
 
-    onLoginClick() {
-        GlobalState.raiseEvent(Events.LOGIN, { name: 'Vasilios Magriplis' });
-    }
-
-    onLogoutClick() {
-        GlobalState.setStateData(State.CURRENT_USER, null);
-        GlobalState.raiseEvent(Events.LOGOUT, null);
-    }
+    onAppEventLogout(event, data) { this.setState({ user: null }); }
 
     render() {
-        console.log(this.state.user);
         return (
             <div className={styles.red}>
                 <h1>{this.state.user != null ? `Hello, ${this.state.user.name}!` : "Hello!"}</h1>
-                <button onClick={linkEvent(this, this.onLoginClick)}>Login</button>
-                <button onClick={linkEvent(this, this.onLogoutClick)}>Logout</button>
             </div>
         );
     }
