@@ -28,7 +28,7 @@ export default class LoginStatus extends Component {
     render() {
         return (
             <div>
-                {this.state.user == null ? 'You are not logged in' : `Hello, ${this.state.user.name}`  }
+                { this.state.user == null ? <a href="#login">Please log in</a> : `Hello, ${this.state.user.name}!` }
             </div>
         )
     }
