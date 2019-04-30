@@ -55,7 +55,7 @@ class Dal():
             .join(Bookshelf)
             .join(User)
             .filter(User.id==user_id,Book.id==book_id)
-            .all())
+            .first())
 
     def create_book(self, name, bookshelf_id, description=None, weblink=None):
         book = Book(name=name,
