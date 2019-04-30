@@ -2,14 +2,6 @@ import { AppState } from 'brainlet';
 
 const GlobalState = new AppState();
 
-class LoginState {
-    constructor(name, email, method) {
-        this.name = name;
-        this.email = email;
-        this.method = method;
-    }
-}
-
 /**
  * Represents the Events components can subscribe and unsubscribe from.
  */

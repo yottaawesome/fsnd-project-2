@@ -48,6 +48,15 @@ class Dal():
             .filter_by(id=id)
             .first())
 
+    def get_book_by_id_and_user(self, book_id: int, user_id: int):
+        return (self
+            ._session
+            .query(Book)
+            .join(Bookshelf)
+            .join(User)
+            .filter(User.id==user_id,Book.id==book_id)
+            .all())
+
     def create_book(self, name, bookshelf_id, description=None, weblink=None):
         book = Book(name=name,
                     bookshelf_id=bookshelf_id,

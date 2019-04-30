@@ -1,5 +1,5 @@
 from db import dal_factory
-from flask import (Flask, render_template, jsonify, session as login_session)
+from flask import (Flask, render_template, jsonify, session as login_session, request)
 from .flask_app import (main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, 
                         GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
 
@@ -57,14 +57,61 @@ def new_book(id):
 
 @main_app.route('/book/<int:id>', methods=['GET'])
 def get_book(id):
-    pass
+    try:
+
+        user = login_session.get('user')
+        if user is None:
+            return jsonify({ 'message': 'No currently logged in user' }), 401
+        json = request.get_json()
+        if json is None:
+            return jsonify({'message': 'Bad request'}), 400
+
+        with dal_fct() as dal:
+            book = dal.get_book_by_id_and_user(id, user.id)
+            if book is None:
+                return jsonify({'message': 'Book not found'}), 404
+
+            return jsonify(book.serialize)
+
+    except Exception as ex:
+        print('DAL operation failed: ', ex)
+        return jsonify({'message': 'Operation failed'}), 500
 
 
 @main_app.route('/book/<int:id>', methods=['POST'])
 def edit_book():
-    pass
+    try:
+
+        user = login_session.get('user')
+        if user is None:
+            return jsonify({ 'message': 'No currently logged in user' }), 401
+        json = request.get_json()
+        if json is None:
+            return jsonify({'message': 'Bad request'}), 400
+
+        return '', 204
+
+    except Exception as ex:
+        print('DAL operation failed: ', ex)
+        return jsonify({'message': 'Operation failed'}), 500
 
 
 @main_app.route('/book/<int:id>', methods=['DELETE'])
-def delete_book():
-    pass
+def delete_book(id):
+    try:
+
+        user = login_session.get('user')
+        if user is None:
+            return jsonify({ 'message': 'No currently logged in user' }), 401
+
+        with dal_fct() as dal:
+            book = dal.get_book_by_id_and_user(id, user.id)
+            if book is None:
+                return jsonify({'message': 'Book not found'}), 404
+            dal.delete_book(book)
+
+        return '', 204
+
+    except Exception as ex:
+        print('DAL operation failed: ', ex)
+        return jsonify({'message': 'Operation failed'}), 500
