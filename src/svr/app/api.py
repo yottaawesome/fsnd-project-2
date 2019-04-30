@@ -48,11 +48,29 @@ def get_bookshelf(id):
 
 @main_app.route('/bookshelf/<int:id>/', methods=['POST'])
 def new_book(id):
-    user = login_session.get('user')
-    if user is None:
-        return jsonify({ 'message': 'No currently logged in user' }), 401
+    try:
+        
+        user = login_session.get('user')
+        if user is None:
+            return jsonify({ 'message': 'No currently logged in user' }), 401
+        json = request.get_json()
+        if json is None:
+            return jsonify({'message': 'Bad request'}), 400
 
-    pass
+        with dal_fct() as dal:
+            bookshelf_id = dal.get_bookshelf_by_user(user.id).id
+            book = dal.create_book(
+                json['name'], 
+                bookshelf_id, 
+                description=json['description'],
+                weblink=json['weblink'])
+            dal.flush()
+
+            return jsonify(book.serialize), 200
+    
+    except Exception as ex:
+        print('DAL operation failed: ', ex)
+        return jsonify({'message': 'Operation failed'}), 500
 
 
 @main_app.route('/book/<int:id>', methods=['GET'])
