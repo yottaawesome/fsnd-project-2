@@ -65,6 +65,16 @@ class Dal():
         self._session.add(book)
         return book
 
+    def update_book(self, id, name, description, weblink):
+        book = self._session.query(Book).filter_by(id=id).first()
+        if book is None:
+            raise ValueError('Book {id} not found. Update aborted.'.format(id))
+        book.name = name
+        book.description = description
+        book.web_link = weblink
+        # we're never going to update the bookshelf_id
+        self._session.add(book)
+
     def delete_book(self, id: int):
         (self
             ._session

@@ -83,6 +83,35 @@ class TestDal(unittest.TestCase):
             self.assertTrue(book.bookshelf_id==bookshelf.id)
             self.assertTrue(bookshelf.user_id==user.id)
 
+    def test_update_book(self):
+        with self.dal_fct() as dal:
+            user = dal.create_user(name='Vasilios Magriplis', 
+                                        email='test@example.com', 
+                                        picture='path/to/picture')
+            dal.flush()
+            
+            bookshelf = dal.create_bookshelf(user.id)
+            dal.flush()
+            
+            book = dal.create_book('Test',
+                                    bookshelf.id,
+                                    description='desc',
+                                    weblink='testlink')
+            dal.flush()
+            
+            name = 'Test2'
+            desc = 'desc2'
+            weblink = 'testlink2'
+            dal.update_book(book.id, name, desc, weblink)
+            dal.flush()
+
+            book = dal.get_book(book.id)
+
+            self.assertTrue(book.name == name)
+            self.assertTrue(book.description == desc)
+            self.assertTrue(book.web_link == weblink)
+            
+
     def test_delete_book(self):
         with self.dal_fct() as dal:
             user = dal.create_user(name='Vasilios Magriplis', 
