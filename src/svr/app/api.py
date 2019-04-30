@@ -17,7 +17,7 @@ def user():
     if user is None:
         return jsonify({ 'message': 'No currently logged in user' }), 215
 
-    return jsonify(user)
+    return jsonify(user.serialize)
 
 
 @main_app.route('/user/books')
@@ -27,7 +27,8 @@ def get_books_by_user():
         return jsonify({ 'message': 'No currently logged in user' }), 215
     
     with dal_fct() as dal:
-        return dal.get_books_by_user(user.user_id)
+        books = dal.get_books_by_user(user.user_id)
+        return jsonify([book.serialize for book in books]), 200
 
 
 @main_app.route('/logout/', methods=['DELETE'])
@@ -35,7 +36,7 @@ def logout():
     login_session.clear()
     return '', 204
 
-
+# TODO: review if we really need this
 @main_app.route('/bookshelf/<int:id>')
 def get_bookshelf(id):
     user = login_session.get('user')
@@ -43,7 +44,7 @@ def get_bookshelf(id):
         return jsonify({ 'message': 'No currently logged in user' }), 401
 
     with dal_fct() as dal:
-        return dal.get_bookshelf_by_user(user.user_id)
+        return jsonify(dal.get_bookshelf_by_user(user.user_id).serialize), 200
 
 
 @main_app.route('/bookshelf/<int:id>/', methods=['POST'])
