@@ -7,12 +7,23 @@ dal_fct = dal_factory()
 
 @main_app.route('/')
 def home():
+    '''
+    Base route.
+    '''
     return render_template('index.html', google_client_id=GOOGLE_CLIENT_ID,
                             github_client_id=GITHUB_CLIENT_ID)
 
 
 @main_app.route('/user/')
 def user():
+    '''
+    Gets the current user's details.
+
+    Returns:
+        200 and the user's details as JSON.
+        215 if no user is currently logged.
+    '''
+
     user = login_session.get('user')
     if user is None:
         return jsonify({ 'message': 'No currently logged in user' }), 215
@@ -20,24 +31,30 @@ def user():
     return jsonify(user)
 
 
-@main_app.route('/user/books')
-def get_books_by_user():
-    user = login_session.get('user')
-    if user is None:
-        return jsonify({ 'message': 'No currently logged in user' }), 215
-    
-    with dal_fct() as dal:
-        books = dal.get_books_by_user(user.user_id)
-        return jsonify(books), 200
-
-
 @main_app.route('/logout/', methods=['DELETE'])
 def logout():
+    '''
+    Logs the current user out.
+
+    Returns:
+        204. 
+    '''
+
     login_session.clear()
     return '', 204
 
 @main_app.route('/bookshelf/', methods=['GET'])
 def get_bookshelf():
+    '''
+    Gets all the books for the user's bookshelf as JSON.
+
+    Returns:
+        200 and the bookshelf books in JSON format. 
+        401 if the user is not authenticated.
+        404 if the book does not exist. 
+        500 if an unexpected error.
+    '''
+
     user = login_session.get('user')
     if user is None:
         return jsonify({ 'message': 'No currently logged in user' }), 401
@@ -51,6 +68,17 @@ def get_bookshelf():
 
 @main_app.route('/bookshelf/', methods=['POST'])
 def new_book():
+    '''
+    Creates a new book in the user's bookshelf.
+
+    Returns:
+        200 and the created book in JSON format. 
+        401 if the user is not authenticated.
+        400 for a malformed request.
+        404 if the book does not exist.
+        500 if an unexpected error.
+    '''
+
     try:
 
         user = login_session.get('user')
@@ -80,6 +108,16 @@ def new_book():
 
 @main_app.route('/book/<int:id>', methods=['GET'])
 def get_book(id):
+    '''
+    Gets the book identified by the id segment of the URI as JSON.
+
+    Returns:
+        200 and the book in JSON format. 
+        401 if the user is not authenticated.
+        404 if the book does not exist. 
+        500 if unexpected error occurs.
+    '''
+
     try:
 
         user = login_session.get('user')
@@ -100,6 +138,17 @@ def get_book(id):
 
 @main_app.route('/book/<int:id>', methods=['POST'])
 def edit_book(id):
+    '''
+    Updates the book identified by the id segment of the URI.
+
+    Returns:
+        200 and the updated book in JSON format. 
+        400 for a malformed request.
+        401 if the user is not authenticated.
+        404 if the book does not exist. 
+        500 if an unexpected error occurs.
+    '''
+
     try:
 
         user = login_session.get('user')
@@ -125,6 +174,15 @@ def edit_book(id):
 
 @main_app.route('/book/<int:id>', methods=['DELETE'])
 def delete_book(id):
+    '''
+    Deletes the book identified by the id segment of the URI.
+
+    Returns:
+        204 if the book was successfully deleted.
+        401 if the user is not authenticated.
+        404 if the book does not exist. 
+        500 if an unexpected error occurs.
+    '''
     try:
 
         user = login_session.get('user')
