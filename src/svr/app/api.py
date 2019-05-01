@@ -36,7 +36,6 @@ def logout():
     login_session.clear()
     return '', 204
 
-# TODO: review if we really need this
 @main_app.route('/bookshelf/', methods=['GET'])
 def get_bookshelf():
     user = login_session.get('user')
@@ -44,27 +43,27 @@ def get_bookshelf():
         return jsonify({ 'message': 'No currently logged in user' }), 401
 
     with dal_fct() as dal:
-        bookshelf = dal.get_bookshelf_by_user(user['id'])
+        bookshelf = dal.get_books_by_user(user['id'])
         if bookshelf is None:
-            bookshelf = dal.create_bookshelf(user['id'])
-            dal.flush()
-
-        return jsonify(bookshelf.serialize), 200
+            return jsonify([]), 200
+        return jsonify([book.serialize for book in bookshelf]), 200
 
 
 @main_app.route('/bookshelf/', methods=['POST'])
-def new_book(id):
+def new_book():
     try:
 
         user = login_session.get('user')
         if user is None:
             return jsonify({ 'message': 'No currently logged in user' }), 401
+
         json = request.get_json()
         if json is None:
             return jsonify({'message': 'Bad request'}), 400
 
         with dal_fct() as dal:
-            bookshelf_id = dal.get_bookshelf_by_user(user.id).id
+            bookshelf_id = dal.get_bookshelf_by_user(user['id']).id
+            print(bookshelf_id)
             book = dal.create_book(
                 json['name'], 
                 bookshelf_id, 
@@ -95,7 +94,7 @@ def get_book(id):
             if book is None:
                 return jsonify({'message': 'Book not found'}), 404
 
-            return jsonify(book)
+            return jsonify(book.serialize)
 
     except Exception as ex:
         print('DAL operation failed: ', ex)

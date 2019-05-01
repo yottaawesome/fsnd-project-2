@@ -19,4 +19,20 @@ export default class ServerApi {
             credentials: 'same-origin',
         })
     }
+
+    static createNewBook() {
+        return fetch('/bookshelf/', {
+            credentials: 'same-origin',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: 'testname',
+                description: 'testdescription',
+                weblink: 'testweblink'
+            })
+        })
+    }
 }
