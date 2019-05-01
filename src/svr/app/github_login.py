@@ -66,6 +66,9 @@ def github_callback():
                                     user_details_data['avatar_url'])
             dal.flush()
         login_session['user'] = user_record.serialize
+        # the bookshelf must also exist
+        if dal.get_bookshelf_by_user(user_record.id) is None:
+            dal.create_bookshelf(user_record.id)
 
     # Once we have the user's details, we don't actually need the token 
     # anymore, so let's just immediately revoke it.
