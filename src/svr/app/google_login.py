@@ -1,3 +1,4 @@
+'''Contains the main logic for Google Logins.'''
 from flask import (Flask, render_template, url_for, 
                     request, redirect, flash, jsonify,
                     session as login_session, make_response)

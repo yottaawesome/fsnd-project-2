@@ -1,3 +1,4 @@
+'''Contains the functional test cases for the DAL.'''
 import unittest
 import context
 import svr.db

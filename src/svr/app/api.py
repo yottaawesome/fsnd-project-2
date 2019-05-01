@@ -1,3 +1,4 @@
+'''Contains the main routes for the REST API.'''
 from db import dal_factory
 from flask import (Flask, render_template, jsonify, session as login_session, request)
 from .flask_app import (main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, 
