@@ -12,19 +12,23 @@ _In development._
 
 ## Project structure
 
-The application is split in two parts: a Python Flask backend that initially serves the index page and handles the server-side REST endpoints, and a client single page application (SPA) built in Inferno that acts as the default client. The Flask backend is located in `src/svr` and the SPA is located in `src/spa`.
+The application is split in two parts: the server-side and the client-side.
 
-The Flask application is structured as a Python package with several subpackages beneath it.
+### Server-side
+
+The server-side is built as a Python Flask back end. The source code is located in the `src/svr` directory, and the main package is `svr`. Three subpackages are underneath `svr`.
 
 * **app:** Contains the core logic of the Flask web application.
 * **db:** Contains the database abstraction components.
 * **tests:** Contains the unit tests.
 
-The SPA is built using Inferno with Webpack, Babel, and NPM being part of the build tools. The SPA is a componentized client-side application in the typical style of React apps.
+### Client-side
+
+The client-side is a single-page application (SPA) built in Inferno that acts as the default client for the Python server. The source code is located in `src/spa`. The client is highly componentized, as would be expected in React-type SPAs.
 
 ## Setting up
 
-You'll require the following prerequisites.
+You'll need the following prerequisites.
 
 * Python
 * Pip
