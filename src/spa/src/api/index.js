@@ -35,4 +35,10 @@ export default class ServerApi {
             })
         })
     }
+
+    static fetchBook() {
+        return fetch('/book/1', {
+            credentials: 'same-origin',
+        })
+    }
 }

@@ -85,12 +85,9 @@ def get_book(id):
         user = login_session.get('user')
         if user is None:
             return jsonify({ 'message': 'No currently logged in user' }), 401
-        json = request.get_json()
-        if json is None:
-            return jsonify({'message': 'Bad request'}), 400
 
         with dal_fct() as dal:
-            book = dal.get_book_by_id_and_user(id, user.id)
+            book = dal.get_book_by_id_and_user(id, user['id'])
             if book is None:
                 return jsonify({'message': 'Book not found'}), 404
 
