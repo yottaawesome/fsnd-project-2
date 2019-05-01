@@ -1,3 +1,4 @@
+'''Contains the core DAL logic.'''
 from .schema import (User, Book, BookCategories,
                     BookCategory, Bookshelf, DB_NAME, Base)
 from sqlalchemy import create_engine

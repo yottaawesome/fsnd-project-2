@@ -1,3 +1,4 @@
+'''Runs the web application.'''
 from app import main_app
 import os
 
