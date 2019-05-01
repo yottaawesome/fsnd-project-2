@@ -132,10 +132,10 @@ def delete_book(id):
             return jsonify({ 'message': 'No currently logged in user' }), 401
 
         with dal_fct() as dal:
-            book = dal.get_book_by_id_and_user(id, user.id)
+            book = dal.get_book_by_id_and_user(id, user['id'])
             if book is None:
                 return jsonify({'message': 'Book not found'}), 404
-            dal.delete_book(book)
+            dal.delete_book(book.id)
 
         return '', 204
 

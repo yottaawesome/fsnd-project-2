@@ -1,3 +1,5 @@
+import ApiTest from "../ui-components/api-test";
+
 export default class ServerApi {
     constructor() {}
 
@@ -56,5 +58,14 @@ export default class ServerApi {
                 web_link: 'testweblinkupdated'
             })
         });
+    }
+
+    static deleteBook(id) {
+        return fetch(`/book/${id}`, {
+            credentials: 'same-origin',
+            method: 'DELETE',
+        });
+
+        
     }
 }

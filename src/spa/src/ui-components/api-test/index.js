@@ -52,6 +52,25 @@ export default class ApiTest extends Component {
             .catch(err => console.error(err));
     }
 
+    onDeleteBook() {
+        ServerApi
+            .fetchBookshelf()
+            .then(response => response.json())
+            .then(books => {
+                if(books.length == 0)
+                    Promise.reject('Nothing found on server to delete')
+                return books[books.length-1];
+            })
+            .then(book => {
+                return ServerApi.deleteBook(book.id);
+            })
+            .then(response => {
+                if(response.status == 204)
+                    return true;
+                Promise.reject(`Delete failed with status ${response.status}`);
+            });
+    }
+
     render() {
         return (
             <div>
@@ -59,6 +78,7 @@ export default class ApiTest extends Component {
                 <div><button onClick={linkEvent(this, this.onCreateBookClick)}>Create book</button></div>
                 <div><button onClick={linkEvent(this, this.onGetBookClick)}>Get book</button></div>
                 <div><button onClick={linkEvent(this, this.onEditBookClick)}>Edit book</button></div>
+                <div><button onClick={linkEvent(this, this.onDeleteBook)}>Delete book</button></div>
             </div>
         );
     }
