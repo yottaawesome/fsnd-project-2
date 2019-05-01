@@ -13,4 +13,10 @@ export default class ServerApi {
             method: "DELETE"
         });
     }
+
+    static fetchBookshelf() {
+        return fetch('/bookshelf/', {
+            credentials: 'same-origin',
+        })
+    }
 }

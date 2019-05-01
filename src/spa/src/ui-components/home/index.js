@@ -2,6 +2,7 @@ import { Component, linkEvent } from 'inferno';
 import { GlobalState, Events, State } from '../../app-state'
 import styles from './styles.module.scss'
 import autobind from 'auto-bind';
+import ApiTest from '../api-test';
 
 export default class Home extends Component {
     constructor(props) {
@@ -30,6 +31,7 @@ export default class Home extends Component {
         return (
             <div className={styles.red}>
                 <h1>{this.state.user != null ? `Hello, ${this.state.user.name}!` : "Hello!"}</h1>
+                { this.state.user != null ? <ApiTest /> : null }
             </div>
         );
     }
