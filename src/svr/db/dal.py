@@ -74,6 +74,7 @@ class Dal():
         book.web_link = weblink
         # we're never going to update the bookshelf_id
         self._session.add(book)
+        return book
 
     def delete_book(self, id: int):
         (self

@@ -68,7 +68,7 @@ def new_book():
                 json['name'], 
                 bookshelf_id, 
                 description=json['description'],
-                weblink=json['weblink'])
+                weblink=json['web_link'])
             dal.flush()
 
             return jsonify(book.serialize), 200
@@ -110,13 +110,13 @@ def edit_book(id):
             return jsonify({'message': 'Bad request'}), 400
 
         with dal_fct() as dal:
-            book = dal.get_book_by_id_and_user(id, user.id)
+            book = dal.get_book_by_id_and_user(id, user['id'])
             if book is None:
                 return jsonify({'message': 'Book not found'}), 404
 
-            dal.update_book(book.id, json['name'], json['description'], json['weblink'])
+            book = dal.update_book(book.id, json['name'], json['description'], json['web_link'])
 
-        return '', 204
+            return jsonify(book.serialize), 200
 
     except Exception as ex:
         print('DAL operation failed: ', ex)

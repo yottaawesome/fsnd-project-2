@@ -17,7 +17,7 @@ export default class ServerApi {
     static fetchBookshelf() {
         return fetch('/bookshelf/', {
             credentials: 'same-origin',
-        })
+        });
     }
 
     static createNewBook() {
@@ -31,14 +31,30 @@ export default class ServerApi {
             body: JSON.stringify({
                 name: 'testname',
                 description: 'testdescription',
-                weblink: 'testweblink'
+                web_link: 'testweblink'
             })
-        })
+        });
     }
 
     static fetchBook() {
         return fetch('/book/1', {
             credentials: 'same-origin',
-        })
+        });
+    }
+
+    static editBook() {
+        return fetch('/book/1', {
+            credentials: 'same-origin',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: 'testnameupdated',
+                description: 'testdescriptionupdated',
+                web_link: 'testweblinkupdated'
+            })
+        });
     }
 }
