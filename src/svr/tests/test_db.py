@@ -205,11 +205,6 @@ class TestDal(unittest.TestCase):
             self.assertTrue(book.categories[0].id == book_category.id)
             self.assertTrue(book.categories[1].id == book_category2.id)
 
-            books = dal.get_books_by_user(user.id)
-            for book in books:
-                for category in book.categories:
-                    print('Category {}'.format(category.id))
-
 
 if __name__ == '__main__':
     unittest.main()
