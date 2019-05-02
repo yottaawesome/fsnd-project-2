@@ -189,6 +189,7 @@ class TestDal(unittest.TestCase):
             dal.flush()
             
             book_category = dal.create_book_category('testcategory', 'desc')
+            book_category2 = dal.create_book_category('testcategory2', 'desc2')
             dal.flush()
 
             book = dal.create_book('Test',
@@ -197,10 +198,17 @@ class TestDal(unittest.TestCase):
                                     weblink='testlink')
             dal.flush()
 
-            book_cat_assoc = dal.add_category_to_book(book.id, book_category.id)
-            self.assertIsNotNone(book_cat_assoc)
-            self.assertTrue(book_cat_assoc.book_id == book.id)
-            self.assertTrue(book_cat_assoc.category_id == book_category.id)
+            dal.add_category_to_book(book.id, book_category.id)
+            dal.add_category_to_book(book.id, book_category2.id)
+            book = dal.get_book(book.id)
+
+            self.assertTrue(book.categories[0].id == book_category.id)
+            self.assertTrue(book.categories[1].id == book_category2.id)
+
+            books = dal.get_books_by_user(user.id)
+            for book in books:
+                for category in book.categories:
+                    print('Category {}'.format(category.id))
 
 
 if __name__ == '__main__':

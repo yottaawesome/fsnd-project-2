@@ -44,6 +44,7 @@ def logout():
     login_session.clear()
     return '', 204
 
+
 @main_app.route('/bookshelf/', methods=['GET'])
 def get_bookshelf():
     '''
@@ -64,6 +65,7 @@ def get_bookshelf():
         bookshelf = dal.get_books_by_user(user['id'])
         if bookshelf is None:
             return jsonify([]), 200
+
         return jsonify([book.serialize for book in bookshelf]), 200
 
 

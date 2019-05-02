@@ -59,6 +59,22 @@ class BookCategory(Base):
             'description'   : self.description,
        }
 
+class BookCategories(Base):
+    __tablename__ = 'book_categories'
+
+    id = Column(Integer, primary_key=True)
+    book_id = Column(Integer, ForeignKey('book.id'), nullable=False)
+    category_id = Column(Integer, ForeignKey('book_category.id'), nullable=False)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id'        : self.id,
+            'book_id'     : self.bookshelf_id,
+            'category_id'     : self.description,
+       }
+
 
 class Book(Base):
     __tablename__ = 'book'
@@ -69,35 +85,18 @@ class Book(Base):
     description = Column(String(250))
     web_link = Column(String(250))
     bookshelf = relationship(Bookshelf)
+    categories = relationship(BookCategory, secondary="book_categories")
 
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
         return {
-            'id'        : self.id,
-            'bookshelf_id'     : self.bookshelf_id,
-            'description'     : self.description,
-            'name'     : self.name,
-            'web_link'     : self.web_link,
-       }
-
-
-class BookCategories(Base):
-    __tablename__ = 'book_categories'
-
-    id = Column(Integer, primary_key=True)
-    book_id = Column(Integer, ForeignKey('book.id'), nullable=False)
-    category_id = Column(Integer, ForeignKey('book_category.id'), nullable=False)
-    book = relationship(Book)
-    book = relationship(BookCategory)
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {
-            'id'        : self.id,
-            'book_id'     : self.bookshelf_id,
-            'category_id'     : self.description,
+            'id'            : self.id,
+            'bookshelf_id'  : self.bookshelf_id,
+            'description'   : self.description,
+            'name'          : self.name,
+            'web_link'      : self.web_link,
+            'categories'    : [category.serialize for category in self.categories]
        }
 
 
