@@ -35,8 +35,8 @@ def check_token_status(access_token):
     return response.status_code == 200
 
 
-@main_app.route('/gconnect/', methods=['POST'])
-def gconnect():
+@main_app.route('/googleauth/', methods=['POST'])
+def google_auth():
     # Validate state token
     json_req = request.get_json()
     login_session_state = login_session.get('state')

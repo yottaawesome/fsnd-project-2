@@ -82,8 +82,8 @@ export default class ServerApi {
     }
 
     static postGoogleAuthCode(state, code) {
-        return fetch('/gconnect/', {
-            credentials: 'include',
+        return fetch('/googleauth/', {
+            credentials: 'same-origin',
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

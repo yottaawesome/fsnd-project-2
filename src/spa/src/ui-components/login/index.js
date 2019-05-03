@@ -8,28 +8,29 @@ const githubClientId = document.querySelector("meta[name='github-client-id']").g
 const googleClientId = document.querySelector("meta[name='google-client-id']").getAttribute("content");
 const pageState = document.querySelector("meta[name='page-state']").getAttribute("content");
 
-/*function start() {
-    console.log('load')
-    gapi.load('auth2', function() {
-        auth2 = gapi.auth2.init({
-            client_id: googleClientId,
-            // Scopes to request in addition to 'profile' and 'email'
-            //scope: 'additional_scope'
-        });
-    });
-}*/
+let auth2 = null;
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
         autobind(this);
+        this.state = { loadGScript: auth2 == null }
     }
 
     onGoogleLoginClick() {
         auth2.grantOfflineAccess().then(this.signInCallback);
     }
 
-    componentDidMount() {
+    loadGoogleApi() {
+        let _this = this;
+        gapi.load('auth2', function() {
+            auth2 = gapi.auth2.init({
+                client_id: googleClientId,
+                // Scopes to request in addition to 'profile' and 'email'
+                //scope: 'additional_scope'
+            });
+            _this.setState({ loadGScript: auth2 == null });
+        });
     }
 
     signInCallback(authResult) {
@@ -61,7 +62,11 @@ export default class Login extends Component {
 
                 <p><a href={`https://github.com/login/oauth/authorize?scope=read:user%20user:email&client_id=${githubClientId}`}>Login with GitHub!</a></p>
                 <p><button id="signinButton" onClick={ linkEvent(this, this.onGoogleLoginClick) }>Sign in with Google!</button></p>
-                { /*<script onLoad={start} src="https://apis.google.com/js/client:platform.js" async defer></script>*/ }
+                {
+                    this.state.loadGScript 
+                        ? <script onLoad={linkEvent(this, this.loadGoogleApi)} src="https://apis.google.com/js/client:platform.js" async defer></script> 
+                        : null
+                }
             </div>
         );
     }
