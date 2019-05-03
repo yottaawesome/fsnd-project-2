@@ -12,13 +12,19 @@ export default class ServerApi {
     static logout() {
         return fetch('/logout/', {
             credentials: 'same-origin',
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         });
     }
 
     static fetchBookshelf() {
         return fetch('/bookshelf/', {
             credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         });
     }
 
@@ -28,7 +34,8 @@ export default class ServerApi {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify({
                 name: 'testname',
@@ -41,6 +48,9 @@ export default class ServerApi {
     static fetchBook() {
         return fetch('/book/1', {
             credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         });
     }
 
@@ -50,7 +60,8 @@ export default class ServerApi {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify({
                 name: 'testnameupdated',
@@ -64,8 +75,25 @@ export default class ServerApi {
         return fetch(`/book/${id}`, {
             credentials: 'same-origin',
             method: 'DELETE',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         });
+    }
 
-        
+    static postGoogleAuthCode(state, code) {
+        return fetch('/gconnect/', {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+                code: code,
+                state: state
+            })
+        });
     }
 }

@@ -6,6 +6,21 @@
 
         <meta name="google-client-id" content="{{ google_client_id }}">
         <meta name="github-client-id" content="{{ github_client_id }}">
+        <meta name="page-state" content="{{ page_state }}">
+
+        <script src="https://code.jquery.com/jquery-3.4.0.min.js"> </script>
+        <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+        <script type="text/javascript">
+            function start() {
+                gapi.load('auth2', function() {
+                    auth2 = gapi.auth2.init({
+                        client_id: '{{ google_client_id }}',
+                        // Scopes to request in addition to 'profile' and 'email'
+                        //scope: 'additional_scope'
+                    });
+                });
+            }
+        </script>
     </head>
     
     <body>

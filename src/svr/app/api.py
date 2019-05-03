@@ -3,16 +3,22 @@ from db import dal_factory
 from flask import (Flask, render_template, jsonify, session as login_session, request)
 from .flask_app import (main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, 
                         GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+import random, string
 
 dal_fct = dal_factory()
 
 @main_app.route('/')
 def home():
-    '''
-    Base route.
-    '''
-    return render_template('index.html', google_client_id=GOOGLE_CLIENT_ID,
-                            github_client_id=GITHUB_CLIENT_ID)
+    ''' Base route. '''
+
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in range(32))
+    login_session['state'] = state
+    
+    return render_template('index.html',
+                            google_client_id=GOOGLE_CLIENT_ID,
+                            github_client_id=GITHUB_CLIENT_ID,
+                            page_state=state)
 
 
 @main_app.route('/user/')

@@ -34,40 +34,37 @@ def check_token_status(access_token):
         params={'token': access_token})
     return response.status_code == 200
 
-@main_app.route('/gconnect', methods=['POST'])
+
+@main_app.route('/gconnect/', methods=['POST'])
 def gconnect():
     # Validate state token
-    if request.args.get('state') != login_session['state']:
-        response = make_response(json.dumps('Invalid state parameter.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    json_req = request.get_json()
+    login_session_state = login_session.get('state')
+    if login_session_state is None or json_req['state'] != login_session_state:
+        return jsonify('Invalid state parameter'), 401
+
     # Obtain authorization code
-    code = request.data
+    code = json_req['code']
 
     try:
+
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets(
-            'secret.google_client_secrets.json',
-            scope='')
+        oauth_flow = flow_from_clientsecrets('secret.google_client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
-    except FlowExchangeError:
-        response = make_response(
-            json.dumps('Failed to upgrade the authorization code.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+
+    except FlowExchangeError as ex:
+        print(ex)
+        return jsonify({ 'message': 'Failed to upgrade the authorization code.' }), 401
 
     # Check that the access token is valid.
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'
             .format(access_token))
-    h = httplib2.Http()
-    result = json.loads(h.request(url, 'GET')[1])
+    check_json = requests.get(url).json()
     # If there was an error in the access token info, abort.
-    if result.get('error') is not None:
-        response = make_response(json.dumps(result.get('error')), 500)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    if check_json.get('error') is not None:
+        return jsonify({ 'message': check_json.get('error') }), 500
 
     """ https://www.googleapis.com/oauth2/v1/tokeninfo
     {
@@ -84,43 +81,18 @@ def gconnect():
 
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
-    if result['user_id'] != gplus_id:
-        response = make_response(
-            json.dumps("Token's user ID doesn't match given user ID."), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    if check_json['user_id'] != gplus_id:
+        return jsonify({ 'message': 'Token\'s user ID doesn\'t match given user ID.' }), 401
 
     # Verify that the access token is valid for this app.
-    if result['issued_to'] != GOOGLE_CLIENT_ID:
-        response = make_response(
-            json.dumps("Token's client ID does not match app's."), 401)
-        print("Token's client ID does not match app's.")
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    stored_access_token = login_session.get('access_token')
-    stored_gplus_id = login_session.get('gplus_id')
-    if stored_access_token is not None and gplus_id == stored_gplus_id:
-        print('Current token: {}'.format(stored_access_token))
-        print('New token: {}'.format(credentials.access_token))
-        revoke_token(login_session['access_token'])
-        login_session['access_token'] = credentials.access_token
-        response = make_response(json.dumps('Current user is already connected.'),
-                                200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    # Store the access token in the session for later use.
-    login_session['access_token'] = credentials.access_token
-    login_session['gplus_id'] = gplus_id
-    login_session['token_expiry'] = credentials.token_expiry
+    if check_json['issued_to'] != GOOGLE_CLIENT_ID:
+        return jsonify({ 'message': 'Token\'s client ID does not match app\'s' }), 401
 
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-    params = {'access_token': credentials.access_token, 'alt': 'json'}
+    params = {'access_token': access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
-
-    data = answer.json()
+    user_details_data = answer.json()
 
     """
     https://www.googleapis.com/oauth2/v1/userinfo
@@ -136,27 +108,23 @@ def gconnect():
     }
     """
 
-    login_session['username'] = data['name']
-    login_session['picture'] = data['picture']
-    login_session['email'] = data['email']
+    with dal_fct() as dal:
+        user_record = dal.get_user_by_email(user_details_data['email'])
+        if(user_record is None):
+            user_record = dal.create_user(
+                                user_details_data['name'],
+                                user_details_data['email'],
+                                user_details_data['avatar_url'])
+            dal.flush()
 
-    login_session['user'] = {
-        'uid': data['id'],
-        'name': data['name'],
-        'email': data['email'],
-        'picture': data['picture']
-    }
+        login_session['user'] = user_record.serialize
+        # the bookshelf must also exist
+        if dal.get_bookshelf_by_user(user_record.id) is None:
+            dal.create_bookshelf(user_record.id)
 
-    output = ''
-    output += '<h1>Welcome, '
-    output += login_session['username']
-    output += '!</h1>'
-    output += '<img src="'
-    output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-    flash("you are now logged in as %s" % login_session['username'])
-    print("done!")
-    return output
+    revoke_token(access_token)
+
+    return jsonify(login_session['user']), 200
 
 @main_app.route('/gdisconnect')
 def gdisconnect():
