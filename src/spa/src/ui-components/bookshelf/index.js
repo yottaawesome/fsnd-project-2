@@ -65,17 +65,15 @@ export default class Bookshelf extends Component {
 
         return (
             <div className={styles.root}>
-            <p><a href='/#/new'>Add a book</a></p>
-            {
-                this.state.bookshelf.map((book, key) => 
+                <p><a href='/#/new'>Add a book</a></p>
+                {this.state.bookshelf.map((book, key) => 
                     <div>
                         <p>{book.name}</p>
                         <p>{book.description}</p>
                         <p>{book.web_link}</p>
                         <button onClick={linkEvent(this, this.bindDeleteBookEvent(book.id))}>delete</button>
                     </div>
-                )
-            }
+                )}
             </div>
         )
     }
