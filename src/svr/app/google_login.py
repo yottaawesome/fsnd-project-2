@@ -5,7 +5,8 @@ from flask import (Flask, render_template, url_for,
                     
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-import random, string, httplib2, json, requests
+import json
+import requests
 
 from db import Dal, dal_factory
 dal_fct = dal_factory()
@@ -20,19 +21,6 @@ def revoke_token(access_token):
         print('Token successfully revoked')
     else:
         print('Token revocation failed with status {}'.format(response.status_code))
-
-def clear_session():
-    del login_session['access_token']
-    del login_session['gplus_id']
-    del login_session['username']
-    del login_session['email']
-    del login_session['picture']
-
-def check_token_status(access_token):
-    response = requests.get(
-        'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}', 
-        params={'token': access_token})
-    return response.status_code == 200
 
 
 @main_app.route('/googleauth/', methods=['POST'])
@@ -125,18 +113,3 @@ def google_auth():
     revoke_token(access_token)
 
     return jsonify(login_session['user']), 200
-
-@main_app.route('/gdisconnect')
-def gdisconnect():
-    access_token = login_session.get('access_token')
-    if access_token is None:
-        print('Access Token is None')
-        response = make_response(json.dumps('Current user not connected.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    revoke_token(login_session['access_token'])
-    clear_session()
-    response = make_response(json.dumps('Successfully disconnected.'), 200)
-    response.headers['Content-Type'] = 'application/json'
-    return response
