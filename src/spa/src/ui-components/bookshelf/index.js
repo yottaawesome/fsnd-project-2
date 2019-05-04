@@ -1,4 +1,4 @@
-import { Component } from 'inferno';
+import { Component, linkEvent } from 'inferno';
 import autobind from 'auto-bind';
 import ServerApi from '../../api';
 import { GlobalState, State, Events } from '../../app-state';
@@ -46,6 +46,14 @@ export default class Bookshelf extends Component {
             .catch(err => console.error(err));
     }
 
+    deleteBook(id) {
+        console.log(`Delete book ${id}`);
+    }
+
+    bindDeleteBookEvent(id) {
+        return () => this.deleteBook(id);
+    }
+
     render() {
         if(this.state.bookshelf == null || this.state.bookshelf.length == 0) {
             return (
@@ -57,12 +65,14 @@ export default class Bookshelf extends Component {
 
         return (
             <div className={styles.root}>
+            <p><a href='/#/new'>Add a book</a></p>
             {
                 this.state.bookshelf.map((book, key) => 
                     <div>
                         <p>{book.name}</p>
                         <p>{book.description}</p>
                         <p>{book.web_link}</p>
+                        <button onClick={linkEvent(this, this.bindDeleteBookEvent(book.id))}>delete</button>
                     </div>
                 )
             }
