@@ -34,10 +34,21 @@ You'll need the following prerequisites.
 * Pip
 * `virtualenv`
 * Node
-* NPM (ideally a version that comes with NPX, or you can install NPX separately)
+* NPM
+* A GitHub and/or a Google Account (this application supports authenticating with both options).
 * Git to clone this repository.
 
 ### Python
+
+You'll need to set up a Google Developer Client application and a GitHub application in order to obtain the relevant client IDs and secrets, plus the secrets JSON file from Google. These details are used by the server and client to authenticate against GitHub and Google. The following files will need to be present at the root of `svr`. Note that all files starting with `secret.` are deliberately ignored in `.gitignore`.
+
+* `secret.github_clientid:` a single-line file with your GitHub application's client ID.
+* `secret.github_clientsecret:` a single-line file with your GitHub application's client secret.
+* `secret.google.clientid:` a single-line file with your Google application's client ID.
+* `secret.google_clientsecret:` a single-line file with your Google application's client secret.
+* `secret.google_client_secrets.json:` the downloaded JSON file for your Google application from Google Developer Console.
+
+I'll remove requirement for `secret.google.clientid` and `secret.google_clientsecret` in the future and allow the server to directly extract this information using only `secret.google_client_secrets.json`.
 
 * From Bash:
   * Move into the server dir: `cd src/svr`.
