@@ -14,7 +14,7 @@
   "dependencies": {
     "@babel/polyfill": "7.4.3",
     "auto-bind": "2.1.0",
-    "brainlet": "1.0.2",
+    "brainlet": "1.0.8",
     "inferno": "7.1.11",
     "inferno-router": "7.1.11"
   },
