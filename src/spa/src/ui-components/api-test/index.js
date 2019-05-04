@@ -21,7 +21,7 @@ export default class ApiTest extends Component {
 
     onCreateBookClick() {
         ServerApi
-            .createNewBook()
+            .createNewBook('testname', 'testdescription', 'testweblink')
             .then(response => response.json())
             .then(json => {
                 console.log(json);
@@ -32,7 +32,7 @@ export default class ApiTest extends Component {
 
     onGetBookClick() {
         ServerApi
-            .fetchBook()
+            .fetchBook(1)
             .then(response => response.json())
             .then(json => {
                 console.log(json);
@@ -43,7 +43,7 @@ export default class ApiTest extends Component {
 
     onEditBookClick() {
         ServerApi
-            .editBook()
+            .editBook(1, 'testnameupdated', 'testdescriptionupdated', 'testweblinkupdated')
             .then(response => response.json())
             .then(json => {
                 console.log(json);
