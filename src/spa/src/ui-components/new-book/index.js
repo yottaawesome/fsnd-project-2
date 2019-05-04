@@ -30,6 +30,10 @@ export default class NewBook extends Component {
     bindChangeToEvent(name) {
         return (event) => { this.onValueChange(name, event); };
     }
+
+    onCancelClick() {
+        window.location.hash = '#/';
+    }
     
     render() {
         return (
@@ -42,8 +46,9 @@ export default class NewBook extends Component {
 
                 <label for="web_link">Web link</label>
                 <input id="web_link" name="web_link" type="text" onInput={this.onValueChange} />
-                
+
                 <button onClick={linkEvent(this, this.onSubmitClick)}>Submit</button>
+                <button onClick={linkEvent(this, this.onCancelClick)}>Cancel</button>
             </div>
         );
     }

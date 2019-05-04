@@ -57,6 +57,15 @@ export default class Bookshelf extends Component {
 
         return (
             <div className={styles.root}>
+            {
+                this.state.bookshelf.map((book, key) => 
+                    <div>
+                        <p>{book.name}</p>
+                        <p>{book.description}</p>
+                        <p>{book.web_link}</p>
+                    </div>
+                )
+            }
             </div>
         )
     }
