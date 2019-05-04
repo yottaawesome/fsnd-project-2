@@ -1,10 +1,12 @@
-import "@babel/polyfill";
+import '@babel/polyfill';
 import { render, Component } from 'inferno';
 import { HashRouter, Route, Switch, Link } from 'inferno-router';
 import Home from './ui-components/home';
 import Login from './ui-components/login';
 import Header from './ui-components/header';
 import Menu from './ui-components/menu';
+import ApiTest from './ui-components/api-test';
+import NewBook from './ui-components/new-book';
 import { GlobalState, Events, State } from './app-state';
 import ServerApi from './api';
 import './index.scss';
@@ -27,11 +29,12 @@ const MainClient = () => (
     <Header />
     <HashRouter>
       <div>
-        <Menu />
         <div>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/login" component={Login} />
+            <Route path="/test" component={ApiTest} />
+            <Route path="/new" component={NewBook} />
           </Switch>
         </div>
       </div>
