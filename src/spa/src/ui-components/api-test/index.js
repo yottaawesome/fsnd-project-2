@@ -58,7 +58,7 @@ export default class ApiTest extends Component {
             .then(response => response.json())
             .then(books => {
                 if(books.length == 0)
-                    Promise.reject('Nothing found on server to delete')
+                    return Promise.reject('Nothing found on server to delete')
                 return books[books.length-1];
             })
             .then(book => {
@@ -67,8 +67,9 @@ export default class ApiTest extends Component {
             .then(response => {
                 if(response.status == 204)
                     return true;
-                Promise.reject(`Delete failed with status ${response.status}`);
-            });
+                return Promise.reject(`Delete failed with status ${response.status}`);
+            })
+            .catch(err => console.error(`Deleet book failed: ${err}`));
     }
 
     render() {
