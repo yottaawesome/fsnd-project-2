@@ -44,6 +44,7 @@ You'll need the following prerequisites.
   * Create virtual environment: `env virtualenv`.
   * Activate virtual environment: `source env/bin/activate`.
   * Install Python dependencies: `pip install -r requirements.txt`.
+  * Create the DB: `python create_db.py`.
   * Run development server: `python main.py` or `source run`.
   * Visit [localhost:5000](http://localhost:5000).
 
