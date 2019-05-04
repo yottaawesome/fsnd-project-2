@@ -36,9 +36,10 @@ You'll need the following prerequisites.
 * Node
 * NPM
 * A GitHub and/or a Google Account (this application supports authenticating with both options).
+* A Google Web Application and a GitHub Application (further details in the section below).
 * Git to clone this repository.
 
-### Python
+### Server
 
 You'll need to set up a Google Developer Client application and a GitHub application in order to obtain the relevant client IDs and secrets, plus the secrets JSON file from Google. These details are used by the server and client to authenticate against GitHub and Google. The following files will need to be present at the root of `svr`. Note that all files starting with `secret.` are deliberately ignored in `.gitignore`.
 
@@ -48,7 +49,7 @@ You'll need to set up a Google Developer Client application and a GitHub applica
 * `secret.google_clientsecret:` a single-line file with your Google application's client secret.
 * `secret.google_client_secrets.json:` the downloaded JSON file for your Google application from Google Developer Console.
 
-I'll remove requirement for `secret.google.clientid` and `secret.google_clientsecret` in the future and allow the server to directly extract this information using only `secret.google_client_secrets.json`.
+In the future, I'll remove the requirement for `secret.google.clientid` and `secret.google_clientsecret` and allow the server to directly extract this information using only `secret.google_client_secrets.json`.
 
 * From Bash:
   * Move into the server dir: `cd src/svr`.
