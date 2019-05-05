@@ -8,7 +8,7 @@ As such, this project will take the shape of a digital bookshelf where users wil
 
 ## :warning: Alert
 
-The client's package.json uses node-sass, which uses a [vulnerable version](https://nvd.nist.gov/vuln/detail/CVE-2018-20834) of node-tar. The [issue](https://github.com/sass/node-sass/issues/2625) is being tracked. I'm currently awaiting for node-sass to issue a new version, and then I'll upgrade the dependencies. For now, you might see NPM complaining about this vulnerability.
+The client's `package.json` uses `node-sass`, which uses a [vulnerable version](https://nvd.nist.gov/vuln/detail/CVE-2018-20834) of `node-tar`. The [issue](https://github.com/sass/node-sass/issues/2625) is being tracked. I'm currently awaiting for `node-sass to issue a new version, and then I'll upgrade the dependencies. For now, you might see NPM complaining about this vulnerability.
 
 ## Status
 
