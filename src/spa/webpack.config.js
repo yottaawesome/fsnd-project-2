@@ -15,6 +15,11 @@ module.exports = (env, argv) => {
       path: path.resolve(__dirname, '../svr/app/static'),
       filename: 'main.js'
     },
+    resolve: {
+      alias: {
+          'inferno': isDevelopment ? 'inferno/dist/index.dev.esm.js' : 'inferno/dist/index.esm.js',
+      },
+    },
     module: {
       rules: [
         {
