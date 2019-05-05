@@ -5,34 +5,34 @@ import autobind from 'auto-bind';
 import Bookshelf from '../bookshelf';
 
 export default class Home extends Component {
-    constructor(props) {
-        super(props);
-        //this.componentDidMount = this.componentDidMount.bind(this);
-        autobind(this);
-        this.state = {}
-        GlobalState.subscribe(this, Events.LOGIN, Events.LOGOUT);
-    }
+  constructor(props) {
+    super(props);
+    //this.componentDidMount = this.componentDidMount.bind(this);
+    autobind(this);
+    this.state = {}
+    GlobalState.subscribe(this, Events.LOGIN, Events.LOGOUT);
+  }
 
-    componentDidMount() { 
-        let currentUser = GlobalState.getStateData(State.CURRENT_USER);
-        let state = currentUser == null
-            ? { user: null }
-            : { user: currentUser }
-        this.setState(state);
-    }
+  componentDidMount() { 
+    let currentUser = GlobalState.getStateData(State.CURRENT_USER);
+    let state = currentUser == null
+      ? { user: null }
+      : { user: currentUser }
+    this.setState(state);
+  }
 
-    componentWillUnmount() { GlobalState.unsubscribe(this); }
+  componentWillUnmount() { GlobalState.unsubscribe(this); }
 
-    onAppEventLogin(event, data) { this.setState({ user: data }); }
+  onAppEventLogin(event, data) { this.setState({ user: data }); }
 
-    onAppEventLogout(event, data) { this.setState({ user: null }); }
+  onAppEventLogout(event, data) { this.setState({ user: null }); }
 
-    render() {
-        return (
-            <div className={styles.root}>
-                <h1>{this.state.user != null ? `Hello, ${this.state.user.name}!` : "Hello!"}</h1>
-                { this.state.user != null ? <Bookshelf /> : null }
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div className={styles.root}>
+        <h1>{this.state.user != null ? `Hello, ${this.state.user.name}!` : "Hello!"}</h1>
+        { this.state.user != null ? <Bookshelf /> : null }
+      </div>
+    );
+  }
 }

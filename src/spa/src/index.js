@@ -26,19 +26,19 @@ ServerApi
 
 const MainClient = () => (
   <div class="main">
-    <Header />
-    <HashRouter>
-      <div>
-        <div>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/login" component={Login} />
-            <Route path="/test" component={ApiTest} />
-            <Route path="/new" component={NewBook} />
-          </Switch>
-        </div>
-      </div>
-    </HashRouter>
+  <Header />
+  <HashRouter>
+    <div>
+    <div>
+      <Switch>
+      <Route exact path="/" component={Home} />
+      <Route path="/login" component={Login} />
+      <Route path="/test" component={ApiTest} />
+      <Route path="/new" component={NewBook} />
+      </Switch>
+    </div>
+    </div>
+  </HashRouter>
   </div>
 );
 

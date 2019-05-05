@@ -11,63 +11,63 @@ const pageState = document.querySelector("meta[name='page-state']").getAttribute
 let auth2 = null;
 
 export default class Login extends Component {
-    constructor(props) {
-        super(props);
-        autobind(this);
-        this.state = { loadGScript: auth2 == null }
+  constructor(props) {
+    super(props);
+    autobind(this);
+    this.state = { loadGScript: auth2 == null }
+  }
+
+  onGoogleLoginClick() {
+    auth2.grantOfflineAccess().then(this.signInCallback);
+  }
+
+  loadGoogleApi() {
+    let _this = this;
+    gapi.load('auth2', function() {
+      auth2 = gapi.auth2.init({
+        client_id: googleClientId,
+        // Scopes to request in addition to 'profile' and 'email'
+        //scope: 'additional_scope'
+      });
+      _this.setState({ loadGScript: auth2 == null });
+    });
+  }
+
+  signInCallback(authResult) {
+    if (!authResult['code']) {
+      console.error('An error occurred and no code was given.');
+      return;
     }
 
-    onGoogleLoginClick() {
-        auth2.grantOfflineAccess().then(this.signInCallback);
-    }
+    ServerApi
+      .postGoogleAuthCode(pageState, authResult['code'])
+      .then(response => {
+        if(response.status == 401)
+          return Promise.reject("Failed to authenticate");
+        return response.json();
+      })
+      .then(json => {
+        GlobalState.setStateData(State.CURRENT_USER, json);
+        GlobalState.raiseEvent(Events.LOGIN, json);
+        window.location.hash = '#/';
+        return json;
+      })
+      .catch(err => console.error(`Google login error: ${err}`))
+  }
 
-    loadGoogleApi() {
-        let _this = this;
-        gapi.load('auth2', function() {
-            auth2 = gapi.auth2.init({
-                client_id: googleClientId,
-                // Scopes to request in addition to 'profile' and 'email'
-                //scope: 'additional_scope'
-            });
-            _this.setState({ loadGScript: auth2 == null });
-        });
-    }
+  render() {
+    return (
+      <div className={styles.red}>
+        <h2>Login</h2>
 
-    signInCallback(authResult) {
-        if (!authResult['code']) {
-            console.error('An error occurred and no code was given.');
-            return;
+        <p><a href={`https://github.com/login/oauth/authorize?scope=read:user%20user:email&client_id=${githubClientId}`}>Login with GitHub!</a></p>
+        <p><button id="signinButton" onClick={ linkEvent(this, this.onGoogleLoginClick) }>Sign in with Google!</button></p>
+        {
+          this.state.loadGScript 
+            ? <script onLoad={linkEvent(this, this.loadGoogleApi)} src="https://apis.google.com/js/client:platform.js" async defer></script> 
+            : null
         }
-
-        ServerApi
-            .postGoogleAuthCode(pageState, authResult['code'])
-            .then(response => {
-                if(response.status == 401)
-                    return Promise.reject("Failed to authenticate");
-                return response.json();
-            })
-            .then(json => {
-                GlobalState.setStateData(State.CURRENT_USER, json);
-                GlobalState.raiseEvent(Events.LOGIN, json);
-                window.location.hash = '#/';
-                return json;
-            })
-            .catch(err => console.error(`Google login error: ${err}`))
-    }
-
-    render() {
-        return (
-            <div className={styles.red}>
-                <h2>Login</h2>
-
-                <p><a href={`https://github.com/login/oauth/authorize?scope=read:user%20user:email&client_id=${githubClientId}`}>Login with GitHub!</a></p>
-                <p><button id="signinButton" onClick={ linkEvent(this, this.onGoogleLoginClick) }>Sign in with Google!</button></p>
-                {
-                    this.state.loadGScript 
-                        ? <script onLoad={linkEvent(this, this.loadGoogleApi)} src="https://apis.google.com/js/client:platform.js" async defer></script> 
-                        : null
-                }
-            </div>
-        );
-    }
+      </div>
+    );
+  }
 }
