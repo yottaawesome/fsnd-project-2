@@ -216,7 +216,7 @@ class TestDal(unittest.TestCase):
 
     def test_get_categories(self):
         with self.dal_fct() as dal:
-            book_category = dal.create_book_category('testcategory', 'desc')
+            dal.create_book_category('testcategory', 'desc')
             dal.flush()
 
             categories = dal.get_categories()
