@@ -21,7 +21,7 @@ export default class ApiTest extends Component {
 
   onCreateBookClick() {
     ServerApi
-      .createNewBook('testname', 'testdescription', 'testweblink')
+      .createBook('testname', 'testdescription', 'testweblink')
       .then(response => response.json())
       .then(json => {
         console.log(json);

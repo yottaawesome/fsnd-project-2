@@ -214,6 +214,14 @@ class TestDal(unittest.TestCase):
             self.assertTrue(book.categories[0].id == book_category.id)
             self.assertTrue(book.categories[1].id == book_category2.id)
 
+    def test_get_categories(self):
+        with self.dal_fct() as dal:
+            book_category = dal.create_book_category('testcategory', 'desc')
+            dal.flush()
+
+            categories = dal.get_categories()
+            self.assertTrue(len(categories) > 0)
+
 
 if __name__ == '__main__':
     unittest.main()

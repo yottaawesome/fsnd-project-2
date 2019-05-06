@@ -42,7 +42,8 @@ export default class EditBook extends Component {
       this.state.data.id,
       this.state.data['name'],
       this.state.data['description'],
-      this.state.data['web_link']
+      this.state.data['web_link'],
+      this.state.data[categories]
     );
   }
 

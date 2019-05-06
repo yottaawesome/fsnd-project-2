@@ -13,7 +13,7 @@ export default class NewBook extends Component {
   }
 
   onSubmitClick() {
-    ServerApi.createNewBook(
+    ServerApi.createBook(
       this.state.data['name'],
       this.state.data['description'],
       this.state.data['web_link']

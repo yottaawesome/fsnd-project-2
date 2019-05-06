@@ -175,3 +175,9 @@ class Dal():
             .query(BookCategory)
             .filter_by(id=id)
             .first())
+
+    def get_categories(self):
+        return (self
+            ._session
+            .query(BookCategory)
+            .all())

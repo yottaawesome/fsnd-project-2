@@ -172,7 +172,11 @@ def edit_book(id):
             if book is None:
                 return jsonify({'message': 'Book not found'}), 404
 
-            book = dal.update_book(book.id, json['name'], json['description'], json['web_link'])
+            book = dal.update_book(
+                book.id, json['name'],
+                json['description'],
+                json['web_link'],
+                json['categories'])
 
             return jsonify(book.serialize), 200
 
@@ -205,6 +209,31 @@ def delete_book(id):
             dal.delete_book(book.id)
 
         return '', 204
+
+    except Exception as ex:
+        print('DAL operation failed: ', ex)
+        return jsonify({'message': 'Operation failed'}), 500
+
+@main_app.route('/categories/', methods=['GET'])
+def get_categories():
+    '''
+    Gets all book categories.
+
+    Returns:
+        200 if the book was successfully deleted.
+        401 if the user is not authenticated.
+        404 if the book does not exist. 
+        500 if an unexpected error occurs.
+    '''
+
+    try:
+
+        user = login_session.get('user')
+        if user is None:
+            return jsonify({ 'message': 'No currently logged in user' }), 401
+
+        with dal_fct() as dal:
+            return jsonify([cat.serialize for cat in dal.get_categories()]), 200
 
     except Exception as ex:
         print('DAL operation failed: ', ex)

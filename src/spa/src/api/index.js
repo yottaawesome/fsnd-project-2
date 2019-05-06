@@ -26,7 +26,16 @@ export default class ServerApi {
     });
   }
 
-  static createNewBook(name, description, web_link) {
+  static fetchBook(id) {
+    return fetch(`/book/${id}`, {
+      credentials: 'same-origin',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    });
+  }
+
+  static createBook(name, description, web_link, categories) {
     return fetch('/bookshelf/', {
       credentials: 'same-origin',
       method: 'POST',
@@ -38,21 +47,13 @@ export default class ServerApi {
       body: JSON.stringify({
         name: name,
         description: description,
-        web_link: web_link
+        web_link: web_link,
+        categories: categories
       })
     });
   }
 
-  static fetchBook(id) {
-    return fetch(`/book/${id}`, {
-      credentials: 'same-origin',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    });
-  }
-
-  static editBook(id, name, description, web_link) {
+  static editBook(id, name, description, web_link, categories) {
     return fetch(`/book/${id}`, {
       credentials: 'same-origin',
       method: 'POST',
@@ -64,7 +65,8 @@ export default class ServerApi {
       body: JSON.stringify({
         name: name,
         description: description,
-        web_link: web_link
+        web_link: web_link,
+        categories: categories
       })
     });
   }
