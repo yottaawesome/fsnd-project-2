@@ -38,9 +38,9 @@ export default class ServerApi {
         'X-Requested-With': 'XMLHttpRequest'
       },
       body: JSON.stringify({
-        name: 'testname',
-        description: 'testdescription',
-        web_link: 'testweblink'
+        name: name,
+        description: description,
+        web_link: web_link
       })
     });
   }
