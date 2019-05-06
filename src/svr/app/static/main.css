@@ -1,6 +1,5 @@
 
 
-
 .login__red__1DXmZ {
   color: blue; }
 
@@ -59,6 +58,34 @@ h1 {
   0% {
     background-position-x: 390px; } }
 
+
+
+.edit-book__row__21XbH {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%; }
+
+.edit-book__labelColumn__2cUeN {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+  text-align: right;
+  margin-right: 5px;
+  margin-top: 5px; }
+
+.edit-book__inputColumn__fpemL {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 4; }
+
+.edit-book__buttonColumn__r5HCy {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 2; }
 
 .main {
   width: 50%;

@@ -1,5 +1,3 @@
-import ApiTest from "../ui-components/api-test";
-
 export default class ServerApi {
   constructor() {}
 

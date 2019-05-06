@@ -7,6 +7,7 @@ import Header from './ui-components/header';
 import Menu from './ui-components/menu';
 import ApiTest from './ui-components/api-test';
 import NewBook from './ui-components/new-book';
+import EditBook from './ui-components/edit-book';
 import { GlobalState, Events, State } from './app-state';
 import ServerApi from './api';
 import './index.scss';
@@ -35,6 +36,7 @@ const MainClient = () => (
       <Route path="/login" component={Login} />
       <Route path="/test" component={ApiTest} />
       <Route path="/new" component={NewBook} />
+      <Route path="/edit/:id" component={EditBook} />
       </Switch>
     </div>
     </div>

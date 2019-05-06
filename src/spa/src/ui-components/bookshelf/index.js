@@ -47,7 +47,16 @@ export default class Bookshelf extends Component {
   }
 
   deleteBook(id) {
-    console.log(`Delete book ${id}`);
+    if(confirm(`Are you sure you wish to delete ${this.state.bookshelf[id].name}?`)) {
+      ServerApi
+        .deleteBook(id)
+        .then(response => {
+          if(response.status != 200)
+            return Promise.reject(`Delete failed with state ${response.status}`)
+          return response;
+        })
+        .catch(err => console.err(err));
+    }
   }
 
   bindDeleteBookEvent(id) {
@@ -72,9 +81,10 @@ export default class Bookshelf extends Component {
             <p>{book.description}</p>
             <p>{book.web_link}</p>
             <button onClick={linkEvent(this, this.bindDeleteBookEvent(book.id))}>delete</button>
+            <a href={`/#/edit/${book.id}`}>edit</a>
           </div>
         )}
       </div>
-    )
+    );
   }
 }
