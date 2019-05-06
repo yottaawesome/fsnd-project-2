@@ -63,7 +63,8 @@ h1 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 100%; }
+  width: 100%;
+  padding-bottom: 15px; }
 
 .new-edit-book__labelColumn__1PKy7 {
   display: flex;
@@ -93,18 +94,19 @@ h1 {
   flex: 1; }
 
 .new-edit-book__clicked__32chs, .new-edit-book__unclicked__1soUG:hover {
-  border: 3px solid black;
+  border: 1px solid black;
   border-radius: 4px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  font-weight: bold; }
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-weight: bold;
+  background: #2079b0;
+  color: white; }
 
 .new-edit-book__unclicked__1soUG {
-  border: 3px solid gray;
-  border: none;
+  border: 1px solid black;
   border-radius: 4px;
-  padding-top: 10px;
-  padding-bottom: 10px; }
+  padding-top: 5px;
+  padding-bottom: 5px; }
 
 .main {
   width: 50%;

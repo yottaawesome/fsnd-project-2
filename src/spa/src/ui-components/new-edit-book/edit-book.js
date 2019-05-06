@@ -33,6 +33,7 @@ export default class EditBook extends Component {
       .then(json => {
         let newState = {..._this.state}
         newState.data = json;
+        newState.data.categories = json.categories.map((value, index) => value.id);
         newState.name = json.name;
         _this.setState(newState);
         return json;
@@ -53,7 +54,7 @@ export default class EditBook extends Component {
       this.state.data['name'],
       this.state.data['description'],
       this.state.data['web_link'],
-      this.state.data[categories]
+      this.state.data['categories']
     );
   }
 
@@ -132,7 +133,9 @@ export default class EditBook extends Component {
             <div className={styles.row}>
             {
               this.state.categories.map((val, index) => (
-                <div className={styles.categoryColumn}><button className={this.getButtonStyle(val.id)} onClick={this.bindCategoryClick(val.id)}>{ val.name }</button></div>
+                <div className={styles.categoryColumn}>
+                  <button className={this.getButtonStyle(val.id)} onClick={this.bindCategoryClick(val.id)}>{ val.name }</button>
+                </div>
               ))
             }
             </div>

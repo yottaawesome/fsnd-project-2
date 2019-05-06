@@ -3,6 +3,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
+    padding-bottom: 15px;
 }
 
 .labelColumn {
@@ -37,17 +38,18 @@
 }
 
 .clicked, .unclicked:hover {
-    border: 3px solid black;
+    border: 1px solid black;
     border-radius: 4px;
-    padding-top:10px;
-    padding-bottom:10px;
+    padding-top:5px;
+    padding-bottom:5px;
     font-weight: bold;
+    background: #2079b0;
+    color:white;
 }
 
 .unclicked {
-    border: 3px solid gray;
-    border: none;
+    border: 1px solid black;
     border-radius: 4px;
-    padding-top:10px;
-    padding-bottom:10px;
+    padding-top:5px;
+    padding-bottom:5px;
 }

@@ -181,6 +181,7 @@ def edit_book(id):
             return jsonify(book.serialize), 200
 
     except Exception as ex:
+        print(ex)
         print('DAL operation failed: ', ex)
         return jsonify({'message': 'Operation failed'}), 500
 
