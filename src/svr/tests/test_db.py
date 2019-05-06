@@ -175,15 +175,13 @@ class TestDal(unittest.TestCase):
             
             bookshelf = dal.create_bookshelf(user.id)
             dal.flush()
-            
-            dal.create_book_category('testcategory', 'desc')
-            dal.flush()
 
             book = dal.create_book('Test',
                                     bookshelf.id,
                                     description='desc',
                                     weblink='testlink')
             dal.flush()
+            
             books = dal.get_books_by_user(user.id)
             self.assertIsNotNone(books)
             self.assertTrue(len(books)>0)
