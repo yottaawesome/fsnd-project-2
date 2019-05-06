@@ -96,4 +96,15 @@ export default class ServerApi {
       })
     });
   }
+
+  static fetchCategories() {
+    return fetch('/categories/', {
+      credentials: 'same-origin',
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    });
+  }
 }

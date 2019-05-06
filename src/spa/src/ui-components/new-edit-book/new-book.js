@@ -1,6 +1,7 @@
 import { Component, linkEvent } from 'inferno';
 import autobind from 'auto-bind';
 import ServerApi from '../../api';
+import { categories } from './shared';
 import styles from './styles.module.scss';
 
 export default class NewBook extends Component {
@@ -10,6 +11,10 @@ export default class NewBook extends Component {
     this.state = { 
       data: {} 
     };
+  }
+
+  componentDidMount() {
+    
   }
 
   onSubmitClick() {

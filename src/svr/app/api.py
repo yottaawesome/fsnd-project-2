@@ -220,17 +220,11 @@ def get_categories():
     Gets all book categories.
 
     Returns:
-        200 if the book was successfully deleted.
-        401 if the user is not authenticated.
-        404 if the book does not exist. 
+        200.
         500 if an unexpected error occurs.
     '''
 
     try:
-
-        user = login_session.get('user')
-        if user is None:
-            return jsonify({ 'message': 'No currently logged in user' }), 401
 
         with dal_fct() as dal:
             return jsonify([cat.serialize for cat in dal.get_categories()]), 200

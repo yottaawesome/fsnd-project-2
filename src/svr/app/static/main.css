@@ -86,6 +86,26 @@ h1 {
   flex-basis: 100%;
   flex: 2; }
 
+.new-edit-book__categoryColumn__25z_k {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1; }
+
+.new-edit-book__clicked__32chs, .new-edit-book__unclicked__1soUG:hover {
+  border: 3px solid black;
+  border-radius: 4px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold; }
+
+.new-edit-book__unclicked__1soUG {
+  border: 3px solid gray;
+  border: none;
+  border-radius: 4px;
+  padding-top: 10px;
+  padding-bottom: 10px; }
+
 .main {
   width: 50%;
   margin: 0 auto; }

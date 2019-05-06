@@ -1,6 +1,7 @@
 import { Component, linkEvent } from 'inferno';
 import autobind from 'auto-bind';
 import ServerApi from '../../api';
+import { categories } from './shared';
 import styles from './styles.module.scss';
 
 export default class EditBook extends Component {
@@ -13,8 +14,10 @@ export default class EditBook extends Component {
     this.state = {
       name: '',
       data: {
-        id: params.id
-      } 
+        id: params.id,
+        categories: []
+      },
+      categories: []
     };
   }
 
@@ -35,6 +38,13 @@ export default class EditBook extends Component {
         return json;
       })
       .catch(err => console.error(err));
+
+      categories.then(json => {
+        this.setState({ 
+          ...this.state, 
+          categories: json 
+        });
+      });
   }
 
   onSubmitClick() {
@@ -60,6 +70,24 @@ export default class EditBook extends Component {
 
   onCancelClick() {
     window.location.hash = '#/';
+  }
+
+  onCategoryClick(id) {
+    if(this.state.data.categories.find(x => x == id))
+      this.state.data.categories = this.state.data.categories.filter(x => x != id);
+    else
+      this.state.data.categories.push(id);
+    this.setState({...this.state});
+  }
+
+  bindCategoryClick(id) {
+    return () => this.onCategoryClick(id);
+  }
+
+  getButtonStyle(id) {
+    if(this.state.data.categories.find(x => x == id))
+      return styles.clicked;
+    return styles.unclicked;
   }
   
   render() {
@@ -93,6 +121,21 @@ export default class EditBook extends Component {
           </div>
           <div className={styles.inputColumn}>
             <input id="web_link" name="web_link" type="text" onInput={this.onValueChange} value={this.state.data.web_link} />
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <div className={styles.labelColumn}>
+            <span>Categories:</span>
+          </div>
+          <div className={styles.inputColumn}>
+            <div className={styles.row}>
+            {
+              this.state.categories.map((val, index) => (
+                <div className={styles.categoryColumn}><button className={this.getButtonStyle(val.id)} onClick={this.bindCategoryClick(val.id)}>{ val.name }</button></div>
+              ))
+            }
+            </div>
           </div>
         </div>
 
