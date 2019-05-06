@@ -47,6 +47,9 @@ class TestDal(unittest.TestCase):
                                     email='test@example.com', 
                                     picture='path/to/picture')
             dal.flush()
+
+            book_category = dal.create_book_category('testcategory', 'desc')
+            dal.flush()
             
             bookshelf = dal.create_bookshelf(user.id)
             dal.flush()
@@ -54,7 +57,8 @@ class TestDal(unittest.TestCase):
             book = dal.create_book(name,
                                     bookshelf.id,
                                     description=description,
-                                    weblink=weblink)
+                                    weblink=weblink,
+                                    categories=[book_category.id])
             dal.flush()
             
             book = dal.get_book(book.id)
@@ -62,6 +66,7 @@ class TestDal(unittest.TestCase):
             self.assertTrue(book.bookshelf_id == bookshelf.id)
             self.assertTrue(book.description == description)
             self.assertTrue(book.web_link == weblink)
+            self.assertTrue(book.categories[0].id == book_category.id)
 
     def test_get_book_by_id_and_user(self):
         with self.dal_fct() as dal:
@@ -92,18 +97,23 @@ class TestDal(unittest.TestCase):
             dal.flush()
             
             bookshelf = dal.create_bookshelf(user.id)
+            book_category = dal.create_book_category('testcategory', 'desc')
             dal.flush()
             
             book = dal.create_book('Test',
                                     bookshelf.id,
                                     description='desc',
-                                    weblink='testlink')
+                                    weblink='testlink',
+                                    categories=[book_category.id])
+            dal.flush()
+
+            book_category2 = dal.create_book_category('testcategory2', 'desc2')
             dal.flush()
             
             name = 'Test2'
             desc = 'desc2'
             weblink = 'testlink2'
-            dal.update_book(book.id, name, desc, weblink)
+            dal.update_book(book.id, name, desc, weblink, [book_category2.id])
             dal.flush()
 
             book = dal.get_book(book.id)
@@ -111,6 +121,7 @@ class TestDal(unittest.TestCase):
             self.assertTrue(book.name == name)
             self.assertTrue(book.description == desc)
             self.assertTrue(book.web_link == weblink)
+            self.assertTrue(book.categories[0].id == book_category2.id)
             
 
     def test_delete_book(self):
