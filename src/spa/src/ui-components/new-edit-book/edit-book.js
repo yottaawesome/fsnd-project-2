@@ -67,7 +67,7 @@ export default class EditBook extends Component {
 
     return (
       <div className={styles.root}>
-        <h2>You're editing {this.state.name}</h2>
+        <h2>You're editing {this.state.name}!</h2>
         <div className={styles.row}>
           <div className={styles.labelColumn}>
             <label for="name">Name:</label>

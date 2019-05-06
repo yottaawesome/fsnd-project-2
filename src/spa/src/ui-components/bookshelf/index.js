@@ -46,21 +46,22 @@ export default class Bookshelf extends Component {
       .catch(err => console.error(err));
   }
 
-  deleteBook(id) {
-    if(confirm(`Are you sure you wish to delete ${this.state.bookshelf[id].name}?`)) {
+  deleteBook(id, index) {
+    if(confirm(`Are you sure you wish to delete ${this.state.bookshelf[index].name}?`)) {
       ServerApi
         .deleteBook(id)
         .then(response => {
-          if(response.status != 200)
+          if(response.status != 204)
             return Promise.reject(`Delete failed with state ${response.status}`)
+          this.fetchBookshelf();
           return response;
         })
-        .catch(err => console.err(err));
+        .catch(err => console.error(err));
     }
   }
 
-  bindDeleteBookEvent(id) {
-    return () => this.deleteBook(id);
+  bindDeleteBookEvent(id, index) {
+    return () => this.deleteBook(id, index);
   }
 
   render() {
@@ -75,12 +76,12 @@ export default class Bookshelf extends Component {
     return (
       <div className={styles.root}>
         <p><a href='/#/new'>Add a book</a></p>
-        {this.state.bookshelf.map((book, key) => 
+        {this.state.bookshelf.map((book, index) => 
           <div>
             <p>{book.name}</p>
             <p>{book.description}</p>
             <p>{book.web_link}</p>
-            <button onClick={linkEvent(this, this.bindDeleteBookEvent(book.id))}>delete</button>
+            <button onClick={linkEvent(this, this.bindDeleteBookEvent(book.id, index))}>delete</button>
             <a href={`/#/edit/${book.id}`}>edit</a>
           </div>
         )}
