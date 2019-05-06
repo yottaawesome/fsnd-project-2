@@ -59,14 +59,13 @@ h1 {
     background-position-x: 390px; } }
 
 
-
-.edit-book__row__21XbH {
+.new-edit-book__row__2jAmg {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%; }
 
-.edit-book__labelColumn__2cUeN {
+.new-edit-book__labelColumn__1PKy7 {
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
@@ -75,13 +74,13 @@ h1 {
   margin-right: 5px;
   margin-top: 5px; }
 
-.edit-book__inputColumn__fpemL {
+.new-edit-book__inputColumn__pilhJ {
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
   flex: 4; }
 
-.edit-book__buttonColumn__r5HCy {
+.new-edit-book__buttonColumn__3jN8Y {
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
