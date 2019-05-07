@@ -34,6 +34,8 @@ export default class NewEditBook extends Component {
     this.refresh();
   }
 
+  // It doesn't appear componentWillReceiveProps() gets invoked if
+  // shouldComponentUpdate() is not defined, so just add it.
   shouldComponentUpdate() {
     return true;
   }
@@ -139,6 +141,8 @@ export default class NewEditBook extends Component {
 
   refresh() {
     if(this.state.categories == null || this.state.categories.length == 0) {
+      // Because of the async nature of retrieving the categories,
+      // we need to retrieve the categories and queue the rest of the refresh
       categories.then(json => {
         this.setState({
           ...this.state,
@@ -160,15 +164,12 @@ export default class NewEditBook extends Component {
     newState.mode = id == null ? mode.NEW : mode.EDIT;
     newState.categories = this.state.categories;
 
-    if(newState.data.id) {
-      let _this = this;
+    if(newState.data.id && newState.loggedIn) {
       ServerApi
         .fetchBook(newState.data.id)
         .then(response => {
-          if(response.status == 401) {
-            this.setState(this.initialState());
+          if(response.status == 401)
             return Promise.reject(`User is not logged in or does not have permission to edit this book`);
-          }
           if(response.status != 200)
             return Promise.reject(`fetchBook failed with status ${response.status}`);
 
@@ -178,12 +179,11 @@ export default class NewEditBook extends Component {
           newState.data = json;
           newState.data.categories = json.categories.map((value, index) => value.id);
           newState.name = json.name;
-          _this.setState(newState);
+          this.setState(newState);
           return json;
         })
         .catch(err => console.error(err));
-    }
-    else {
+    } else {
       this.setState(newState);
     }
   }
