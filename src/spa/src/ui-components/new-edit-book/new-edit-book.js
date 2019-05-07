@@ -20,12 +20,10 @@ export default class NewEditBook extends Component {
 
   /// LIFECYCLE
   componentDidMount() {
-    console.log('Remount')
     this.refresh();
   }
 
   componentWillUnmount() {
-    console.log('Die')
     GlobalState.unsubscribe(this);
   }
 
@@ -63,6 +61,7 @@ export default class NewEditBook extends Component {
       .then(response => {
         if(response.status != 200)
           return Promise.reject($`Create failed with state ${response.status}`);
+        GlobalState.raiseEvent(Events.NOTIFICATION, "Successfully added a new book!");
         return response.json();
       })
       .then(json => window.location.hash = `#/edit/${json.id}`)
@@ -79,6 +78,7 @@ export default class NewEditBook extends Component {
       .then(response => {
         if(response.status != 200)
           return Promise.reject($`Edit failed with state ${response.status}`);
+        GlobalState.raiseEvent(Events.NOTIFICATION, "Editing was successful!");
         return response.json();
       })
       .catch(err => console.error(err));

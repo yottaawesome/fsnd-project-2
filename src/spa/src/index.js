@@ -9,6 +9,7 @@ import ApiTest from './ui-components/api-test';
 import { NewEditBook } from './ui-components/new-edit-book';
 import { GlobalState, Events, State } from './app-state';
 import ServerApi from './api';
+import Notifier from './ui-components/notifier';
 import './index.scss';
 
 ServerApi
@@ -26,20 +27,19 @@ ServerApi
 
 const MainClient = () => (
   <div class="main">
-  <Header />
-  <HashRouter>
-    <div>
-    <div>
-      <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/login" component={Login} />
-      <Route path="/test" component={ApiTest} />
-      <Route path="/new" component={NewEditBook} />
-      <Route path="/edit/:id" component={NewEditBook} />
-      </Switch>
-    </div>
-    </div>
-  </HashRouter>
+    <Header />
+    <Notifier />
+    <HashRouter>
+      <div>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path="/test" component={ApiTest} />
+          <Route path="/new" component={NewEditBook} />
+          <Route path="/edit/:id" component={NewEditBook} />
+        </Switch>
+      </div>
+    </HashRouter>
   </div>
 );
 
