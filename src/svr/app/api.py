@@ -47,7 +47,10 @@ def logout():
         204. 
     '''
 
+    # preserve the state
+    state = login_session.get('state')
     login_session.clear()
+    login_session['state'] = state
     return '', 204
 
 

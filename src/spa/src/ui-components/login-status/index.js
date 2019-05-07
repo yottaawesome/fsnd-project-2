@@ -33,8 +33,6 @@ export default class LoginStatus extends Component {
         if(response.status == 204) {
           GlobalState.setStateData(State.CURRENT_USER, null);
           GlobalState.raiseEvent(Events.LOGOUT, null);
-          // force a reload as switching from GitHub login to Google login leaves the state param invalid
-          window.location.reload();
           return response;
         }
         return Promise.reject(`Logout encountered response code ${response.status}`)
