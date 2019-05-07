@@ -130,6 +130,10 @@ class Dal():
         self._session.add(user)
         return user
 
+    def update_user(self, user):
+        self._session.add(user)
+        return user
+
     def get_user(self, user_id: int):
         return (self
             ._session

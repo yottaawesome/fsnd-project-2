@@ -66,6 +66,9 @@ def github_callback():
                                     user_details_data['email'],
                                     user_details_data['avatar_url'])
             dal.flush()
+        else:
+            user_record.picture = user_details_data['avatar_url']
+            dal.update_user(user_record)
 
         login_session['user'] = user_record.serialize
         # the bookshelf must also exist

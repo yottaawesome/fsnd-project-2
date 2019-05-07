@@ -33,6 +33,8 @@ export default class LoginStatus extends Component {
         if(response.status == 204) {
           GlobalState.setStateData(State.CURRENT_USER, null);
           GlobalState.raiseEvent(Events.LOGOUT, null);
+          // force a reload as switching from GitHub login to Google login leaves the state param invalid
+          window.location.reload();
           return response;
         }
         return Promise.reject(`Logout encountered response code ${response.status}`)
@@ -43,6 +45,11 @@ export default class LoginStatus extends Component {
     if(this.state.user == null)
       return (<div><a href="#login">Please log in</a></div>);
 
-    return (<div>{ `Hello, ${this.state.user.name}!` } Not you? <button class="link-button" onClick={linkEvent(this, this.onLogoutClick)}>Logout</button></div>);
+    return (
+      <div>
+        <img height="30" width="30" src={this.state.user.picture} alt="avatar" />
+        { `Hello, ${this.state.user.name}!` } Not you? <button class="link-button" onClick={linkEvent(this, this.onLogoutClick)}>Logout</button>
+      </div>
+    );
   }
 }
