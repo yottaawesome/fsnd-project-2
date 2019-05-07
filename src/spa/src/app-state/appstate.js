@@ -8,13 +8,14 @@ const GlobalState = new AppState();
 const Events = {
   LOGIN: "onAppEventLogin",
   LOGOUT: "onAppEventLogout",
-}
+  NOTIFICATION: "onAppEventNotification"
+};
 
 /**
  * Represents all State variables that can have data associated with them.
  */
 const State = {
   CURRENT_USER: "stateCurrentUser"
-}
+};
 
-export { GlobalState, Events, State }
+export { GlobalState, Events, State };

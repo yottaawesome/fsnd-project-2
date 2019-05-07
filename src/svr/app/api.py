@@ -105,7 +105,8 @@ def new_book():
                 json['name'], 
                 bookshelf_id, 
                 description=json['description'],
-                weblink=json['web_link'])
+                weblink=json['web_link'],
+                categories=json['categories'])
             dal.flush()
 
             return jsonify(book.serialize), 200
