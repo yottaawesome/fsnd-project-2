@@ -100,12 +100,12 @@ class Book(Base):
        }
 
 
-def setup_db():
+def setup_db(db_name=DB_NAME):
     # remove the old db file, if it exists
-    db_file = Path(DB_NAME)
+    db_file = Path(db_name)
     if db_file.is_file():
         os.remove(db_file)
-    engine = create_engine('sqlite:///{}'.format(DB_NAME))
+    engine = create_engine('sqlite:///{}'.format(db_name))
     Base.metadata.create_all(engine)
 
 if __name__ == '__main__':

@@ -12,8 +12,8 @@ from svr.db import Dal, populate, dal_factory
 
 class TestDal(unittest.TestCase):
     def setUp(self):
-        svr.db.schema.setup_db()
-        populate()
+        svr.db.schema.setup_db(DB_NAME)
+        populate(DB_NAME)
         self.dal_fct = dal_factory(DB_NAME)
 
     def tearDown(self):

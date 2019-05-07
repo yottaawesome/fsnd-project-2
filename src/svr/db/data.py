@@ -2,12 +2,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from .schema import (
     User, Book, Bookshelf, BookCategory, 
-    BookCategories, Base, DB_NAME)
+    BookCategories, Base)
 
-PKG_DB_NAME = DB_NAME
-
-def populate():
-    engine = create_engine('sqlite:///{}'.format(PKG_DB_NAME))
+def populate(db_name):
+    engine = create_engine('sqlite:///{}'.format(db_name))
     Base.metadata.bind = engine
     
     DBSession = sessionmaker(bind=engine)
@@ -23,15 +21,9 @@ def populate():
                             'other books.'))
     session.add(BookCategory(name='Cookbook', description='Books that are '
                             'collections of recipes.'))
-    user = User(name='Vasilios Magriplis',
-                        email='example@example.com',
-                        picture='path/to/picture')
-    session.add(user)
-
-    session.add(Bookshelf(user=user))
 
     session.commit()
     session.close()
 
 if __name__ == '__main__':
-    populate()
+    populate('bookshelf.db')
