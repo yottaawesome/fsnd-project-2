@@ -3,7 +3,7 @@ export default class ServerApi {
 
   static fetchUserDetails() {
     return (
-      fetch('/user/', {
+      fetch('api/v1/user/', {
         credentials: 'same-origin'  
       })
       .then(response => {
@@ -13,7 +13,7 @@ export default class ServerApi {
 
   static logout() {
     return (
-      fetch('/logout/', {
+      fetch('api/v1/logout/', {
         credentials: 'same-origin',
         method: "DELETE",
         headers: {
@@ -27,7 +27,7 @@ export default class ServerApi {
 
   static fetchBookshelf() {
     return (
-      fetch('/bookshelf/', {
+      fetch('api/v1/bookshelf/', {
         credentials: 'same-origin',
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
@@ -41,7 +41,7 @@ export default class ServerApi {
 
   static fetchBook(id) {
     return (
-      fetch(`/book/${id}`, {
+      fetch(`api/v1/book/${id}`, {
         credentials: 'same-origin',
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
@@ -54,7 +54,7 @@ export default class ServerApi {
 
   static createBook(name, description, web_link, categories) {
     return (
-      fetch('/bookshelf/', {
+      fetch('api/v1/bookshelf/', {
         credentials: 'same-origin',
         method: 'POST',
         headers: {
@@ -76,7 +76,7 @@ export default class ServerApi {
 
   static editBook(id, name, description, web_link, categories) {
     return (
-      fetch(`/book/${id}`, {
+      fetch(`api/v1/book/${id}`, {
         credentials: 'same-origin',
         method: 'POST',
         headers: {
@@ -98,7 +98,7 @@ export default class ServerApi {
 
   static deleteBook(id) {
     return (
-      fetch(`/book/${id}`, {
+      fetch(`api/v1/book/${id}`, {
         credentials: 'same-origin',
         method: 'DELETE',
         headers: {
@@ -112,7 +112,7 @@ export default class ServerApi {
 
   static postGoogleAuthCode(state, code) {
     return (
-      fetch('/googleauth/', {
+      fetch('api/v1/googleauth/', {
         credentials: 'same-origin',
         method: 'POST',
         headers: {
@@ -131,7 +131,7 @@ export default class ServerApi {
 
   static fetchCategories() {
     return (
-      fetch('/categories/', {
+      fetch('api/v1/categories/', {
         credentials: 'same-origin',
         method: 'GET',
         headers: {

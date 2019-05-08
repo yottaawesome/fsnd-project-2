@@ -21,7 +21,7 @@ def revoke_token(access_token):
         print('Token revocation failed with status {}'.format(response.status_code))
 
 
-@main_app.route('/googleauth/', methods=['POST'])
+@main_app.route('/api/v1/googleauth/', methods=['POST'])
 def google_auth():
     # Validate state token
     json_req = request.get_json()

@@ -6,6 +6,26 @@ import random, string
 
 dal_fct = dal_factory()
 
+def alt_route(rule, **options):
+    def decorator(f):
+        print(f.__doc__)
+        endpoint = options.pop("endpoint", None)
+        help_endpoint = options.pop("help", None)
+        main_app.add_url_rule(rule, endpoint, f, **options)
+
+        if help_endpoint:
+            def help_route():
+                obj = {
+                    'route':rule,
+                    'description':f.__doc__.strip()
+                }
+                return jsonify(obj)
+            main_app.add_url_rule(help_endpoint, None, help_route)
+
+        return f
+    return decorator
+
+
 @main_app.route('/')
 def home():
     ''' Base route. '''
@@ -20,7 +40,8 @@ def home():
                             page_state=state)
 
 
-@main_app.route('/user/')
+#@main_app.route('/v1/user/')
+@alt_route('/api/v1/user/', help='/api/v1/help/user/')
 def user():
     '''
     Gets the current user's details.
@@ -44,7 +65,7 @@ def user():
         return jsonify({'message': 'Fetching user details failed'}), 500
 
 
-@main_app.route('/logout/', methods=['DELETE'])
+@main_app.route('/api/v1/logout/', methods=['DELETE'])
 def logout():
     '''
     Logs the current user out.
@@ -52,6 +73,7 @@ def logout():
     Returns:
         204. 
     '''
+
     try:
 
         # preserve the state
@@ -66,7 +88,7 @@ def logout():
         return jsonify({'message': 'Logging out failed'}), 500
 
 
-@main_app.route('/bookshelf/', methods=['GET'])
+@main_app.route('/api/v1/bookshelf/', methods=['GET'])
 def get_bookshelf():
     '''
     Gets all the books for the user's bookshelf as JSON.
@@ -97,7 +119,7 @@ def get_bookshelf():
         return jsonify({'message': 'Creating a new book failed'}), 500
 
 
-@main_app.route('/bookshelf/', methods=['POST'])
+@main_app.route('/api/v1/bookshelf/', methods=['POST'])
 def new_book():
     '''
     Creates a new book in the user's bookshelf.
@@ -139,7 +161,7 @@ def new_book():
         return jsonify({'message': 'Creating a new book failed'}), 500
 
 
-@main_app.route('/book/<int:id>', methods=['GET'])
+@main_app.route('/api/v1/book/<int:id>', methods=['GET'])
 def get_book(id):
     '''
     Gets the book identified by the id segment of the URI as JSON.
@@ -170,7 +192,7 @@ def get_book(id):
         return jsonify({'message': 'Fetching book failed'}), 500
 
 
-@main_app.route('/book/<int:id>', methods=['POST'])
+@main_app.route('/api/v1/book/<int:id>', methods=['POST'])
 def edit_book(id):
     '''
     Updates the book identified by the id segment of the URI.
@@ -210,7 +232,7 @@ def edit_book(id):
         return jsonify({'message': 'Editing book failed'}), 500
 
 
-@main_app.route('/book/<int:id>', methods=['DELETE'])
+@main_app.route('/api/v1/book/<int:id>', methods=['DELETE'])
 def delete_book(id):
     '''
     Deletes the book identified by the id segment of the URI.
@@ -240,7 +262,7 @@ def delete_book(id):
         print('Exception: ', ex)
         return jsonify({'message': 'Deleting a book failed'}), 500
 
-@main_app.route('/categories/', methods=['GET'])
+@main_app.route('/api/v1/categories/', methods=['GET'])
 def get_categories():
     '''
     Gets all book categories.
