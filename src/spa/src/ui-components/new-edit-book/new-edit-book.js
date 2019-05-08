@@ -18,7 +18,7 @@ export default class NewEditBook extends Component {
     GlobalState.subscribe(this, Events.LOGIN, Events.LOGOUT);
   }
 
-  /// LIFECYCLE
+  //#region LIFECYCLE
   componentDidMount() {
     this.refresh();
   }
@@ -27,6 +27,8 @@ export default class NewEditBook extends Component {
     GlobalState.unsubscribe(this);
   }
 
+  // We need this to handle changing routes, because the same component is used
+  // and not remounted, so we need to manually detect this and refresh.
   componentWillReceiveProps(newProps) {
     this.props = newProps;
     this.refresh();
@@ -37,9 +39,9 @@ export default class NewEditBook extends Component {
   shouldComponentUpdate() {
     return true;
   }
-  //////////////////////////////////////////////
+  //#endregion
 
-  /// GLOBAL EVENTS
+  //#region GLOBAL EVENTS
   onAppEventLogin(evt, data) {
     this.refresh();
   }
@@ -47,9 +49,9 @@ export default class NewEditBook extends Component {
   onAppEventLogout(evt, data) {
     this.refresh();
   }
-  //////////////////////////////////////////////
+  //#endregion
 
-  /// UI EVENTS
+  //#region UI EVENTS
   onSubmitClick() {
     if(this.state.mode == mode.NEW) {
       ServerApi.createBook(
@@ -113,9 +115,9 @@ export default class NewEditBook extends Component {
       return styles.clicked;
     return styles.unclicked;
   }
-  //////////////////////////////////////////////
+  //#endregion
 
-  /// FUNCTIONS
+  //#region INTERNAL FUNCTIONS
   initialState() {
     const { match: { params } } = this.props;
     let id = params != null && params.id != null 
@@ -175,6 +177,7 @@ export default class NewEditBook extends Component {
       this.setState(newState);
     }
   }
+  //#endregion
   
   render() {
     if(this.state.loggedIn == false) {
