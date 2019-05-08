@@ -26,8 +26,8 @@ class TestApi(unittest.TestCase):
         self.running = False
 
     def setUp(self):
-        svr.db.schema.setup_db()
-        populate()
+        svr.db.schema.setup_db(DB_NAME)
+        populate(DB_NAME)
         self.dal_fct = dal_factory(DB_NAME)
         self.daemon = threading.Thread(target=run, args=self, daemon=True)
         self.daemon.start()
