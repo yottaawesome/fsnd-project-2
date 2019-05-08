@@ -13,7 +13,7 @@ export default class ServerApi {
 
   static logout() {
     return (
-      fetch('api/v1/logout/', {
+      fetch('api/v1/user/', {
         credentials: 'same-origin',
         method: "DELETE",
         headers: {

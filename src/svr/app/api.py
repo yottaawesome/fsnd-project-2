@@ -6,25 +6,41 @@ import random, string
 
 dal_fct = dal_factory()
 
+API_DOC = []
+
 def alt_route(rule, **options):
     def decorator(f):
-        print(f.__doc__)
         endpoint = options.pop("endpoint", None)
-        help_endpoint = options.pop("help", None)
         main_app.add_url_rule(rule, endpoint, f, **options)
+        methods = options.get("methods")
+        if methods is None or len(methods)==0:
+            methods = ['GET']
 
-        if help_endpoint:
-            def help_route():
-                obj = {
-                    'route':rule,
-                    'description':f.__doc__.strip()
-                }
-                return jsonify(obj)
-            main_app.add_url_rule(help_endpoint, None, help_route)
+        route = None
+        for r in API_DOC:
+            if r['route'] == rule:
+                route=r
+                break
+
+        if route is None:
+            route = {
+                'methods': [],
+                'route': rule
+            }
+            API_DOC.append(route)
+
+        for method in methods:
+            route['methods'].append({
+                'description'   : f.__doc__.strip(),
+                'method'        : method
+            })
 
         return f
     return decorator
 
+@main_app.route('/api/v1/docs')
+def docs():
+    return jsonify(API_DOC), 200
 
 @main_app.route('/')
 def home():
@@ -41,7 +57,7 @@ def home():
 
 
 #@main_app.route('/v1/user/')
-@alt_route('/api/v1/user/', help='/api/v1/help/user/')
+@alt_route('/api/v1/user/')
 def user():
     '''
     Gets the current user's details.
@@ -65,7 +81,7 @@ def user():
         return jsonify({'message': 'Fetching user details failed'}), 500
 
 
-@main_app.route('/api/v1/logout/', methods=['DELETE'])
+@alt_route('/api/v1/user/', methods=['DELETE'])
 def logout():
     '''
     Logs the current user out.
@@ -88,7 +104,7 @@ def logout():
         return jsonify({'message': 'Logging out failed'}), 500
 
 
-@main_app.route('/api/v1/bookshelf/', methods=['GET'])
+@alt_route('/api/v1/bookshelf/', methods=['GET'])
 def get_bookshelf():
     '''
     Gets all the books for the user's bookshelf as JSON.
@@ -119,7 +135,7 @@ def get_bookshelf():
         return jsonify({'message': 'Creating a new book failed'}), 500
 
 
-@main_app.route('/api/v1/bookshelf/', methods=['POST'])
+@alt_route('/api/v1/bookshelf/', methods=['POST'])
 def new_book():
     '''
     Creates a new book in the user's bookshelf.
@@ -161,7 +177,7 @@ def new_book():
         return jsonify({'message': 'Creating a new book failed'}), 500
 
 
-@main_app.route('/api/v1/book/<int:id>', methods=['GET'])
+@alt_route('/api/v1/book/<int:id>', methods=['GET'])
 def get_book(id):
     '''
     Gets the book identified by the id segment of the URI as JSON.
@@ -192,7 +208,7 @@ def get_book(id):
         return jsonify({'message': 'Fetching book failed'}), 500
 
 
-@main_app.route('/api/v1/book/<int:id>', methods=['POST'])
+@alt_route('/api/v1/book/<int:id>', methods=['POST'])
 def edit_book(id):
     '''
     Updates the book identified by the id segment of the URI.
@@ -232,7 +248,7 @@ def edit_book(id):
         return jsonify({'message': 'Editing book failed'}), 500
 
 
-@main_app.route('/api/v1/book/<int:id>', methods=['DELETE'])
+@alt_route('/api/v1/book/<int:id>', methods=['DELETE'])
 def delete_book(id):
     '''
     Deletes the book identified by the id segment of the URI.
@@ -262,7 +278,7 @@ def delete_book(id):
         print('Exception: ', ex)
         return jsonify({'message': 'Deleting a book failed'}), 500
 
-@main_app.route('/api/v1/categories/', methods=['GET'])
+@alt_route('/api/v1/categories/', methods=['GET'])
 def get_categories():
     '''
     Gets all book categories.
