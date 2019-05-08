@@ -59,7 +59,7 @@ export default class ApiTest extends Component {
       .then(book => {
         return ServerApi.deleteBook(book.id);
       })
-      .catch(err => console.error(`Deleet book failed: ${err}`));
+      .catch(err => console.error(err));
   }
 
   render() {
