@@ -14,16 +14,12 @@ import './index.scss';
 
 ServerApi
   .fetchUserDetails()
-  .then(response => { 
-    if(response.status == 215)
-      return Promise.reject('User is not authenticated')
-    return response.json();
-  })
   .then(json => {
     GlobalState.setStateData(State.CURRENT_USER, json);
     GlobalState.raiseEvent(Events.LOGIN, json);
     return json;
-  });
+  })
+  .catch(err => console.error('The user is not currently authenticated'));
 
 const MainClient = () => (
   <div class="main">

@@ -42,11 +42,6 @@ export default class Login extends Component {
     // We can't have this aas const as the redirect results in it being regenerated
     ServerApi
       .postGoogleAuthCode(pageState, authResult['code'])
-      .then(response => {
-        if(response.status == 401)
-          return Promise.reject("Failed to authenticate");
-        return response.json();
-      })
       .then(json => {
         GlobalState.setStateData(State.CURRENT_USER, json);
         GlobalState.raiseEvent(Events.LOGIN, json);

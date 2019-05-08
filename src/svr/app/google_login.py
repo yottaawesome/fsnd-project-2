@@ -1,7 +1,5 @@
 '''Contains the main logic for Google Logins.'''
-from flask import (Flask, render_template, url_for, 
-                    request, redirect, flash, jsonify,
-                    session as login_session, make_response)
+from flask import request, jsonify, session as login_session
                     
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -42,6 +40,7 @@ def google_auth():
         credentials = oauth_flow.step2_exchange(code)
 
     except FlowExchangeError as ex:
+
         print(ex)
         return jsonify({ 'message': 'Failed to upgrade the authorization code.' }), 401
 

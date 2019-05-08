@@ -30,12 +30,9 @@ export default class LoginStatus extends Component {
     ServerApi
       .logout()
       .then((response) => {
-        if(response.status == 204) {
-          GlobalState.setStateData(State.CURRENT_USER, null);
-          GlobalState.raiseEvent(Events.LOGOUT, null);
-          return response;
-        }
-        return Promise.reject(`Logout encountered response code ${response.status}`)
+        GlobalState.setStateData(State.CURRENT_USER, null);
+        GlobalState.raiseEvent(Events.LOGOUT, null);
+        return response;
       });
   }
 

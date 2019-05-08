@@ -58,13 +58,11 @@ export default class NewEditBook extends Component {
         this.state.data.web_link,
         this.state.data.categories
       )
-      .then(response => {
-        if(response.status != 200)
-          return Promise.reject($`Create failed with state ${response.status}`);
+      .then(json => {
         GlobalState.raiseEvent(Events.NOTIFICATION, "Successfully added a new book!");
-        return response.json();
+        window.location.hash = `#/edit/${json.id}`;
+        return json;
       })
-      .then(json => window.location.hash = `#/edit/${json.id}`)
       .catch(err => console.error(err));
     } 
     else if(this.state.mode == mode.EDIT) {
@@ -75,11 +73,9 @@ export default class NewEditBook extends Component {
         this.state.data.web_link,
         this.state.data.categories
       )
-      .then(response => {
-        if(response.status != 200)
-          return Promise.reject($`Edit failed with state ${response.status}`);
+      .then(json => {
         GlobalState.raiseEvent(Events.NOTIFICATION, "Editing was successful!");
-        return response.json();
+        return json;
       })
       .catch(err => console.error(err));
     }
@@ -167,14 +163,6 @@ export default class NewEditBook extends Component {
     if(newState.data.id && newState.loggedIn) {
       ServerApi
         .fetchBook(newState.data.id)
-        .then(response => {
-          if(response.status == 401)
-            return Promise.reject(`User is not logged in or does not have permission to edit this book`);
-          if(response.status != 200)
-            return Promise.reject(`fetchBook failed with status ${response.status}`);
-
-          return response.json()
-        })
         .then(json => {
           newState.data = json;
           newState.data.categories = json.categories.map((value, index) => value.id);

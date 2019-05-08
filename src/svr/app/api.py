@@ -1,8 +1,7 @@
 '''Contains the main routes for the REST API.'''
 from db import dal_factory
-from flask import (Flask, render_template, jsonify, session as login_session, request)
-from .flask_app import (main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, 
-                        GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+from flask import render_template, jsonify, session as login_session, request
+from .flask_app import main_app, GITHUB_CLIENT_ID, GOOGLE_CLIENT_ID
 import random, string
 
 dal_fct = dal_factory()
@@ -31,11 +30,18 @@ def user():
         215 if no user is currently logged.
     '''
 
-    user = login_session.get('user')
-    if user is None:
-        return jsonify({ 'message': 'No currently logged in user' }), 215
+    try:
 
-    return jsonify(user)
+        user = login_session.get('user')
+        if user is None:
+            return jsonify({ 'message': 'No currently logged in user' }), 215
+
+        return jsonify(user)
+
+    except Exception as ex:
+
+        print('Exception: ', ex)
+        return jsonify({'message': 'Fetching user details failed'}), 500
 
 
 @main_app.route('/logout/', methods=['DELETE'])
@@ -46,12 +52,18 @@ def logout():
     Returns:
         204. 
     '''
+    try:
 
-    # preserve the state
-    state = login_session.get('state')
-    login_session.clear()
-    login_session['state'] = state
-    return '', 204
+        # preserve the state
+        state = login_session.get('state')
+        login_session.clear()
+        login_session['state'] = state
+        return '', 204
+
+    except Exception as ex:
+
+        print('Exception: ', ex)
+        return jsonify({'message': 'Logging out failed'}), 500
 
 
 @main_app.route('/bookshelf/', methods=['GET'])
@@ -66,16 +78,23 @@ def get_bookshelf():
         500 if an unexpected error.
     '''
 
-    user = login_session.get('user')
-    if user is None:
-        return jsonify({ 'message': 'No currently logged in user' }), 401
+    try:
 
-    with dal_fct() as dal:
-        bookshelf = dal.get_books_by_user(user['id'])
-        if bookshelf is None:
-            return jsonify([]), 200
+        user = login_session.get('user')
+        if user is None:
+            return jsonify({ 'message': 'No currently logged in user' }), 401
 
-        return jsonify([book.serialize for book in bookshelf]), 200
+        with dal_fct() as dal:
+            bookshelf = dal.get_books_by_user(user['id'])
+            if bookshelf is None:
+                return jsonify([]), 200
+
+            return jsonify([book.serialize for book in bookshelf]), 200
+
+    except Exception as ex:
+
+        print('Exception: ', ex)
+        return jsonify({'message': 'Creating a new book failed'}), 500
 
 
 @main_app.route('/bookshelf/', methods=['POST'])
@@ -115,8 +134,9 @@ def new_book():
             return jsonify(book.serialize), 200
     
     except Exception as ex:
-        print('DAL operation failed: ', ex)
-        return jsonify({'message': 'Operation failed'}), 500
+
+        print('Exception: ', ex)
+        return jsonify({'message': 'Creating a new book failed'}), 500
 
 
 @main_app.route('/book/<int:id>', methods=['GET'])
@@ -145,8 +165,9 @@ def get_book(id):
             return jsonify(book.serialize)
 
     except Exception as ex:
-        print('DAL operation failed: ', ex)
-        return jsonify({'message': 'Operation failed'}), 500
+
+        print('Exception: ', ex)
+        return jsonify({'message': 'Fetching book failed'}), 500
 
 
 @main_app.route('/book/<int:id>', methods=['POST'])
@@ -185,9 +206,8 @@ def edit_book(id):
             return jsonify(book.serialize), 200
 
     except Exception as ex:
-        print(ex)
-        print('DAL operation failed: ', ex)
-        return jsonify({'message': 'Operation failed'}), 500
+        print('Exception: ', ex)
+        return jsonify({'message': 'Editing book failed'}), 500
 
 
 @main_app.route('/book/<int:id>', methods=['DELETE'])
@@ -216,8 +236,9 @@ def delete_book(id):
         return '', 204
 
     except Exception as ex:
-        print('DAL operation failed: ', ex)
-        return jsonify({'message': 'Operation failed'}), 500
+
+        print('Exception: ', ex)
+        return jsonify({'message': 'Deleting a book failed'}), 500
 
 @main_app.route('/categories/', methods=['GET'])
 def get_categories():
@@ -235,5 +256,6 @@ def get_categories():
             return jsonify([cat.serialize for cat in dal.get_categories()]), 200
 
     except Exception as ex:
-        print('DAL operation failed: ', ex)
-        return jsonify({'message': 'Operation failed'}), 500
+
+        print('Exception: ', ex)
+        return jsonify({'message': 'Fetching categories failed'}), 500

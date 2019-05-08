@@ -31,14 +31,6 @@ export default class Bookshelf extends Component {
   fetchBookshelf() {
     ServerApi
       .fetchBookshelf()
-      .then(response => {
-        if(response.status == 401)
-          return Promise.reject(`User is not logged in, can't fetch bookshelf`);
-        if (response.status != 200)
-          return Promise.reject(`Unknown server response: ${response.status}`);
-
-        return response.json();
-      })
       .then(json => {
         this.setState({ bookshelf: json });
         return json;
@@ -51,8 +43,6 @@ export default class Bookshelf extends Component {
       ServerApi
         .deleteBook(id)
         .then(response => {
-          if(response.status != 204)
-            return Promise.reject(`Delete failed with state ${response.status}`)
           this.fetchBookshelf();
           return response;
         })

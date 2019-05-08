@@ -11,7 +11,6 @@ export default class ApiTest extends Component {
   onGetBookshelfClick() {
     ServerApi
       .fetchBookshelf()
-      .then(response => response.json())
       .then(json => {
         console.log(json);
         return json;
@@ -22,7 +21,6 @@ export default class ApiTest extends Component {
   onCreateBookClick() {
     ServerApi
       .createBook('testname', 'testdescription', 'testweblink')
-      .then(response => response.json())
       .then(json => {
         console.log(json);
         return json;
@@ -33,7 +31,6 @@ export default class ApiTest extends Component {
   onGetBookClick() {
     ServerApi
       .fetchBook(1)
-      .then(response => response.json())
       .then(json => {
         console.log(json);
         return json;
@@ -44,7 +41,6 @@ export default class ApiTest extends Component {
   onEditBookClick() {
     ServerApi
       .editBook(1, 'testnameupdated', 'testdescriptionupdated', 'testweblinkupdated')
-      .then(response => response.json())
       .then(json => {
         console.log(json);
         return json;
@@ -55,7 +51,6 @@ export default class ApiTest extends Component {
   onDeleteBook() {
     ServerApi
       .fetchBookshelf()
-      .then(response => response.json())
       .then(books => {
         if(books.length == 0)
           return Promise.reject('Nothing found on server to delete')
@@ -63,11 +58,6 @@ export default class ApiTest extends Component {
       })
       .then(book => {
         return ServerApi.deleteBook(book.id);
-      })
-      .then(response => {
-        if(response.status == 204)
-          return true;
-        return Promise.reject(`Delete failed with status ${response.status}`);
       })
       .catch(err => console.error(`Deleet book failed: ${err}`));
   }

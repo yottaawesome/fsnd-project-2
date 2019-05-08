@@ -3,6 +3,6 @@ import ServerApi from '../../api';
 const categories = 
   ServerApi
     .fetchCategories()
-    .then(response => response.json());
+    .catch(err => console.error(err));
 
 export { categories };
