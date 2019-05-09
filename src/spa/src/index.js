@@ -6,6 +6,7 @@ import Login from './ui-components/login';
 import Header from './ui-components/header';
 import Menu from './ui-components/menu';
 import Footer from './ui-components/footer';
+import Docs from './ui-components/docs';
 import ApiTest from './ui-components/api-test';
 import { NewEditBook } from './ui-components/new-edit-book';
 import { GlobalState, Events, State } from './app-state';
@@ -40,6 +41,7 @@ const MainClient = () => (
               <Route path="/test" component={ApiTest} />
               <Route path="/new" component={NewEditBook} />
               <Route path="/edit/:id" component={NewEditBook} />
+              <Route path="/docs" component={Docs} />
             </Switch>
           </div>
         </HashRouter>

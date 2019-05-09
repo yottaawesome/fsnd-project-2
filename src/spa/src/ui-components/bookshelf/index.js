@@ -58,23 +58,35 @@ export default class Bookshelf extends Component {
     if(this.state.bookshelf == null || this.state.bookshelf.length == 0) {
       return (
         <div className={styles.root}>
-          <p>You don't have anything in your bookshelf... yet! Why don't you <a href='/#/new'>add a book?</a></p>
+          <h2>Your bookshelf</h2>
         </div>
       );
     }
 
     return (
       <div className={styles.root}>
+        <h2>Your bookshelf</h2>
         <p><a href='/#/new'>Add a book</a></p>
-        {this.state.bookshelf.map((book, index) => 
-          <div>
-            <p>{book.name}</p>
-            <p>{book.description}</p>
-            <p>{book.web_link}</p>
-            <button onClick={linkEvent(this, this.bindDeleteBookEvent(book.id, index))}>delete</button>
-            <a href={`/#/edit/${book.id}`}>edit</a>
-          </div>
-        )}
+        <hr />
+        
+        {
+          this.state.bookshelf == null || this.state.bookshelf.length == 0
+            ? <p>You don't have anything in your bookshelf... yet! Why don't you <a href='/#/new'>add a book?</a></p>
+            : null
+        }
+
+        {
+          this.state.bookshelf.map((book, index) => 
+            <div>
+              <h3><strong>Title:</strong> {book.name}</h3>
+              <p><strong>Description:</strong> {book.description}</p>
+              <p><strong>Web link:</strong> {book.web_link}</p>
+              <a href="javascript:" onClick={linkEvent(this, this.bindDeleteBookEvent(book.id, index))}>delete</a>
+              &nbsp;
+              <a href={`/#/edit/${book.id}`}>edit</a>
+              <hr />
+            </div>)
+        }
       </div>
     );
   }
