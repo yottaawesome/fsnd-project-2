@@ -5,6 +5,7 @@ import Home from './ui-components/home';
 import Login from './ui-components/login';
 import Header from './ui-components/header';
 import Menu from './ui-components/menu';
+import Footer from './ui-components/footer';
 import ApiTest from './ui-components/api-test';
 import { NewEditBook } from './ui-components/new-edit-book';
 import { GlobalState, Events, State } from './app-state';
@@ -22,20 +23,29 @@ ServerApi
   .catch(err => console.error('The user is not currently authenticated'));
 
 const MainClient = () => (
-  <div class="main">
-    <Header />
-    <Notifier />
-    <HashRouter>
-      <div>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login} />
-          <Route path="/test" component={ApiTest} />
-          <Route path="/new" component={NewEditBook} />
-          <Route path="/edit/:id" component={NewEditBook} />
-        </Switch>
+  <div>
+    <div class="top">
+      <div class="main">
+        <Header />
+        <Notifier />
       </div>
-    </HashRouter>
+    </div>
+    <div class="content-wrapper">
+      <div class="main">
+        <HashRouter>
+          <div class="content">
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/login" component={Login} />
+              <Route path="/test" component={ApiTest} />
+              <Route path="/new" component={NewEditBook} />
+              <Route path="/edit/:id" component={NewEditBook} />
+            </Switch>
+          </div>
+        </HashRouter>
+      </div>
+    </div>
+    <Footer />
   </div>
 );
 

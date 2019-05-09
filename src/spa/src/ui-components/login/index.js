@@ -53,11 +53,21 @@ export default class Login extends Component {
 
   render() {
     return (
-      <div className={styles.red}>
-        <h2>Login</h2>
+      <div className={styles.root}>
+        <h2>Please select how you want to log in</h2>
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <a href={`https://github.com/login/oauth/authorize?scope=read:user%20user:email&client_id=${githubClientId}`}>
+              <img title="Sign in with GitHub" width="300" height="300" src="https://image.flaticon.com/icons/svg/25/25231.svg" alt="GitHub logo" />
+            </a>
+          </div>
+          <div className={styles.column}>
+            <a href="javascript:" id="signinButton" onClick={ linkEvent(this, this.onGoogleLoginClick) }>
+              <img title="Sign in with Google" width="300" height="300" src="https://madeby.google.com/static/images/google_g_logo.svg" alt="GitHub logo" />
+            </a>
+          </div>
+        </div>
 
-        <p><a href={`https://github.com/login/oauth/authorize?scope=read:user%20user:email&client_id=${githubClientId}`}>Login with GitHub!</a></p>
-        <p><button id="signinButton" onClick={ linkEvent(this, this.onGoogleLoginClick) }>Sign in with Google!</button></p>
         {
           this.state.loadGScript 
             ? <script onLoad={linkEvent(this, this.loadGoogleApi)} src="https://apis.google.com/js/client:platform.js" async defer></script> 

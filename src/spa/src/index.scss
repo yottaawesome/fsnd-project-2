@@ -1,3 +1,31 @@
+body {
+    color:wheat;
+    height:100%;
+    margin:0;
+    background-color: #00235b;
+}
+
+.top {
+}
+
+.content {
+    padding-top:30px;
+    padding-bottom:30px;
+}
+
+.content-wrapper {
+    width:100vw;
+    background-color: #444;
+}
+
+.content h2 {
+    margin-top:0;
+} 
+
+a {
+    color:white;
+}
+
 .main
 {
     width:50%;
@@ -7,11 +35,11 @@
 //https://stackoverflow.com/questions/1367409/how-to-make-button-look-like-a-link
 .link-button {
     background:none!important;
-    color:inherit;
+    color:white;
     border:none; 
     padding:0!important;
     font: inherit;
     /*border is optional*/
-    border-bottom:1px solid #444; 
+    border-bottom:1px solid white; 
     cursor: pointer;
 }
