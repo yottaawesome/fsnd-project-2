@@ -1,17 +1,20 @@
 '''Contains the main logic for Google Logins.'''
 from flask import request, jsonify, session as login_session
-                    
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from db import Dal, dal_factory
 import json
 import requests
 
-from db import Dal, dal_factory
 dal_fct = dal_factory()
 
-from .flask_app import main_app, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
+from .flask_app import main_app, GOOGLE_CLIENT_ID
 
 def revoke_token(access_token):
+    '''
+    Revokes the Google token.
+    '''
+
     response = requests.post('https://accounts.google.com/o/oauth2/revoke',
         params={'token': access_token},
     headers = {'content-type': 'application/x-www-form-urlencoded'})
@@ -23,6 +26,11 @@ def revoke_token(access_token):
 
 @main_app.route('/api/v1/googleauth/', methods=['POST'])
 def google_auth():
+    '''
+    Authenticates to Google using the temporary client code. This endpoint
+    is not intended for general public use. 
+    '''
+
     # Validate state token
     json_req = request.get_json()
     login_session_state = login_session.get('state')

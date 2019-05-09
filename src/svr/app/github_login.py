@@ -1,17 +1,30 @@
 '''Contains the main logic for GitHub Logins.'''
-from flask import (Flask, render_template, url_for, 
-                    request, redirect, flash, jsonify,
-                    session as login_session, make_response)
+
+import string
+import json
+import requests
+from flask import (url_for, 
+                    request, 
+                    redirect,
+                    session as login_session)
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from requests.auth import HTTPBasicAuth
-import random, string, json, requests
 
-from .flask_app import main_app, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_ID
+from .flask_app import (
+    main_app, 
+    GITHUB_CLIENT_ID, 
+    GITHUB_CLIENT_SECRET, 
+    doc_route)
+
 from db import Dal, dal_factory, User
 dal_fct = dal_factory()
 
 def revoke_token(access_token):
+    '''
+    Revokes the GitHub token.
+    '''
+
     url = 'https://api.github.com/applications/{}/tokens/{}'.format(GITHUB_CLIENT_ID, access_token)
     # Don't put the Authorization header in manually with manual base64 
     # encoding via base64 lib, it doesn't seem to work.
