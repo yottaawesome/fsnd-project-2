@@ -98,6 +98,8 @@ class Book(Base):
             'description'   : self.description,
             'name'          : self.name,
             'web_link'      : self.web_link,
+            'author'        : self.author,
+            'publisher'     : self.publisher,
             'categories'    : [category.serialize for category in self.categories]
        }
 
