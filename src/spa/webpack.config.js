@@ -58,6 +58,15 @@ module.exports = (env, argv) => {
             "css-loader",
             "sass-loader"
           ]
+        },
+        {
+          test: /\.(png|jpe?g|gif|svg)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {publicPath: 'static'},
+            },
+          ],
         }
       ]
     },

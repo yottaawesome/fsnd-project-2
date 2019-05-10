@@ -3,6 +3,8 @@ import autobind from 'auto-bind';
 import ServerApi from '../../api';
 import { GlobalState, State, Events } from '../../app-state';
 import styles from './styles.module.scss'
+import githubIcon from './github-icon.svg';
+import googleIcon from './google-icon.svg';
 
 const githubClientId = document.querySelector("meta[name='github-client-id']").getAttribute("content");
 const googleClientId = document.querySelector("meta[name='google-client-id']").getAttribute("content");
@@ -58,12 +60,12 @@ export default class Login extends Component {
         <div className={styles.row}>
           <div className={styles.column}>
             <a href={`https://github.com/login/oauth/authorize?scope=read:user%20user:email&client_id=${githubClientId}`}>
-              <img title="Sign in with GitHub" width="300" height="300" src="https://image.flaticon.com/icons/svg/25/25231.svg" alt="GitHub logo" />
+              <img title="Sign in with GitHub" width="300" height="300" src={githubIcon} alt="GitHub logo" />
             </a>
           </div>
           <div className={styles.column}>
             <a href="javascript:" id="signinButton" onClick={ linkEvent(this, this.onGoogleLoginClick) }>
-              <img title="Sign in with Google" width="300" height="300" src="https://madeby.google.com/static/images/google_g_logo.svg" alt="GitHub logo" />
+              <img title="Sign in with Google" width="300" height="300" src={googleIcon} alt="GitHub logo" />
             </a>
           </div>
         </div>
