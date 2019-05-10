@@ -84,6 +84,8 @@ class Book(Base):
     name = Column(String(250), nullable=False)
     description = Column(String(250))
     web_link = Column(String(250))
+    author = Column(String(150))
+    publisher = Column(String(150))
     bookshelf = relationship(Bookshelf)
     categories = relationship(BookCategory, secondary="book_categories")
 

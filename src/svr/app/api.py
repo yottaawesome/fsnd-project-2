@@ -139,7 +139,10 @@ def new_book():
                 bookshelf_id, 
                 description=json['description'],
                 weblink=json['web_link'],
-                categories=json['categories'])
+                categories=json['categories'],
+                author=json['author'],
+                publisher=json['publisher']
+            )
             dal.flush()
 
             return jsonify(book.serialize), 200
@@ -212,7 +215,10 @@ def edit_book(id):
                 book.id, json['name'],
                 json['description'],
                 json['web_link'],
-                json['categories'])
+                json['categories'],
+                json['author'],
+                json['publisher']
+            )
 
             return jsonify(book.serialize), 200
 

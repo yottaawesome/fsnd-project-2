@@ -52,7 +52,7 @@ export default class ServerApi {
       }));
   }
 
-  static createBook(name, description, web_link, categories) {
+  static createBook(book) {
     return (
       fetch('api/v1/bookshelf/', {
         credentials: 'same-origin',
@@ -62,19 +62,16 @@ export default class ServerApi {
           'Content-Type': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({
-          name: name,
-          description: description,
-          web_link: web_link,
-          categories: categories
-        })
+        body: JSON.stringify(book)
       })
       .then(response => {
         return response.status != 200 ? Promise.reject(response.status) : response.json();
       }));
   }
 
-  static editBook(id, name, description, web_link, categories) {
+  static editBook(book) {
+    let id = book.id;
+    delete book.id;
     return (
       fetch(`api/v1/book/${id}`, {
         credentials: 'same-origin',
@@ -84,12 +81,7 @@ export default class ServerApi {
           'Content-Type': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({
-          name: name,
-          description: description,
-          web_link: web_link,
-          categories: categories
-        })
+        body: JSON.stringify(book)
       })
       .then(response => {
         return response.status != 200 ? Promise.reject(response.status) : response.json();

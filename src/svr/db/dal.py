@@ -58,11 +58,13 @@ class Dal():
             .filter(User.id==user_id,Book.id==book_id)
             .first())
 
-    def create_book(self, name, bookshelf_id, description=None, weblink=None, categories=None):
+    def create_book(self, name, bookshelf_id, description=None, weblink=None, categories=None, author=None, publisher=None):
         book = Book(name=name,
                     bookshelf_id=bookshelf_id,
                     description=description,
-                    web_link=weblink)
+                    web_link=weblink,
+                    author=weblink,
+                    publisher=weblink)
         self._session.add(book)
         
         if categories is not None:
@@ -71,7 +73,7 @@ class Dal():
 
         return book
 
-    def update_book(self, id, name, description, weblink, categories):
+    def update_book(self, id, name, description, weblink, categories, author=None, publisher=None):
         book = self._session.query(Book).filter_by(id=id).first()
         if book is None:
             raise ValueError('Book {id} not found. Update aborted.'.format(id))

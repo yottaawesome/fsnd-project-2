@@ -54,12 +54,7 @@ export default class NewEditBook extends Component {
   //#region UI EVENTS
   onSubmitClick() {
     if(this.state.mode == mode.NEW) {
-      ServerApi.createBook(
-        this.state.data.name,
-        this.state.data.description,
-        this.state.data.web_link,
-        this.state.data.categories
-      )
+      ServerApi.createBook(this.state.data)
       .then(json => {
         GlobalState.raiseEvent(Events.NOTIFICATION, "Successfully added a new book!");
         window.location.hash = `#/edit/${json.id}`;
@@ -68,13 +63,7 @@ export default class NewEditBook extends Component {
       .catch(err => console.error(err));
     } 
     else if(this.state.mode == mode.EDIT) {
-      ServerApi.editBook(
-        this.state.data.id,
-        this.state.data.name,
-        this.state.data.description,
-        this.state.data.web_link,
-        this.state.data.categories
-      )
+      ServerApi.editBook(this.state.data)
       .then(json => {
         GlobalState.raiseEvent(Events.NOTIFICATION, "Editing was successful!");
         return json;
@@ -215,6 +204,24 @@ export default class NewEditBook extends Component {
           </div>
           <div className={styles.inputColumn}>
             <input id="web_link" name="web_link" type="text" onInput={this.onValueChange} value={this.state.data.web_link} />
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <div className={styles.labelColumn}>
+            <label for="author">Author:</label>
+          </div>
+          <div className={styles.inputColumn}>
+            <input id="author" name="author" type="text" onInput={this.onValueChange} value={this.state.data.author} />
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <div className={styles.labelColumn}>
+            <label for="publisher">Publisher:</label>
+          </div>
+          <div className={styles.inputColumn}>
+            <input id="publisher" name="publisher" type="text" onInput={this.onValueChange} value={this.state.data.publisher} />
           </div>
         </div>
 

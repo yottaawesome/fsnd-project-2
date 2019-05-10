@@ -30,7 +30,7 @@ export default class Home extends Component {
   render() {
     return (
       <div className={styles.root}>
-        { this.state.user != null ? <Bookshelf /> : <h1>Hi there, <a href="/#/">please log in</a> to view your bookshelf</h1> }
+        { this.state.user != null ? <Bookshelf /> : <h1>Hi there, <a href="/#/login">please log in</a> to view your bookshelf</h1> }
       </div>
     );
   }

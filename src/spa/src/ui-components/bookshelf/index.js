@@ -9,7 +9,7 @@ export default class Bookshelf extends Component {
     super(props);
     autobind(this);
     GlobalState.subscribe(this, Events.LOGIN, Events.LOGOUT);
-    this.state = { bookshelf: null };
+    this.state = { bookshelf: [] };
   }
 
   componentWillUnmount() {
@@ -32,7 +32,7 @@ export default class Bookshelf extends Component {
     ServerApi
       .fetchBookshelf()
       .then(json => {
-        this.setState({ bookshelf: json });
+        this.setState({ bookshelf: json || [] });
         return json;
       })
       .catch(err => console.error(err));
@@ -55,14 +55,6 @@ export default class Bookshelf extends Component {
   }
 
   render() {
-    if(this.state.bookshelf == null || this.state.bookshelf.length == 0) {
-      return (
-        <div className={styles.root}>
-          <h2>Your bookshelf</h2>
-        </div>
-      );
-    }
-
     return (
       <div className={styles.root}>
         <h2>Your bookshelf</h2>
@@ -70,7 +62,7 @@ export default class Bookshelf extends Component {
         <hr />
         
         {
-          this.state.bookshelf == null || this.state.bookshelf.length == 0
+          this.state.bookshelf.length == 0
             ? <p>You don't have anything in your bookshelf... yet! Why don't you <a href='/#/new'>add a book?</a></p>
             : null
         }
@@ -85,7 +77,8 @@ export default class Bookshelf extends Component {
               &nbsp;
               <a href={`/#/edit/${book.id}`}>edit</a>
               <hr />
-            </div>)
+            </div>
+          )
         }
       </div>
     );

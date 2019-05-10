@@ -21,7 +21,7 @@ ServerApi
     GlobalState.raiseEvent(Events.LOGIN, json);
     return json;
   })
-  .catch(err => console.error('The user is not currently authenticated'));
+  .catch(err => console.error(err));
 
 const MainClient = () => (
   <div>
