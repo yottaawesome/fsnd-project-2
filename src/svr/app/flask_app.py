@@ -15,18 +15,19 @@ main_app = Flask(__name__)
 
 API_DOC = []
 
+
 def doc_route(rule, **options):
     def decorator(f):
         endpoint = options.pop("endpoint", None)
         main_app.add_url_rule(rule, endpoint, f, **options)
         methods = options.get("methods")
-        if methods is None or len(methods)==0:
+        if methods is None or len(methods) == 0:
             methods = ['GET']
 
         route = None
         for r in API_DOC:
             if r['route'] == rule:
-                route=r
+                route = r
                 break
 
         if route is None:
@@ -40,8 +41,8 @@ def doc_route(rule, **options):
 
         for method in methods:
             route['methods'].append({
-                'description'   : doc_string,
-                'method'        : method
+                'description': doc_string,
+                'method': method
             })
 
         return f

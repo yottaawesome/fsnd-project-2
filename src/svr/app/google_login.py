@@ -1,4 +1,6 @@
 '''Contains the main logic for Google Logins.'''
+
+from .flask_app import main_app, GOOGLE_CLIENT_ID
 from flask import request, jsonify, session as login_session
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -8,27 +10,29 @@ import requests
 
 dal_fct = dal_factory()
 
-from .flask_app import main_app, GOOGLE_CLIENT_ID
 
 def revoke_token(access_token):
     '''
     Revokes the Google token.
     '''
 
-    response = requests.post('https://accounts.google.com/o/oauth2/revoke',
+    response = requests.post(
+        'https://accounts.google.com/o/oauth2/revoke',
         params={'token': access_token},
-    headers = {'content-type': 'application/x-www-form-urlencoded'})
+        headers={'content-type': 'application/x-www-form-urlencoded'})
+
     if response.status_code == 200:
         print('Token successfully revoked')
     else:
-        print('Token revocation failed with status {}'.format(response.status_code))
+        print('Token revocation failed with status {}'.format(
+            response.status_code))
 
 
 @main_app.route('/api/v1/googleauth/', methods=['POST'])
 def google_auth():
     '''
     Authenticates to Google using the temporary client code. This endpoint
-    is not intended for general public use. 
+    is not intended for general public use.
     '''
 
     # Validate state token
@@ -43,30 +47,33 @@ def google_auth():
     try:
 
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('secret.google_client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets(
+            'secret.google_client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
 
     except FlowExchangeError as ex:
 
         print(ex)
-        return jsonify({ 'message': 'Failed to upgrade the authorization code.' }), 401
+        return jsonify(
+            {'message': 'Failed to upgrade the authorization code.'}), 401
 
     # Check that the access token is valid.
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'
-            .format(access_token))
+    url = (
+        'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'
+        .format(access_token))
     check_json = requests.get(url).json()
     # If there was an error in the access token info, abort.
     if check_json.get('error') is not None:
-        return jsonify({ 'message': check_json.get('error') }), 500
+        return jsonify({'message': check_json.get('error')}), 500
 
     """ https://www.googleapis.com/oauth2/v1/tokeninfo
     {
         "issued_to": <app client id>,
         "audience": <app client id>,
         "user_id": <user id>,
-        "scope": "openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+        "scope": "openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email", # noqa
         "expires_in": <seconds to expiry>,
         "email": "<user email>",
         "verified_email": true,
@@ -77,11 +84,13 @@ def google_auth():
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
     if check_json['user_id'] != gplus_id:
-        return jsonify({ 'message': 'Token\'s user ID doesn\'t match given user ID.' }), 401
+        return jsonify(
+            {'message': 'Token\'s user ID doesn\'t match given user ID.'}), 401
 
     # Verify that the access token is valid for this app.
     if check_json['issued_to'] != GOOGLE_CLIENT_ID:
-        return jsonify({ 'message': 'Token\'s client ID does not match app\'s' }), 401
+        return jsonify(
+            {'message': 'Token\'s client ID does not match app\'s'}), 401
 
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"

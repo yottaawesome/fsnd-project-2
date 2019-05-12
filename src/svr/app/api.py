@@ -1,4 +1,5 @@
 '''Contains the main routes for the REST API.'''
+
 from db import dal_factory
 from flask import render_template, jsonify, session as login_session, request
 from .flask_app import (
