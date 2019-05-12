@@ -16,6 +16,8 @@ dal_fct = dal_factory()
 
 @main_app.route('/api/v1/docs/')
 def docs():
+    '''Serializes the docs collection into JSON for client consumption'''
+
     return jsonify(API_DOC), 200
 
 

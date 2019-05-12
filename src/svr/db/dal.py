@@ -1,14 +1,22 @@
 '''Contains the core DAL logic.'''
-from .schema import (User, Book, BookCategories,
-                    BookCategory, Bookshelf, DB_NAME, Base)
+from .schema import (
+    User,
+    Book,
+    BookCategories,
+    BookCategory,
+    Bookshelf,
+    DB_NAME,
+    Base)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+
 def dal_factory(db_name=DB_NAME):
     engine = create_engine('sqlite:///{}'.format(db_name))
-    Base.metadata.bind=engine
-    DBSession = sessionmaker(bind = engine)
+    Base.metadata.bind = engine
+    DBSession = sessionmaker(bind=engine)
     return lambda: Dal(DBSession)
+
 
 class Dal():
 
@@ -43,22 +51,25 @@ class Dal():
         self._session.flush()
 
     def get_book(self, id: int):
-        return (self
+        return (
+            self
             ._session
             .query(Book)
             .filter_by(id=id)
             .first())
 
     def get_book_by_id_and_user(self, book_id: int, user_id: int):
-        return (self
+        return (
+            self
             ._session
             .query(Book)
             .join(Bookshelf)
             .join(User)
-            .filter(User.id==user_id,Book.id==book_id)
+            .filter(User.id == user_id, Book.id == book_id)
             .first())
 
-    def create_book(self, name, bookshelf_id, description=None, weblink=None, categories=None, author=None, publisher=None):
+    def create_book(self, name, bookshelf_id, description=None, weblink=None,
+                    categories=None, author=None, publisher=None):
         book = Book(name=name,
                     bookshelf_id=bookshelf_id,
                     description=description,
@@ -66,14 +77,16 @@ class Dal():
                     author=weblink,
                     publisher=weblink)
         self._session.add(book)
-        
+
         if categories is not None:
             self.flush()
-            book.categories = [self.get_book_category(cat_id) for cat_id in categories]
+            book.categories = [
+                self.get_book_category(cat_id) for cat_id in categories]
 
         return book
 
-    def update_book(self, id, name, description, weblink, categories, author=None, publisher=None):
+    def update_book(self, id, name, description, weblink, categories,
+                    author=None, publisher=None):
         book = self._session.query(Book).filter_by(id=id).first()
         if book is None:
             raise ValueError('Book {id} not found. Update aborted.'.format(id))
@@ -82,7 +95,8 @@ class Dal():
         book.web_link = weblink
         # we're never going to update the bookshelf_id
         if categories is not None:
-            book.categories = [self.get_book_category(cat_id) for cat_id in categories]
+            book.categories = [
+                self.get_book_category(cat_id) for cat_id in categories]
         self._session.add(book)
 
         return book
@@ -105,26 +119,29 @@ class Dal():
         return bookshelf
 
     def get_books_by_bookshelf(self, bookshelf_id: int):
-        return (self
+        return (
+            self
             ._session
             .query(Book)
             .filter_by(bookshelf_id=bookshelf_id)
             .all())
 
     def get_bookshelf_by_user(self, user_id: int):
-        return (self
+        return (
+            self
             ._session
             .query(Bookshelf)
             .filter_by(user_id=user_id)
             .first())
 
     def get_books_by_user(self, user_id: int):
-        return (self
+        return (
+            self
             ._session
             .query(Book)
             .join(Bookshelf)
             .join(User)
-            .filter(User.id==user_id)
+            .filter(User.id == user_id)
             .all())
 
     def create_user(self, name, email, picture=None):
@@ -137,14 +154,16 @@ class Dal():
         return user
 
     def get_user(self, user_id: int):
-        return (self
+        return (
+            self
             ._session
             .query(User)
             .filter_by(id=user_id)
             .first())
 
     def get_user_by_email(self, email: str):
-        return (self
+        return (
+            self
             ._session
             .query(User)
             .filter_by(email=email)
@@ -156,8 +175,9 @@ class Dal():
         return book_category
 
     def add_category_to_book(self, book_id, category_id):
-        book_category = BookCategories(book_id=book_id, 
-                                        category_id=category_id)
+        book_category = BookCategories(
+            book_id=book_id,
+            category_id=category_id)
         self._session.add(book_category)
         return book_category
 
@@ -165,7 +185,7 @@ class Dal():
         (self
             ._session
             .query(BookCategories)
-            .filter_by(book_id=book_id,category_id=category_id)
+            .filter_by(book_id=book_id, category_id=category_id)
             .delete())
 
     def delete_book_category(self, id):
@@ -176,14 +196,16 @@ class Dal():
             .delete())
 
     def get_book_category(self, id):
-        return (self
+        return (
+            self
             ._session
             .query(BookCategory)
             .filter_by(id=id)
             .first())
 
     def get_categories(self):
-        return (self
+        return (
+            self
             ._session
             .query(BookCategory)
             .all())
