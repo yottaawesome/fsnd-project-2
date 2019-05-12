@@ -37,7 +37,6 @@ const MainClient = () => (
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/login" component={Login} />
-              <Route path="/test" component={ApiTest} />
               <Route path="/new" component={NewEditBook} />
               <Route path="/edit/:id" component={NewEditBook} />
               <Route path="/docs" component={Docs} />

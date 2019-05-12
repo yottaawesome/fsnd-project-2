@@ -16,7 +16,16 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     autobind(this);
-    this.state = { loadGScript: auth2 == null }
+    this.state = { 
+      loadGScript: auth2 == null,
+      authProviders: []
+    }
+  }
+
+  componentDidMount() {
+    ServerApi
+      .fetchAuthProviders()
+      .then(json => this.setState({...this.state, ...{authProviders: json}}));
   }
 
   onGoogleLoginClick() {
@@ -57,16 +66,36 @@ export default class Login extends Component {
       <div className={styles.root}>
         <h2>Please select how you want to log in</h2>
         <div className={styles.row}>
-          <div className={styles.column}>
-            <a href={`https://github.com/login/oauth/authorize?scope=read:user%20user:email&client_id=${githubClientId}`}>
-              <img title="Sign in with GitHub" width="300" height="300" src={githubIcon} alt="GitHub logo" />
-            </a>
-          </div>
-          <div className={styles.column}>
-            <a href="javascript:" id="signinButton" onClick={ linkEvent(this, this.onGoogleLoginClick) }>
-              <img title="Sign in with Google" width="300" height="300" src={googleIcon} alt="GitHub logo" />
-            </a>
-          </div>
+          {
+            this.state.authProviders.map((prov, index) => {
+              switch(prov) {
+                case 'google':
+                  return (
+                    <div className={styles.column}>
+                      <a href="javascript:" id="signinButton" onClick={ linkEvent(this, this.onGoogleLoginClick) }>
+                        <img title="Sign in with Google" width="300" height="300" src={googleIcon} alt="GitHub logo" />
+                      </a>
+                    </div>
+                  )
+
+                case 'github':
+                    return (
+                      <div className={styles.column}>
+                        <a href={`https://github.com/login/oauth/authorize?scope=read:user%20user:email&client_id=${githubClientId}`}>
+                          <img title="Sign in with GitHub" width="300" height="300" src={githubIcon} alt="GitHub logo" />
+                        </a>
+                      </div>
+                    )
+
+                default:
+                  return (
+                    <div className={styles.column}>
+                      <p>Whoops! Looks like the server supports a method we've missed!</p>
+                    </div>
+                );
+              }
+            })
+          }
         </div>
 
         {

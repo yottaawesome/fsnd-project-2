@@ -39,8 +39,8 @@ You'll need the following prerequisites.
 * `virtualenv`
 * Node
 * NPM
-* A GitHub and/or a Google Account (this application supports authenticating with both options).
-* A Google Web Application and a GitHub Application (further details in the section below).
+* A Google account and a configured Google Web Application
+* A GitHub account and a configured GitHub Application.
 * Git to clone this repository.
 
 ### Server

@@ -151,4 +151,19 @@ export default class ServerApi {
         return response.status == 200 ? response.json() : Promise.reject(response.status);
       }));
   }
+
+  static fetchAuthProviders() {
+    return (
+      fetch('api/v1/authproviders/', {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => {
+        return response.status == 200 ? response.json() : Promise.reject(response.status);
+      }));
+  }
 }

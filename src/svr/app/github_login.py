@@ -50,6 +50,9 @@ def revoke_token(access_token):
 def github_callback():
     # We don't need to verify the state token, because the endpoint is invoked
     # directly by GitHub, bypassing the client.
+    if GITHUB_CLIENT_ID is None:
+        return '', 401
+
     # Temporary GitHub code passed in via the querystring
     session_code = request.args.get('code')
 

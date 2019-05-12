@@ -36,6 +36,22 @@ def home():
                             page_state=state)
 
 
+@doc_route('/api/v1/authproviders/')
+def get_auth_providers():
+    '''
+    Gets the supported authentication providers as a list. This list will
+    be either ['google'] or ['google','github'].
+
+    Returns:
+        200 and a list of supported third-party authentication providers.
+    '''
+
+    auths = ['google']
+    if GITHUB_CLIENT_ID:
+        auths.append('github')
+    return jsonify(auths), 200
+
+
 @doc_route('/api/v1/user/')
 def user():
     '''
