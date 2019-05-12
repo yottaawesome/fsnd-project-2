@@ -7,7 +7,6 @@ import Header from './ui-components/header';
 import Menu from './ui-components/menu';
 import Footer from './ui-components/footer';
 import Docs from './ui-components/docs';
-import ApiTest from './ui-components/api-test';
 import { NewEditBook } from './ui-components/new-edit-book';
 import { GlobalState, Events, State } from './app-state';
 import ServerApi from './api';
