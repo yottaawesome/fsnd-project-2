@@ -2,18 +2,21 @@
 from db import dal_factory
 from flask import render_template, jsonify, session as login_session, request
 from .flask_app import (
-    main_app, 
-    GITHUB_CLIENT_ID, 
-    GOOGLE_CLIENT_ID, 
-    doc_route, 
+    main_app,
+    GITHUB_CLIENT_ID,
+    GOOGLE_CLIENT_ID,
+    doc_route,
     API_DOC)
-import random, string
+import random
+import string
 
 dal_fct = dal_factory()
+
 
 @main_app.route('/api/v1/docs/')
 def docs():
     return jsonify(API_DOC), 200
+
 
 @main_app.route('/')
 def home():
@@ -22,14 +25,14 @@ def home():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in range(32))
     login_session['state'] = state
-    
-    return render_template('index.html',
+
+    return render_template(
+                            'index.html',
                             google_client_id=GOOGLE_CLIENT_ID,
                             github_client_id=GITHUB_CLIENT_ID,
                             page_state=state)
 
 
-#@main_app.route('/v1/user/')
 @doc_route('/api/v1/user/')
 def user():
     '''
@@ -44,7 +47,7 @@ def user():
 
         user = login_session.get('user')
         if user is None:
-            return jsonify({ 'message': 'No currently logged in user' }), 215
+            return jsonify({'message': 'No currently logged in user'}), 215
 
         return jsonify(user)
 
@@ -60,7 +63,7 @@ def logout():
     Logs the current user out.
 
     Returns:
-        204. 
+        204.
     '''
 
     try:
@@ -83,9 +86,9 @@ def get_bookshelf():
     Gets all the books for the user's bookshelf as JSON.
 
     Returns:
-        200 and the bookshelf books in JSON format. 
+        200 and the bookshelf books in JSON format.
         401 if the user is not authenticated.
-        404 if the book does not exist. 
+        404 if the book does not exist.
         500 if an unexpected error.
     '''
 
@@ -93,7 +96,7 @@ def get_bookshelf():
 
         user = login_session.get('user')
         if user is None:
-            return jsonify({ 'message': 'No currently logged in user' }), 401
+            return jsonify({'message': 'No currently logged in user'}), 401
 
         with dal_fct() as dal:
             bookshelf = dal.get_books_by_user(user['id'])
@@ -114,7 +117,7 @@ def new_book():
     Creates a new book in the user's bookshelf.
 
     Returns:
-        200 and the created book in JSON format. 
+        200 and the created book in JSON format.
         401 if the user is not authenticated.
         400 for a malformed request.
         404 if the book does not exist.
@@ -125,7 +128,7 @@ def new_book():
 
         user = login_session.get('user')
         if user is None:
-            return jsonify({ 'message': 'No currently logged in user' }), 401
+            return jsonify({'message': 'No currently logged in user'}), 401
 
         json = request.get_json()
         if json is None:
@@ -135,8 +138,8 @@ def new_book():
             bookshelf_id = dal.get_bookshelf_by_user(user['id']).id
             print(bookshelf_id)
             book = dal.create_book(
-                json['name'], 
-                bookshelf_id, 
+                json['name'],
+                bookshelf_id,
                 description=json['description'],
                 weblink=json['web_link'],
                 categories=json['categories'],
@@ -146,7 +149,7 @@ def new_book():
             dal.flush()
 
             return jsonify(book.serialize), 200
-    
+
     except Exception as ex:
 
         print('Exception: ', ex)
@@ -159,9 +162,9 @@ def get_book(id):
     Gets the book identified by the id segment of the URI as JSON.
 
     Returns:
-        200 and the book in JSON format. 
+        200 and the book in JSON format.
         401 if the user is not authenticated.
-        404 if the book does not exist. 
+        404 if the book does not exist.
         500 if unexpected error occurs.
     '''
 
@@ -169,7 +172,7 @@ def get_book(id):
 
         user = login_session.get('user')
         if user is None:
-            return jsonify({ 'message': 'No currently logged in user' }), 401
+            return jsonify({'message': 'No currently logged in user'}), 401
 
         with dal_fct() as dal:
             book = dal.get_book_by_id_and_user(id, user['id'])
@@ -190,10 +193,10 @@ def edit_book(id):
     Updates the book identified by the id segment of the URI.
 
     Returns:
-        200 and the updated book in JSON format. 
+        200 and the updated book in JSON format.
         400 for a malformed request.
         401 if the user is not authenticated.
-        404 if the book does not exist. 
+        404 if the book does not exist.
         500 if an unexpected error occurs.
     '''
 
@@ -201,7 +204,7 @@ def edit_book(id):
 
         user = login_session.get('user')
         if user is None:
-            return jsonify({ 'message': 'No currently logged in user' }), 401
+            return jsonify({'message': 'No currently logged in user'}), 401
         json = request.get_json()
         if json is None:
             return jsonify({'message': 'Bad request'}), 400
@@ -235,14 +238,14 @@ def delete_book(id):
     Returns:
         204 if the book was successfully deleted.
         401 if the user is not authenticated.
-        404 if the book does not exist. 
+        404 if the book does not exist.
         500 if an unexpected error occurs.
     '''
     try:
 
         user = login_session.get('user')
         if user is None:
-            return jsonify({ 'message': 'No currently logged in user' }), 401
+            return jsonify({'message': 'No currently logged in user'}), 401
 
         with dal_fct() as dal:
             book = dal.get_book_by_id_and_user(id, user['id'])
@@ -257,6 +260,7 @@ def delete_book(id):
         print('Exception: ', ex)
         return jsonify({'message': 'Deleting a book failed'}), 500
 
+
 @doc_route('/api/v1/categories/', methods=['GET'])
 def get_categories():
     '''
@@ -270,7 +274,8 @@ def get_categories():
     try:
 
         with dal_fct() as dal:
-            return jsonify([cat.serialize for cat in dal.get_categories()]), 200
+            result = [cat.serialize for cat in dal.get_categories()]
+            return jsonify(result), 200
 
     except Exception as ex:
 
