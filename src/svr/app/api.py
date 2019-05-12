@@ -59,7 +59,7 @@ def user():
 
     Returns:
         200 and the user's details as JSON.
-        215 if no user is currently logged.
+        215 if no user is currently logged in.
     '''
 
     try:
