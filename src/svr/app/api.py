@@ -11,7 +11,7 @@ import random, string
 
 dal_fct = dal_factory()
 
-@main_app.route('/api/v1/docs')
+@main_app.route('/api/v1/docs/')
 def docs():
     return jsonify(API_DOC), 200
 

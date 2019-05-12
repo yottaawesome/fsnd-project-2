@@ -116,7 +116,8 @@ export default class ServerApi {
           code: code,
           state: state
         })
-      }).then(response => {
+      })
+      .then(response => {
         return response.status != 200 ? Promise.reject(response.status) : response.json()
       }));
   }
@@ -124,6 +125,21 @@ export default class ServerApi {
   static fetchCategories() {
     return (
       fetch('api/v1/categories/', {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => {
+        return response.status == 200 ? response.json() : Promise.reject(response.status);
+      }));
+  }
+
+  static fetchApiDoc() {
+    return (
+      fetch('api/v1/docs/', {
         credentials: 'same-origin',
         method: 'GET',
         headers: {

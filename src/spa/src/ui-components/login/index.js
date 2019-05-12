@@ -41,7 +41,6 @@ export default class Login extends Component {
       return;
     }
 
-    // We can't have this aas const as the redirect results in it being regenerated
     ServerApi
       .postGoogleAuthCode(pageState, authResult['code'])
       .then(json => {
