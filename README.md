@@ -32,44 +32,75 @@ The client-side is a single-page application (SPA) built in Inferno that acts as
 
 ## Setting up
 
-You'll need the following prerequisites.
+You'll need the following prerequisites. Instructions for setting these up for Udacity's Vagrant VM are below. If you're using your own UNIX-like environment, consult your environment's package manager on how to best fulfill these prerequisites.
 
-* Python
-* Pip
+* Python 3
+* Pip 3
 * `virtualenv`
-* Node
-* NPM
+* Node and NPM
 * A Google account and a configured Google Web Application
-* A GitHub account and a configured GitHub Application.
-* Git to clone this repository.
+* Optionally, a GitHub account and a configured GitHub Application
+* Git to clone this repository
 
-### Server
+You'll need to set up a Google Developer Client application and optionally a GitHub application in order to enable the application to authenticate against third-party providers. For the application to function, you must at least configure a Google Web Application client and supply the relevant JSON secrets file. The application checks for the following files in order to do this.
 
-You'll need to set up a Google Developer Client application and a GitHub application in order to obtain the relevant client IDs and secrets, plus the secrets JSON file from Google. These details are used by the server and client to authenticate against GitHub and Google. The following files will need to be present at the root of `svr`. Note that all files starting with `secret.` are deliberately ignored in `.gitignore`.
+* `secret.google_client_secrets.json:` the downloaded JSON file for your Google application from Google Developer Console. This must be provided.
+* `secret.github_client_secrets.json:` JSON file containing the GitHub application secrets. Consult `example.secret.github_client_secrets.json` for an example file. If this file is not found, the application disabled GitHub authentication.
 
-* `secret.google_client_secrets.json:` the downloaded JSON file for your Google application from Google Developer Console.
-* `secret.github_client_secrets.json:` JSON file containing the GitHub secrets. Consult `example.secret.github_client_secrets.json` for an example file.
+Note that all files starting with `secret.` are deliberately ignored in `.gitignore`.
+
+### Setting up Google authentication
+
+1. Visit [Google Developer Console](https://console.developers.google.com/).
+2. Create a new project and give it an appropriate name, e.g. My Bookshelf.
+3. From the Project Dashboard, click _Credentials_ > _OAuthConsent screen_.
+4. Choose an appropriate _Application name_ (e.g. My Bookshelf) and _Support email_, then click save.
+5. From the Credentials tab, click _Create credentials_ and choose _OAuth client ID_.
+6. In the next screen, click _Web application_ and then _Create_.
+7. Give your credentials an appropriate _Name_ (e.g. Bookshelf Client) and add http://localhost:5000 to the _Authorised JavaScript origins_. Do not add http://127.0.0.1:5000 -- Google will seemingly accept this but fail when using it.
+8. Save your changes and then click _Download JSON_. Name the downloaded file `secret.google_client_secrets.json` and place it in the `src/svr` folder of your repository.
+
+### (Optional) Setting up GitHub authentication
+
+1. Log into GitHub.
+2. From the top-right-hand-side, click _Settings_.
+3. Click _Developer settings_.
+4. From the _OAuth Apps_ tab, click _New OAuth App_.
+5. Set the fields:
+    * _Application name_ to something appropriate (e.g. bookshelf).
+    * _Homepage URL_ to http://localhost:5000/github.
+    * _Authorization callback URL_ to http://localhost:5000/githubcallback.
+6. Click save. Make note of the _Client ID_ and _Client Secret_ of your newly created GitHub application.
+7. In `src/svr`, rename `example.secret.github_client_secrets.json` to `secret.github_client_secrets.json`.
+8. Open `secret.github_client_secrets.json` and add your _Client ID_ and _Client Secret_ from step 6 to the appropriate fields in the JSON body.
 
 Once you have done this, follow the below instructions.
 
-* From Bash:
-  * Move into the server dir: `cd src/svr`.
-  * Create virtual environment: `env virtualenv`.
-  * Activate virtual environment: `source env/bin/activate`.
-  * Install Python dependencies: `pip install -r requirements.txt`.
-  * Create the DB: `python create_db.py`.
-  * Run development server: `python main.py` or `source run`.
-  * Visit [localhost:5000](http://localhost:5000).
+### Using Udacity's Vagrant VM
 
-### SPA
+The Udacity VM does not have `virtualenv`, so this will need to be installed. Follow the instructions below.
 
-* From Bash:
-  * Move into the SPA dir: `cd src/spa`.
-  * Install NPM dependencies: `npm install`.
-  * Build the client using one of the following commands:
-    * `npm run dev`: run a one-off development build.
-    * `npm run prod`: run a one-off production build.
-    * `npm run dev-watch`: run the development build and rebuild on file changes.
-    * `npm run prod-watch`: run the production build and rebuild on file changes.
-
-Further details will be added soon.
+1. [Install VirtualBox](https://www.virtualbox.org/wiki/Download_Old_Builds_5_1) for your platform. Udacity suggests using VirtualBox 5.1, but students report newer versions work as well.
+2. [Install Vagrant](https://www.vagrantup.com/downloads.html) appropriately for your platform.
+3. [Fork and clone locally](https://github.com/udacity/fullstack-nanodegree-vm) the Udacity VM on GitHub.
+4. From Bash:
+    1. `cd` into the `vagrant` directory in the Udacity repository you cloned in the previous step.
+    2. Run `vagrant up`. This will set up the VM, but it may take quite a while to do so. Consider a :coffee: or twelve.
+    3. Run `vagrant ssh` to SSH into the VM once it's set up.
+    4. Install virtualenv: `sudo apt install virtualenv`.
+    5. Install Node and NPM:
+        1. Run `curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`.
+        2. Run `sudo apt-get install -y nodejs`.
+    6. Clone this repository **into a non-shared directory**. Shared directories [cause problems with NPM](https://github.com/npm/npm/issues/992).
+    7. Build the client:
+        1. `cd` into the `src/spa` directory.
+        2. Install NPM dependencies: `npm install`.
+        3. Run `npm run dev` (development build) or `npm run prod` (prod build). Consult `package.json` for the full list of build commands.
+    8. Set up the server:
+        1. `cd` into the `src/svr` directory.
+        2. Create a Python 3 virtual environment: `virtualenv -p python3 env`.
+        3. Activate the Python virtual environment: `source env/bin/activate`.
+        4. Install Python dependencies: `pip install -r requirements.txt`.
+        5. Create the DB: `python create_db.py`.
+        6. Run development server: `python main.py` or `source run`.
+        7. Visit [localhost:5000](http://localhost:5000).

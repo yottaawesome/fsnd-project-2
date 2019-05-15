@@ -40,9 +40,10 @@ export default class LoginStatus extends Component {
     if(this.state.user == null)
       return (<div><a href="#login">Please log in</a></div>);
 
+    // We need the no-policy due to Google APIs randomly spitting out 403s from localhost: https://stackoverflow.com/questions/30851685/google-drive-thumbnails-getting-403-rate-limit-exceeded
     return (
       <div>
-        <img height="30" width="30" src={this.state.user.picture} alt="avatar" />
+        <img height="30" referrerPolicy="no-referrer" width="30" src={this.state.user.picture} alt="avatar" />
         { `Hello, ${this.state.user.name}!` } Not you? <button class="link-button" onClick={linkEvent(this, this.onLogoutClick)}>Logout</button>
       </div>
     );
