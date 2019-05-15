@@ -12,7 +12,7 @@ The client's `package.json` uses `node-sass`, which uses a [vulnerable version](
 
 ## Status
 
-_In development._
+_Near completion._
 
 ## Project structure
 
@@ -74,7 +74,7 @@ Note that all files starting with `secret.` are deliberately ignored in `.gitign
 7. In `src/svr`, rename `example.secret.github_client_secrets.json` to `secret.github_client_secrets.json`.
 8. Open `secret.github_client_secrets.json` and add your _Client ID_ and _Client Secret_ from step 6 to the appropriate fields in the JSON body.
 
-Once you have done this, follow the below instructions.
+Once you have have setup Google or Google and GitHub authentication, follow the below instructions as they pertain to your environment.
 
 ### Using Udacity's Vagrant VM
 
@@ -91,7 +91,7 @@ The Udacity VM does not have `virtualenv`, so this will need to be installed. Fo
     5. Install Node and NPM:
         1. Run `curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`.
         2. Run `sudo apt-get install -y nodejs`.
-    6. Clone this repository **into a non-shared directory**. Shared directories [cause problems with NPM](https://github.com/npm/npm/issues/992).
+    6. Clone this repository **into a non-shared directory** on your Vagrant VM. Shared VirtualBox/Vagrant directories [cause problems with NPM](https://github.com/npm/npm/issues/992).
     7. Build the client:
         1. `cd` into the `src/spa` directory.
         2. Install NPM dependencies: `npm install`.
@@ -104,3 +104,23 @@ The Udacity VM does not have `virtualenv`, so this will need to be installed. Fo
         5. Create the DB: `python create_db.py`.
         6. Run development server: `python main.py` or `source run`.
         7. Visit [localhost:5000](http://localhost:5000).
+
+### Using your own UNIX-like environment
+
+From the shell of your choice, do the following:
+
+1. Install virtualenv.
+2. Install Node and NPM.
+3. Clone this repository.
+4. Build the client:
+    1. `cd` into the `src/spa` directory.
+    2. Install NPM dependencies: `npm install`.
+    3. Run `npm run dev` (development build) or `npm run prod` (prod build). Consult `package.json` for the full list of build commands.
+5. Set up the server:
+    1. `cd` into the `src/svr` directory.
+    2. Create a Python 3 virtual environment: `virtualenv -p python3 env`.
+    3. Activate the Python virtual environment: `source env/bin/activate`.
+    4. Install Python dependencies: `pip install -r requirements.txt`.
+    5. Create the DB: `python create_db.py`.
+    6. Run development server: `python main.py` or `source run`.
+    7. Visit [localhost:5000](http://localhost:5000).
