@@ -39,6 +39,20 @@ export default class ServerApi {
     );
   }
 
+  static fetchSortedBookshelf() {
+    return (
+      fetch('/api/v1/bookshelf/sorted/', {
+        credentials: 'same-origin',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => {
+        return response.status != 200 ? Promise.reject(response.status) : response.json();
+      })
+    );
+  }
+
   static fetchBook(id) {
     return (
       fetch(`api/v1/book/${id}`, {

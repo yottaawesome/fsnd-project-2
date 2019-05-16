@@ -127,7 +127,48 @@ def get_bookshelf():
     except Exception as ex:
 
         print('Exception: ', ex)
-        return jsonify({'message': 'Creating a new book failed'}), 500
+        return jsonify({'message': 'Retrieving books failed'}), 500
+
+
+@doc_route('/api/v1/bookshelf/sorted/', methods=['GET'])
+def get_sorted_bookshelf():
+    '''
+    Gets all the books sorted by category for the user's bookshelf as JSON.
+
+    Returns:
+        200 and the bookshelf books in JSON format.
+        401 if the user is not authenticated.
+        404 if the book does not exist.
+        500 if an unexpected error.
+    '''
+
+    try:
+
+        user = login_session.get('user')
+        if user is None:
+            return jsonify({'message': 'No currently logged in user'}), 401
+
+        with dal_fct() as dal:
+            bookshelf = dal.get_books_by_user(user['id'])
+            result = {}
+            if bookshelf is None:
+                return jsonify([]), 200
+
+            for book in bookshelf:
+                for category in book.categories:
+                    result[category.name] = result.get(category.name) or {
+                        'category': [],
+                        'books': []
+                    }
+                    result[category.name]['category'] = category.serialize
+                    result[category.name]['books'].append(book.serialize)
+
+            return jsonify(list(result.values())), 200
+
+    except Exception as ex:
+
+        print('Exception: ', ex)
+        return jsonify({'message': 'Retrieving books failed'}), 500
 
 
 @doc_route('/api/v1/bookshelf/', methods=['POST'])

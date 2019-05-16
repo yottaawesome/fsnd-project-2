@@ -9,7 +9,9 @@ export default class Bookshelf extends Component {
     super(props);
     autobind(this);
     GlobalState.subscribe(this, Events.LOGIN, Events.LOGOUT);
-    this.state = { bookshelf: [] };
+    this.state = { 
+      bookshelf: []
+    };
   }
 
   componentWillUnmount() {
@@ -36,6 +38,7 @@ export default class Bookshelf extends Component {
         return json;
       })
       .catch(err => console.error(err));
+    ServerApi.fetchSortedBookshelf();
   }
 
   deleteBook(id, index) {
@@ -73,6 +76,8 @@ export default class Bookshelf extends Component {
               <h3><strong>Title:</strong> {book.name}</h3>
               <p><strong>Description:</strong> {book.description}</p>
               <p><strong>Web link:</strong> {book.web_link}</p>
+              <p><strong>Author:</strong> {book.author}</p>
+              <p><strong>Publisher:</strong> {book.publisher}</p>
               <a href="javascript:" onClick={linkEvent(this, this.bindDeleteBookEvent(book.id, index))}>delete</a>
               &nbsp;
               <a href={`/#/edit/${book.id}`}>edit</a>
