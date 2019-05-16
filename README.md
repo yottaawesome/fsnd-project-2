@@ -28,15 +28,18 @@ The client-side is a single-page application (SPA) built in Inferno that acts as
 
 ## Setting up
 
-You'll need the following prerequisites. Instructions for setting these up for Udacity's Vagrant VM are below. If you're using your own UNIX-like environment, consult your environment's package manager on how to best fulfill these prerequisites.
+You'll need the following prerequisites to minimally run this project. Instructions for setting these up for Udacity's Vagrant VM are below. If you're using your own UNIX-like environment, consult your environment's package manager on how to best fulfill these prerequisites.
 
 * Python 3
 * Pip 3
 * `virtualenv`
-* Node and NPM
 * A Google account and a configured Google Web Application
-* Optionally, a GitHub account and a configured GitHub Application
 * Git to clone this repository
+
+The following prerequisites are optional:
+
+* Node and NPM, for building and developing the SPA client.
+* A GitHub account and a configured GitHub Application, for enabling GitHub authentication.
 
 You'll need to set up a Google Developer Client application and optionally a GitHub application in order to enable the application to authenticate against third-party providers. For the application to function, you must at least configure a Google Web Application client and supply the relevant JSON secrets file. The application checks for the following files in order to do this.
 
@@ -84,15 +87,15 @@ The Udacity VM does not have `virtualenv`, so this will need to be installed. Fo
     2. Run `vagrant up`. This will set up the VM, but it may take quite a while to do so. Consider a :coffee: or twelve.
     3. Run `vagrant ssh` to SSH into the VM once it's set up.
     4. Install virtualenv: `sudo apt install virtualenv`.
-    5. Install Node and NPM:
-        1. Run `curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`.
-        2. Run `sudo apt-get install -y nodejs`.
-    6. Clone this repository **into a non-shared directory** on your Vagrant VM. Shared VirtualBox/Vagrant directories [cause problems with NPM](https://github.com/npm/npm/issues/992).
-    7. Build the client:
-        1. `cd` into the `src/spa` directory.
-        2. Install NPM dependencies: `npm install`.
-        3. Run `npm run dev` (development build) or `npm run prod` (prod build). Consult `package.json` for the full list of build commands.
-    8. Set up the server:
+    5. Clone this repository **into a non-shared directory** on your Vagrant VM. Shared VirtualBox/Vagrant directories [cause problems with NPM](https://github.com/npm/npm/issues/992).
+    6. _Optional:_ Build the SPA client:
+        1. Install Node and NPM:
+            1. Run `curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`.
+            2. Run `sudo apt-get install -y nodejs`.
+        2. `cd` into the `src/spa` directory.
+        3. Install NPM dependencies: `npm install`.
+        4. Run `npm run dev` (development build) or `npm run prod` (prod build). Consult `package.json` for the full list of build commands.
+    7. Set up the server:
         1. `cd` into the `src/svr` directory.
         2. Create a Python 3 virtual environment: `virtualenv -p python3 env`.
         3. Activate the Python virtual environment: `source env/bin/activate`.
@@ -106,13 +109,13 @@ The Udacity VM does not have `virtualenv`, so this will need to be installed. Fo
 From the shell of your choice, do the following:
 
 1. Install virtualenv.
-2. Install Node and NPM.
-3. Clone this repository.
-4. Build the client:
-    1. `cd` into the `src/spa` directory.
-    2. Install NPM dependencies: `npm install`.
-    3. Run `npm run dev` (development build) or `npm run prod` (prod build). Consult `package.json` for the full list of build commands.
-5. Set up the server:
+2. Clone this repository.
+3. _Optional:_ Build the SPA client:
+    1. Install Node and NPM.
+    2. `cd` into the `src/spa` directory.
+    3. Install NPM dependencies: `npm install`.
+    4. Run `npm run dev` (development build) or `npm run prod` (prod build). Consult `package.json` for the full list of build commands.
+4. Set up the server:
     1. `cd` into the `src/svr` directory.
     2. Create a Python 3 virtual environment: `virtualenv -p python3 env`.
     3. Activate the Python virtual environment: `source env/bin/activate`.
