@@ -93,6 +93,8 @@ class Dal():
         book.name = name
         book.description = description
         book.web_link = weblink
+        book.author = author
+        book.publisher = publisher
         # we're never going to update the bookshelf_id
         if categories is not None:
             book.categories = [

@@ -10,7 +10,10 @@ export default class Bookshelf extends Component {
     autobind(this);
     GlobalState.subscribe(this, Events.LOGIN, Events.LOGOUT);
     this.state = { 
-      bookshelf: []
+      bookshelf: {
+        totalBooks: 0,
+        categories: []
+      }
     };
   }
 
@@ -32,17 +35,16 @@ export default class Bookshelf extends Component {
 
   fetchBookshelf() {
     ServerApi
-      .fetchBookshelf()
+      .fetchSortedBookshelf()
       .then(json => {
-        this.setState({ bookshelf: json || [] });
+        this.setState({bookshelf: json});
         return json;
       })
       .catch(err => console.error(err));
-    ServerApi.fetchSortedBookshelf();
   }
 
-  deleteBook(id, index) {
-    if(confirm(`Are you sure you wish to delete ${this.state.bookshelf[index].name}?`)) {
+  deleteBook(id, name) {
+    if(confirm(`Are you sure you wish to delete ${name}?`)) {
       ServerApi
         .deleteBook(id)
         .then(response => {
@@ -53,35 +55,45 @@ export default class Bookshelf extends Component {
     }
   }
 
-  bindDeleteBookEvent(id, index) {
-    return () => this.deleteBook(id, index);
+  bindDeleteBookEvent(id, name) {
+    return () => this.deleteBook(id, name);
   }
 
   render() {
     return (
       <div className={styles.root}>
         <h2>Your bookshelf</h2>
+        <p>You have {this.state.bookshelf.totalBooks} books across {this.state.bookshelf.categories.length} categories!</p>
         <p><a href='/#/new'>Add a book</a></p>
         <hr />
         
         {
-          this.state.bookshelf.length == 0
+          this.state.bookshelf.categories.length == 0
             ? <p>You don't have anything in your bookshelf... yet! Why don't you <a href='/#/new'>add a book?</a></p>
             : null
         }
 
         {
-          this.state.bookshelf.map((book, index) => 
+          this.state.bookshelf.categories.map((category, index) => 
             <div>
-              <h3><strong>Title:</strong> {book.name}</h3>
-              <p><strong>Description:</strong> {book.description}</p>
-              <p><strong>Web link:</strong> {book.web_link}</p>
-              <p><strong>Author:</strong> {book.author}</p>
-              <p><strong>Publisher:</strong> {book.publisher}</p>
-              <a href="javascript:" onClick={linkEvent(this, this.bindDeleteBookEvent(book.id, index))}>delete</a>
-              &nbsp;
-              <a href={`/#/edit/${book.id}`}>edit</a>
-              <hr />
+              <h3>{category.name} -- {category.books.length} {category.books.length == 1 ? 'book' : 'books'}</h3>
+              {
+                category.books.map((book, index) => 
+                  <div className={styles.bookDetails}>
+                    <h3><strong>{book.name}</strong><br /> <small>{book.author || 'No author'}, {book.publisher || 'No publisher'}</small></h3>
+                    <p><strong>Description:</strong><br />{book.description || 'No description'}</p>
+                    {
+                      book.web_link
+                        ? <span><a href={book.web_link}>web link</a>&nbsp;&nbsp;</span>
+                        : null
+                    }             
+                    <a href={`/#/edit/${book.id}`}>edit</a>
+                    &nbsp;&nbsp;
+                    <a href="javascript:" onClick={linkEvent(this, this.bindDeleteBookEvent(book.id, book.name))}>delete</a>
+                    <hr />
+                  </div>
+                )
+              }
             </div>
           )
         }

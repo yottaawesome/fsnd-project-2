@@ -156,14 +156,22 @@ def get_sorted_bookshelf():
 
             for book in bookshelf:
                 for category in book.categories:
-                    result[category.name] = result.get(category.name) or {
-                        'category': [],
-                        'books': []
-                    }
-                    result[category.name]['category'] = category.serialize
+                    if(result.get(category.name) is None):
+                        result[category.name] = {
+                            'books': []
+                        }
+                        # merge the dict with category dict
+                        result[category.name] = {
+                            **result[category.name],
+                            **category.serialize
+                        }
                     result[category.name]['books'].append(book.serialize)
 
-            return jsonify(list(result.values())), 200
+            result = {
+                'totalBooks': len(bookshelf),
+                'categories': list(result.values())
+            }
+            return jsonify(result), 200
 
     except Exception as ex:
 
