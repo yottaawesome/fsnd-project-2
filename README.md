@@ -45,7 +45,7 @@ The following prerequisites are optional:
 You'll need to set up a Google Developer Client application and optionally a GitHub application in order to enable the application to authenticate against third-party providers. For the application to function, you must at least configure a Google Web Application client and supply the relevant JSON secrets file. The application checks for the following files in order to do this.
 
 * `secret.google_client_secrets.json:` the downloaded JSON file for your Google application from Google Developer Console. This must be provided.
-* `secret.github_client_secrets.json:` JSON file containing the GitHub application secrets. Consult `example.secret.github_client_secrets.json` for an example file. If this file is not found, the application disabled GitHub authentication.
+* `secret.github_client_secrets.json:` JSON file containing the GitHub application secrets. Consult `example.secret.github_client_secrets.json` for an example file. If this file is not found, the application disables GitHub authentication.
 
 Note that all files starting with `secret.` are deliberately ignored in `.gitignore`.
 
@@ -58,7 +58,7 @@ Note that all files starting with `secret.` are deliberately ignored in `.gitign
 5. From the Credentials tab, click _Create credentials_ and choose _OAuth client ID_.
 6. In the next screen, click _Web application_ and then _Create_.
 7. Give your credentials an appropriate _Name_ (e.g. Bookshelf Client) and add http://localhost:5000 to the _Authorised JavaScript origins_. Do not add http://127.0.0.1:5000 -- Google will seemingly accept this but fail when using it.
-8. Save your changes and then click _Download JSON_. Name the downloaded file `secret.google_client_secrets.json` and place it in the `src/svr` folder of your repository.
+8. Save your changes and then click _Download JSON_. Name the downloaded file `secret.google_client_secrets.json` and place it in the `src/svr` folder of this repository.
 
 ### (Optional) Setting up GitHub authentication
 
@@ -93,11 +93,11 @@ The Udacity VM does not have `virtualenv`, so this will need to be installed. Fo
         1. Install Node and NPM:
             1. Run `curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`.
             2. Run `sudo apt-get install -y nodejs`.
-        2. `cd` into the `src/spa` directory.
+        2. `cd` into `src/spa` in this repository.
         3. Install NPM dependencies: `npm install`.
         4. Run `npm run dev` (development build) or `npm run prod` (prod build). Consult `package.json` for the full list of build commands.
     7. Set up the server:
-        1. `cd` into the `src/svr` directory.
+        1. `cd` into `src/svr` in this repository.
         2. Create a Python 3 virtual environment: `virtualenv -p python3 env`.
         3. Activate the Python virtual environment: `source env/bin/activate`.
         4. Install Python dependencies: `pip install -r requirements.txt`.
@@ -113,11 +113,11 @@ From the shell of your choice, do the following:
 2. Clone this repository.
 3. _Optional:_ Build the SPA client:
     1. Install Node and NPM.
-    2. `cd` into the `src/spa` directory.
+    2. `cd` into `src/spa` in this repository.
     3. Install NPM dependencies: `npm install`.
     4. Run `npm run dev` (development build) or `npm run prod` (prod build). Consult `package.json` for the full list of build commands.
 4. Set up the server:
-    1. `cd` into the `src/svr` directory.
+    1. `cd` into `src/svr` in this repository.
     2. Create a Python 3 virtual environment: `virtualenv -p python3 env`.
     3. Activate the Python virtual environment: `source env/bin/activate`.
     4. Install Python dependencies: `pip install -r requirements.txt`.
