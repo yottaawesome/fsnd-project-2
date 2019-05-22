@@ -8,7 +8,7 @@ As such, this project will take the shape of a digital bookshelf where users wil
 
 ## Status
 
-_Near completion._
+_Complete._
 
 ## Project structure
 
