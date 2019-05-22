@@ -35,11 +35,11 @@ You'll need the following prerequisites to minimally run this project. Instructi
 * `virtualenv`
 * A Google account and a configured Google Web Application
 * Git to clone this repository
+* Node and NPM, for building and developing the SPA client. This was optional previously as these files were included for the Udacity assessor's convenience, but have since been removed after passing this assessment.
 * A relatively modern web browser.
 
 The following prerequisites are optional:
 
-* Node and NPM, for building and developing the SPA client. For convenience, the built JS and CSS files are already included.
 * A GitHub account and a configured GitHub Application, for enabling GitHub authentication.
 
 You'll need to set up a Google Developer Client application and optionally a GitHub application in order to enable the application to authenticate against third-party providers. For the application to function, you must at least configure a Google Web Application client and supply the relevant JSON secrets file. The application checks for the following files in order to do this.
@@ -89,7 +89,7 @@ The Udacity VM does not have `virtualenv`, so this will need to be installed. Fo
     3. Run `vagrant ssh` to SSH into the VM once it's set up.
     4. Install virtualenv: `sudo apt install virtualenv`.
     5. Clone this repository **into a non-shared directory** on your Vagrant VM. Shared VirtualBox/Vagrant directories [cause problems with NPM](https://github.com/npm/npm/issues/992) if you intend to build and develop the SPA client.
-    6. _Optional:_ Build the SPA client:
+    6. Build the SPA client:
         1. Install Node and NPM:
             1. Run `curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`.
             2. Run `sudo apt-get install -y nodejs`.
@@ -111,7 +111,7 @@ From the shell of your choice, do the following:
 
 1. Install virtualenv.
 2. Clone this repository.
-3. _Optional:_ Build the SPA client:
+3. Build the SPA client:
     1. Install Node and NPM.
     2. `cd` into `src/spa` in this repository.
     3. Install NPM dependencies: `npm install`.
