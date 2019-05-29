@@ -28,6 +28,10 @@ The client-side is a single-page application (SPA) built in Inferno that acts as
 
 ## Setting up
 
+### :alert: Instructions outdated
+
+Following the backporting of changes to FSDN Project 3 to this repository, the instructions below are no longer accurate. The instructions will be updated as soon as FSND Project 3 is complete.
+
 You'll need the following prerequisites to minimally run this project. Instructions for setting these up for Udacity's Vagrant VM are below. If you're using your own UNIX-like environment, consult your environment's package manager on how to best fulfill these prerequisites.
 
 * Python 3
