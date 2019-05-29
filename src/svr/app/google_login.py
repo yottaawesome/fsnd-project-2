@@ -5,6 +5,7 @@ from flask import request, jsonify, session as login_session
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from db import Dal, dal_factory
+from cfg import GOOGLE_SECRETS_FILE
 import json
 import requests
 
@@ -48,7 +49,7 @@ def google_auth():
 
         # Upgrade the authorization code into a credentials object
         oauth_flow = flow_from_clientsecrets(
-            'secret.google_client_secrets.json', scope='')
+            GOOGLE_SECRETS_FILE, scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
 

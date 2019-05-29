@@ -1,18 +1,18 @@
 '''Contains the core DAL logic.'''
+from cfg import CONNECTION_STRING
 from .schema import (
     User,
     Book,
     BookCategories,
     BookCategory,
     Bookshelf,
-    DB_NAME,
     Base)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-def dal_factory(db_name=DB_NAME):
-    engine = create_engine('sqlite:///{}'.format(db_name))
+def dal_factory(conn_str=CONNECTION_STRING):
+    engine = create_engine(conn_str)
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
     return lambda: Dal(DBSession)

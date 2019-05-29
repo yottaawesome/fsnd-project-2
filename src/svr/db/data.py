@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from cfg import CONNECTION_STRING
 from .schema import (
     User,
     Book,
@@ -9,8 +10,8 @@ from .schema import (
     Base)
 
 
-def populate(db_name):
-    engine = create_engine('sqlite:///{}'.format(db_name))
+def populate(conn_str=CONNECTION_STRING):
+    engine = create_engine(conn_str)
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
@@ -35,4 +36,4 @@ def populate(db_name):
     session.close()
 
 if __name__ == '__main__':
-    populate('bookshelf.db')
+    populate(CONNECTION_STRING)

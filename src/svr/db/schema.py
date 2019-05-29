@@ -4,9 +4,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 import os
 from pathlib import Path
+from cfg import CONNECTION_STRING
 
 Base = declarative_base()
-DB_NAME = 'bookshelf.db'
 
 
 class User(Base):
@@ -117,14 +117,20 @@ class Book(Base):
         }
 
 
-def setup_db(db_name=DB_NAME):
+def setup_db(conn_str=CONNECTION_STRING):
     '''Creates the sqlite file, removing the old one if necessary'''
 
     # remove the old db file, if it exists
-    db_file = Path(db_name)
-    if db_file.is_file():
-        os.remove(db_file)
-    engine = create_engine('sqlite:///{}'.format(db_name))
+    if conn_str.startswith('sqllite'):
+        # whether the path is relative (///) or absolute (////), 
+        # this will still work
+        path = conn_str.replace('sqlite:///', '')
+
+        db_file = Path(path)
+        if db_file.is_file():
+            os.remove(db_file)
+
+    engine = create_engine(conn_str)
     Base.metadata.create_all(engine)
 
 if __name__ == '__main__':

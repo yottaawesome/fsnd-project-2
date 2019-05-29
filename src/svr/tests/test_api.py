@@ -8,14 +8,11 @@ import os
 from pathlib import Path
 import threading
 
-DB_NAME = "test.db"
-svr.db.schema.DB_NAME = DB_NAME
-svr.db.data.PKG_DB_NAME = DB_NAME
+CONNECTION_STRING = "test.db"
 
 
+'''
 # TODO: need to give this more thought
-
-
 def run(obj):
     main_app.debug = True
     main_app.secret_key = os.urandom(24)
@@ -46,3 +43,4 @@ class TestApi(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+'''

@@ -1,24 +1,23 @@
 '''Contains the functional test cases for the DAL.'''
+import context
 from svr.db import Dal, populate, dal_factory
 import unittest
-import context
 import svr.db
 import os
 from pathlib import Path
 
-DB_NAME = "test.db"
-svr.db.schema.DB_NAME = DB_NAME
-svr.db.data.PKG_DB_NAME = DB_NAME
+DB_NAME = 'test.db'
+CONNECTION_STRING = 'sqlite:///{}'.format(DB_NAME)
 
 
 class TestDal(unittest.TestCase):
     def setUp(self):
-        svr.db.schema.setup_db(DB_NAME)
-        populate(DB_NAME)
-        self.dal_fct = dal_factory(DB_NAME)
+        svr.db.schema.setup_db(CONNECTION_STRING)
+        populate(CONNECTION_STRING)
+        self.dal_fct = dal_factory(CONNECTION_STRING)
 
     def tearDown(self):
-        db_file = Path(svr.db.schema.DB_NAME)
+        db_file = Path(DB_NAME)
         if db_file.is_file():
             os.remove(db_file)
 
