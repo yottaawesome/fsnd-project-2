@@ -28,7 +28,7 @@ The client-side is a single-page application (SPA) built in Inferno that acts as
 
 ## Setting up
 
-### :alert: Instructions outdated
+### :warning: Instructions outdated
 
 Following the backporting of changes to FSDN Project 3 to this repository, the instructions below are no longer accurate. The instructions will be updated as soon as FSND Project 3 is complete.
 
