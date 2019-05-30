@@ -105,9 +105,11 @@ The Udacity VM does not have `virtualenv`, so this will need to be installed. Fo
         2. Create a Python 3 virtual environment: `virtualenv -p python3 env`.
         3. Activate the Python virtual environment: `source env/bin/activate`.
         4. Install Python dependencies: `pip install -r requirements.txt`.
-        5. Create the DB: `python create_db.py`.
-        6. Run development server: `python main.py` or `source run`.
-        7. Visit [localhost:5000](http://localhost:5000).
+        5. In `svr/cfg`, rename `example.secret.cfg.json` to `secret.cfg.json`.
+        6. Enter the path to the GitHub secrets file, the path to the Google secrets file, and the connection string the application will use.
+        7. Create the DB: `python create_db.py`.
+        8. Run development server: `python main.py` or `source run`.
+        9. Visit [localhost:5000](http://localhost:5000).
 
 ### Using your own UNIX-like environment
 
