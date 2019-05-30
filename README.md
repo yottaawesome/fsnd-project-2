@@ -8,7 +8,7 @@ As such, this project will take the shape of a digital bookshelf where users wil
 
 ## Status
 
-_Complete._
+_Complete. Successfully graded. Improvements from Project 3 backported to this repo._
 
 ## Project structure
 
