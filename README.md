@@ -28,10 +28,6 @@ The client-side is a single-page application (SPA) built in Inferno that acts as
 
 ## Setting up
 
-### :warning: Instructions outdated
-
-Following the backporting of changes to FSDN Project 3 to this repository, the instructions below are no longer accurate. The instructions will be updated as soon as FSND Project 3 is complete.
-
 You'll need the following prerequisites to minimally run this project. Instructions for setting these up for Udacity's Vagrant VM are below. If you're using your own UNIX-like environment, consult your environment's package manager on how to best fulfill these prerequisites.
 
 * Python 3
@@ -46,7 +42,7 @@ The following prerequisites are optional:
 
 * A GitHub account and a configured GitHub Application, for enabling GitHub authentication.
 
-You'll need to set up a Google Developer Client application and optionally a GitHub application in order to enable the application to authenticate against third-party providers. For the application to function, you must at least configure a Google Web Application client and supply the relevant JSON secrets file. The application checks for the following files in order to do this.
+You'll need to set up a Google Developer Client application and optionally a GitHub application in order to enable the application to authenticate against third-party providers. For the application to function, you must at least configure a Google Web Application client and supply the relevant JSON secrets file. The application checks for the following files via the `svr/cfg/secret.cfg.json` file in order to do this.
 
 * `secret.google_client_secrets.json:` the downloaded JSON file for your Google application from Google Developer Console. This must be provided.
 * `secret.github_client_secrets.json:` JSON file containing the GitHub application secrets. Consult `example.secret.github_client_secrets.json` for an example file. If this file is not found, the application disables GitHub authentication.
@@ -62,7 +58,8 @@ Note that all files starting with `secret.` are deliberately ignored in `.gitign
 5. From the Credentials tab, click _Create credentials_ and choose _OAuth client ID_.
 6. In the next screen, click _Web application_ and then _Create_.
 7. Give your credentials an appropriate _Name_ (e.g. Bookshelf Client) and add http://localhost:5000 to the _Authorised JavaScript origins_. Do not add http://127.0.0.1:5000 -- Google will seemingly accept this but fail when using it.
-8. Save your changes and then click _Download JSON_. Name the downloaded file `secret.google_client_secrets.json` and place it in the `src/svr` folder of this repository.
+8. Save your changes and then click _Download JSON_. Name the downloaded file `secret.google_client_secrets.json` and place it in a folder of your choosing.
+9. Modify `svr/cfg/secret.cfg.json` to include the path to the downloaded file. Ensure the file and folder are accessible.
 
 ### (Optional) Setting up GitHub authentication
 
@@ -77,6 +74,8 @@ Note that all files starting with `secret.` are deliberately ignored in `.gitign
 6. Click save. Make note of the _Client ID_ and _Client Secret_ of your newly created GitHub application.
 7. In `src/svr`, rename `example.secret.github_client_secrets.json` to `secret.github_client_secrets.json`.
 8. Open `secret.github_client_secrets.json` and add your _Client ID_ and _Client Secret_ from step 6 to the appropriate fields in the JSON body.
+9. Place `secret.github_client_secrets.json` in a folder of your choosing which can be read.
+10. Modify `svr/cfg/secret.cfg.json` to include the path to the file. Ensure the file and folder are accessible.
 
 Once you have have setup Google or Google and GitHub authentication, follow the below instructions as they pertain to your environment.
 
