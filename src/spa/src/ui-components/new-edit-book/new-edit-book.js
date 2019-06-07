@@ -72,7 +72,7 @@ export default class NewEditBook extends Component {
     }
   }
 
-  onValueChange(event) {
+  onValueChange(first, event) {
     let newState = { ...this.state };
     newState.data[event.srcElement.id] = event.srcElement.value;
 
@@ -185,7 +185,7 @@ export default class NewEditBook extends Component {
             <label for="name">Name:</label>
           </div>
           <div className={styles.inputColumn}>
-            <input id="name" name="name" type="text" onInput={this.onValueChange} value={this.state.data.name} />
+            <input id="name" name="name" type="text" onInput={linkEvent(this, this.onValueChange)} value={this.state.data.name} />
           </div>
         </div>
 
@@ -194,7 +194,7 @@ export default class NewEditBook extends Component {
             <label for="description">Description:</label>
           </div>
           <div className={styles.inputColumn}>
-            <input id="description" name="description" type="text" onInput={this.onValueChange} value={this.state.data.description} />
+            <input id="description" name="description" type="text" onInput={linkEvent(this, this.onValueChange)} value={this.state.data.description} />
           </div>
         </div>
 
@@ -203,7 +203,7 @@ export default class NewEditBook extends Component {
             <label for="web_link">Web link:</label>
           </div>
           <div className={styles.inputColumn}>
-            <input id="web_link" name="web_link" type="text" onInput={this.onValueChange} value={this.state.data.web_link} />
+            <input id="web_link" name="web_link" type="text" onInput={linkEvent(this, this.onValueChange)} value={this.state.data.web_link} />
           </div>
         </div>
 
@@ -212,7 +212,7 @@ export default class NewEditBook extends Component {
             <label for="author">Author:</label>
           </div>
           <div className={styles.inputColumn}>
-            <input id="author" name="author" type="text" onInput={this.onValueChange} value={this.state.data.author} />
+            <input id="author" name="author" type="text" onInput={linkEvent(this, this.onValueChange)} value={this.state.data.author} />
           </div>
         </div>
 
@@ -221,7 +221,7 @@ export default class NewEditBook extends Component {
             <label for="publisher">Publisher:</label>
           </div>
           <div className={styles.inputColumn}>
-            <input id="publisher" name="publisher" type="text" onInput={this.onValueChange} value={this.state.data.publisher} />
+            <input id="publisher" name="publisher" type="text" onInput={linkEvent(this, this.onValueChange)} value={this.state.data.publisher} />
           </div>
         </div>
 
