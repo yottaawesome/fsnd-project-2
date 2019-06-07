@@ -136,8 +136,8 @@ export default class NewEditBook extends Component {
           categories: json
         }, 
         this.refresh)
-        return;
       });
+      return;
     }
 
     const { match: { params } } = this.props;
@@ -234,7 +234,7 @@ export default class NewEditBook extends Component {
             {
               this.state.categories.map((val, index) => (
                 <div className={styles.categoryColumn}>
-                  <button className={this.getButtonStyle(val.id)} onClick={this.bindCategoryClick(val.id)}>{ val.name }</button>
+                  <button className={this.getButtonStyle(val.id)} onClick={linkEvent(this, this.bindCategoryClick(val.id))}>{ val.name }</button>
                 </div>
               ))
             }
