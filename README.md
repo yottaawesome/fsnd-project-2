@@ -8,7 +8,7 @@ As such, this project will take the shape of a digital bookshelf where users wil
 
 ## Status
 
-_Complete. Successfully graded. Improvements from Project 3 backported to this repo._
+_Complete._ Successfully graded. Improvements from Project 3 backported to this repo. **Warning:** I'm no longer committing to this repo as it was for an assessment which is now complete. Some dependencies are now reporting vulnerabilities, so don't use anything from this repo in production code without validation.
 
 ## Project structure
 
